@@ -1,0 +1,60 @@
+class {{classname}} {
+  /// The underlying value of this enum member.
+  final {{dataType}} value;
+
+  const {{classname}}._internal(this.value);
+
+  {{#allowableValues}}
+    {{#enumVars}}
+      {{#description}}
+  /// {{description}}
+      {{/description}}
+  static const {{classname}} {{{name}}} = {{classname}}._internal({{value}});
+    {{/enumVars}}
+  {{/allowableValues}}
+
+  static List<{{classname}}> get values => const [
+    {{#allowableValues}}
+      {{#enumVars}}
+        {{{name}}},
+      {{/enumVars}}
+    {{/allowableValues}}
+      ];
+
+  {{dataType}} toJson () {
+    return value;
+  }
+
+  @override
+  String toString () {
+    return value;
+  }
+
+  static {{classname}} fromJson({{dataType}} value) {
+    return {{classname}}TypeTransformer().decode(value);
+  }
+
+  static List<{{classname}}> listFromJson(List<dynamic> json) {
+    return json == null
+        ? List<{{classname}}>()
+        : json.map((value) => {{classname}}.fromJson(value)).toList();
+  }
+}
+
+class {{classname}}TypeTransformer {
+
+  dynamic encode({{classname}} data) {
+    return data.value;
+  }
+
+  {{classname}} decode(dynamic data) {
+    switch (data) {
+      {{#allowableValues}}
+        {{#enumVars}}
+      case {{{value}}}: return {{classname}}.{{{name}}};
+        {{/enumVars}}
+      {{/allowableValues}}
+      default: throw('Unknown enum value to decode: $data');
+    }
+  }
+}

@@ -1,0 +1,155 @@
+/*
+ * Copyright 2018 OpenAPI-Generator Contributors (https://openapi-generator.tech)
+ * Copyright 2018 SmartBear Software
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.wapache.openapi.generator.languages;
+
+import org.wapache.openapi.generator.*;
+import org.wapache.openapi.generator.meta.features.*;
+import org.wapache.openapi.generator.CodegenConstants;
+import org.wapache.openapi.generator.CodegenOperation;
+import org.wapache.openapi.generator.CodegenType;
+import org.wapache.openapi.generator.SupportingFile;
+import org.wapache.openapi.generator.meta.features.*;
+
+import java.io.File;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+
+import static org.wapache.openapi.generator.utils.StringUtils.camelize;
+
+
+public class GroovyClientCodegen extends AbstractJavaCodegen {
+
+    public GroovyClientCodegen() {
+        super();
+
+        modifyFeatureSet(features -> features
+                .includeDocumentationFeatures(DocumentationFeature.Readme)
+                .wireFormatFeatures(EnumSet.of(WireFormatFeature.JSON))
+                .securityFeatures(EnumSet.noneOf(SecurityFeature.class))
+                .excludeGlobalFeatures(
+                        GlobalFeature.XMLStructureDefinitions,
+                        GlobalFeature.Callbacks,
+                        GlobalFeature.LinkObjects,
+                        GlobalFeature.ParameterStyling
+                )
+                .excludeSchemaSupportFeatures(
+                        SchemaSupportFeature.Polymorphism
+                )
+                .excludeParameterFeatures(
+                        ParameterFeature.Cookie
+                )
+                .includeClientModificationFeatures(
+                        ClientModificationFeature.BasePath
+                )
+        );
+
+        // avoid importing the following as models
+        languageSpecificPrimitives.add("Date");
+        languageSpecificPrimitives.add("ArrayList");
+        languageSpecificPrimitives.add("File");
+        languageSpecificPrimitives.add("Map");
+
+        sourceFolder = projectFolder + File.separator +"groovy";
+        outputFolder = "generated-code/groovy";
+        modelTemplateFiles.put("model.mustache", ".groovy");
+        apiTemplateFiles.put("api.mustache", ".groovy");
+        apiTestTemplateFiles.clear(); // TODO: add test template
+        embeddedTemplateDir = templateDir = "Groovy";
+
+        // clear model and api doc template as this codegen
+        // does not support auto-generated markdown doc at the moment
+        //TODO: add doc templates
+        modelDocTemplateFiles.remove("model_doc.mustache");
+        apiDocTemplateFiles.remove("api_doc.mustache");
+
+        apiPackage = "org.wapache.openapi.api";
+        modelPackage = "org.wapache.openapi.model";
+        invokerPackage = "org.wapache.openapi.api";
+        artifactId = "openapi-groovy";
+        dateLibrary = "legacy"; //TODO: add joda support to groovy
+
+        // cliOptions default redefinition need to be updated
+        updateOption(CodegenConstants.SOURCE_FOLDER, this.getSourceFolder());
+        updateOption(CodegenConstants.INVOKER_PACKAGE, this.getInvokerPackage());
+        updateOption(CodegenConstants.ARTIFACT_ID, this.getArtifactId());
+        updateOption(CodegenConstants.API_PACKAGE, apiPackage);
+        updateOption(CodegenConstants.MODEL_PACKAGE, modelPackage);
+        updateOption(DATE_LIBRARY, this.getDateLibrary());
+        removeOption(CodegenConstants.ARTIFACT_URL);
+        removeOption(CodegenConstants.ARTIFACT_DESCRIPTION);
+
+    }
+
+    @Override
+    public CodegenType getTag() {
+        return CodegenType.CLIENT;
+    }
+
+    @Override
+    public String getName() {
+        return "groovy";
+    }
+
+    @Override
+    public String getHelp() {
+        return "Generates a Groovy API client.";
+    }
+
+    @Override
+    public void processOpts() {
+        super.processOpts();
+
+        supportingFiles.add(new SupportingFile("build.gradle.mustache", "", "build.gradle"));
+        supportingFiles.add(new SupportingFile("README.mustache", "", "README.md"));
+        supportingFiles.add(new SupportingFile("ApiUtils.mustache",
+                (sourceFolder + File.separator + apiPackage).replace(".", File.separator), "ApiUtils.groovy"));
+
+    }
+
+    @Override
+    public Map<String, Object> postProcessOperationsWithModels(Map<String, Object> operations, List<Object> allModels) {
+        Map<String, Object> objs = (Map<String, Object>) operations.get("operations");
+        List<CodegenOperation> ops = (List<CodegenOperation>) objs.get("operation");
+        for (CodegenOperation op : ops) {
+            // Overwrite path to map variable with path parameters
+            op.path = op.path.replace("{", "${");
+        }
+        return operations;
+    }
+
+    @Override
+    public String toApiName(String name) {
+        if (name.length() == 0) {
+            return "DefaultApi";
+        }
+        name = sanitizeName(name);
+        return camelize(name) + "Api";
+    }
+
+    @Override
+    public String escapeQuotationMark(String input) {
+        // remove ' to avoid code injection
+        return input.replace("'", "");
+    }
+
+    @Override
+    public String escapeUnsafeCharacters(String input) {
+        return input.replace("*/", "*_/").replace("/*", "/_*");
+    }
+}

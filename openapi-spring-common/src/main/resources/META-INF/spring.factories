@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.wapache.openapi.spring.core.SpringDocConfiguration,\
+org.wapache.openapi.spring.core.SpringDocConfigProperties

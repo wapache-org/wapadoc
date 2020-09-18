@@ -1,0 +1,2 @@
+org.wapache.openapi.generator.templating.MustacheEngineAdapter
+org.wapache.openapi.generator.templating.HandlebarsEngineAdapter
