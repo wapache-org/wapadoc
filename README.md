@@ -6,12 +6,14 @@
 
 主要引入了以下项目:
 
-1. [swagger-api/swagger-core](https://github.com/https://github.com/swagger-api/swagger-core)
-2. [swagger-api/swagger-parser](https://github.com/swagger-api/swagger-parser)
-3. [swagger-api/swagger-js](https://github.com/swagger-api/swagger-js)
-4. [springdoc/springdoc-openapi](https://github.com/springdoc/springdoc-openapi)
-4. [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator)
-5. [mrin9/RapiDoc](https://github.com/mrin9/RapiDoc)
+1. [OAI/OpenAPI-Specification](https://github.com/OAI/OpenAPI-Specification)
+2. [swagger-api/swagger-core](https://github.com/https://github.com/swagger-api/swagger-core)
+3. [swagger-api/swagger-parser](https://github.com/swagger-api/swagger-parser)
+4. [swagger-api/swagger-js](https://github.com/swagger-api/swagger-js)
+5. [springdoc/springdoc-openapi](https://github.com/springdoc/springdoc-openapi)
+6. [springdoc-openapi-demos](https://github.com/springdoc/springdoc-openapi-demos)
+7. [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator)
+8. [mrin9/RapiDoc](https://github.com/mrin9/RapiDoc)
 
 主要做了以下修改:
 
@@ -21,6 +23,26 @@
 4. 删除`springdoc-openapi`中除Java语言外的其他语言支持, 删除`webflux`支持, `spring-boot`降级为`2.0.4`版本。
 5. 原`springdoc`的`RequestBody`重命名为`ApiRequestBody`,以避免与Spring的`RequestBody`名称重复导致使用不便。
 6. 部分汉化`Rapidoc`, 对`Rapidoc`界面布局和样式做了调整和增强。
+
+## 模块列表
+
+| 模块                       | 来源(github)                                                  | 说明 |
+| -------------------------- | ------------------------------------------------------------ | ---- |
+| openapi-annotations        | swagger-api/swagger-core/modules/swagger-annotations         |      |
+| openapi-core               | swagger-api/swagger-core/modules/swagger-core                |      |
+| openapi-generator          | openapi-generator/modules/openapi-generator                  |      |
+| openapi-generator-cli      | openapi-generator/modules/openapi-generator-cli              |      |
+| openapi-generator-core     | openapi-generator/modules/openapi-generator-core             |      |
+| openapi-integration        | swagger-api/swagger-core/modules/swagger-integration         |      |
+| openapi-models             | swagger-api/swagger-core/modules/swagger-models              |      |
+| openapi-parser             | swagger-api/swagger-parser                                   |      |
+| openapi-specification      | OAI/OpenAPI-Specification                                    |      |
+| openapi-spring-common      | springdoc-openapi/springdoc-openapi-common                   |      |
+| openapi-spring-webjars-ui  | springdoc-openapi/springdoc-openapi-ui                       |      |
+| openapi-spring-webmvc-core | springdoc-openapi/springdoc-openapi-webmvc-core              |      |
+| openapi-spring-webmvc-demo | springdoc-openapi-demos/springdoc-openapi-spring-boot-2-webmvc |      |
+| openapi-test               | -                                                            |      |
+| openapi-ui                 | mrin9/RapiDoc                                                |      |
 
 ## 编译运行
 
