@@ -19,7 +19,60 @@ package org.wapache.openapi.v3.models.security;
 import java.util.Objects;
 
 /**
- * OAuthFlow
+ * <h4><a name="%3Ca-name=%22oauthflowsobject%22%3E%3C/a%3Eoauth-flows-object" class="md-header-anchor"></a><a name="oauthFlowsObject"></a><span>OAuth Flows Object</span></h4>
+ * <p><span>Allows configuration of the supported OAuth Flows.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="oauthFlowsImplicit"></a><span>implicit</span></td><td style='text-align:center;' ><a href='#'><span>OAuth Flow Object</span></a></td><td><span>Configuration for the OAuth Implicit flow</span></td></tr><tr><td><a name="oauthFlowsPassword"></a><span>password</span></td><td style='text-align:center;' ><a href='#'><span>OAuth Flow Object</span></a></td><td><span>Configuration for the OAuth Resource Owner Password flow</span></td></tr><tr><td><a name="oauthFlowsClientCredentials"></a><span>clientCredentials</span></td><td style='text-align:center;' ><a href='#'><span>OAuth Flow Object</span></a></td><td><span>Configuration for the OAuth Client Credentials flow.  Previously called </span><code>application</code><span> in OpenAPI 2.0.</span></td></tr><tr><td><a name="oauthFlowsAuthorizationCode"></a><span>authorizationCode</span></td><td style='text-align:center;' ><a href='#'><span>OAuth Flow Object</span></a></td><td><span>Configuration for the OAuth Authorization Code flow.  Previously called </span><code>accessCode</code><span> in OpenAPI 2.0.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h4><a name="%3Ca-name=%22oauthflowobject%22%3E%3C/a%3Eoauth-flow-object" class="md-header-anchor"></a><a name="oauthFlowObject"></a><span>OAuth Flow Object</span></h4>
+ * <p><span>Configuration details for a supported OAuth Flow</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Applies To</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="oauthFlowAuthorizationUrl"></a><span>authorizationUrl</span></td><td style='text-align:center;' ><code>string</code></td><td><code>oauth2</code><span> (</span><code>&quot;implicit&quot;</code><span>, </span><code>&quot;authorizationCode&quot;</code><span>)</span></td><td><strong><span>REQUIRED</span></strong><span>. The authorization URL to be used for this flow. This MUST be in the form of a URL.</span></td></tr><tr><td><a name="oauthFlowTokenUrl"></a><span>tokenUrl</span></td><td style='text-align:center;' ><code>string</code></td><td><code>oauth2</code><span> (</span><code>&quot;password&quot;</code><span>, </span><code>&quot;clientCredentials&quot;</code><span>, </span><code>&quot;authorizationCode&quot;</code><span>)</span></td><td><strong><span>REQUIRED</span></strong><span>. The token URL to be used for this flow. This MUST be in the form of a URL.</span></td></tr><tr><td><a name="oauthFlowRefreshUrl"></a><span>refreshUrl</span></td><td style='text-align:center;' ><code>string</code></td><td><code>oauth2</code></td><td><span>The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL.</span></td></tr><tr><td><a name="oauthFlowScopes"></a><span>scopes</span></td><td style='text-align:center;' ><span>Map[</span><code>string</code><span>, </span><code>string</code><span>]</span></td><td><code>oauth2</code></td><td><strong><span>REQUIRED</span></strong><span>. The available scopes for the OAuth2 security scheme. A map between the scope name and a short description for it.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="oauth-flow-object-examples" class="md-header-anchor"></a><span>OAuth Flow Object Examples</span></h5>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;type&quot;: &quot;oauth2&quot;,
+ *   &quot;flows&quot;: {
+ *     &quot;implicit&quot;: {
+ *       &quot;authorizationUrl&quot;: &quot;https://example.com/api/oauth/dialog&quot;,
+ *       &quot;scopes&quot;: {
+ *         &quot;write:pets&quot;: &quot;modify pets in your account&quot;,
+ *         &quot;read:pets&quot;: &quot;read your pets&quot;
+ *       }
+ *     },
+ *     &quot;authorizationCode&quot;: {
+ *       &quot;authorizationUrl&quot;: &quot;https://example.com/api/oauth/dialog&quot;,
+ *       &quot;tokenUrl&quot;: &quot;https://example.com/api/oauth/token&quot;,
+ *       &quot;scopes&quot;: {
+ *         &quot;write:pets&quot;: &quot;modify pets in your account&quot;,
+ *         &quot;read:pets&quot;: &quot;read your pets&quot;
+ *       }
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>type: oauth2
+ * flows:
+ *   implicit:
+ *     authorizationUrl: https://example.com/api/oauth/dialog
+ *     scopes:
+ *       write:pets: modify pets in your account
+ *       read:pets: read your pets
+ *   authorizationCode:
+ *     authorizationUrl: https://example.com/api/oauth/dialog
+ *     tokenUrl: https://example.com/api/oauth/token
+ *     scopes:
+ *       write:pets: modify pets in your account
+ *       read:pets: read your pets
+ * </code></pre>
  *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#oauthFlowsObject"
  */

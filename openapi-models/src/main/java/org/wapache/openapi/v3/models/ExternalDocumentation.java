@@ -19,7 +19,25 @@ package org.wapache.openapi.v3.models;
 import java.util.Objects;
 
 /**
- * ExternalDocumentation
+ *
+ * <h4><a name="%3Ca-name=%22externaldocumentationobject%22%3E%3C/a%3Eexternal-documentation-object" class="md-header-anchor"></a><a name="externalDocumentationObject"></a><span>External Documentation Object</span></h4>
+ * <p><span>Allows referencing an external resource for extended documentation.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="externalDocDescription"></a><span>description</span></td><td style='text-align:center;' ><code>string</code></td><td><span>A short description of the target documentation. </span><a href='http://spec.commonmark.org/'><span>CommonMark syntax</span></a><span> MAY be used for rich text representation.</span></td></tr><tr><td><a name="externalDocUrl"></a><span>url</span></td><td style='text-align:center;' ><code>string</code></td><td><strong><span>REQUIRED</span></strong><span>. The URL for the target documentation. Value MUST be in the format of a URL.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="external-documentation-object-example" class="md-header-anchor"></a><span>External Documentation Object Example</span></h5>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;description&quot;: &quot;Find more info here&quot;,
+ *   &quot;url&quot;: &quot;https://example.com&quot;
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>description: Find more info here
+ * url: https://example.com
+ * </code></pre>
  *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#externalDocumentationObject"
  */

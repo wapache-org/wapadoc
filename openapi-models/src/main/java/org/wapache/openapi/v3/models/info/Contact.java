@@ -19,7 +19,26 @@ package org.wapache.openapi.v3.models.info;
 import java.util.Objects;
 
 /**
- * Contact
+ * <h4><a name="%3Ca-name=%22contactobject%22%3E%3C/a%3Econtact-object" class="md-header-anchor"></a><a name="contactObject"></a><span>Contact Object</span></h4>
+ * <p><span>Contact information for the exposed API.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="contactName"></a><span>name</span></td><td style='text-align:center;' ><code>string</code></td><td><span>The identifying name of the contact person/organization.</span></td></tr><tr><td><a name="contactUrl"></a><span>url</span></td><td style='text-align:center;' ><code>string</code></td><td><span>The URL pointing to the contact information. MUST be in the format of a URL.</span></td></tr><tr><td><a name="contactEmail"></a><span>email</span></td><td style='text-align:center;' ><code>string</code></td><td><span>The email address of the contact person/organization. MUST be in the format of an email address.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="contact-object-example:" class="md-header-anchor"></a><span>Contact Object Example:</span></h5>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;name&quot;: &quot;API Support&quot;,
+ *   &quot;url&quot;: &quot;http://www.example.com/support&quot;,
+ *   &quot;email&quot;: &quot;support@example.com&quot;
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>name: API Support
+ * url: http://www.example.com/support
+ * email: support@example.com
+ * </code></pre>
  *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#contactObject"
  */

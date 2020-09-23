@@ -21,8 +21,25 @@ import org.wapache.openapi.v3.models.ExternalDocumentation;
 import java.util.Objects;
 
 /**
- * Tag
- *
+ * <h4><a name="%3Ca-name=%22tagobject%22%3E%3C/a%3Etag-object" class="md-header-anchor"></a><a name="tagObject"></a><span>Tag Object</span></h4>
+ * <p><span>Adds metadata to a single tag that is used by the </span><a href='#'><span>Operation Object</span></a><span>.</span>
+ * <span>It is not mandatory to have a Tag Object per tag defined in the Operation Object instances.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="tagName"></a><span>name</span></td><td style='text-align:center;' ><code>string</code></td><td><strong><span>REQUIRED</span></strong><span>. The name of the tag.</span></td></tr><tr><td><a name="tagDescription"></a><span>description</span></td><td style='text-align:center;' ><code>string</code></td><td><span>A short description for the tag. </span><a href='http://spec.commonmark.org/'><span>CommonMark syntax</span></a><span> MAY be used for rich text representation.</span></td></tr><tr><td><a name="tagExternalDocs"></a><span>externalDocs</span></td><td style='text-align:center;' ><a href='#'><span>External Documentation Object</span></a></td><td><span>Additional external documentation for this tag.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="tag-object-example" class="md-header-anchor"></a><span>Tag Object Example</span></h5>
+ * <pre><code class='language-json' lang='json'>{
+ * 	&quot;name&quot;: &quot;pet&quot;,
+ * 	&quot;description&quot;: &quot;Pets operations&quot;
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>name: pet
+ * description: Pets operations
+ * </code></pre>
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#tagObject"
  */
 

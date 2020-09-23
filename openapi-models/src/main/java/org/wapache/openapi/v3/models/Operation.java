@@ -29,12 +29,125 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Operation
+ * <h4><a name="%3Ca-name=%22operationobject%22%3E%3C/a%3Eoperation-object" class="md-header-anchor"></a><a name="operationObject"></a><span>Operation Object</span></h4>
+ * <p><span>Describes a single API operation on a path.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="operationTags"></a><span>tags</span></td><td style='text-align:center;' ><span>[</span><code>string</code><span>]</span></td><td><span>A list of tags for API documentation control. Tags can be used for logical grouping of operations by resources or any other qualifier.</span></td></tr><tr><td><a name="operationSummary"></a><span>summary</span></td><td style='text-align:center;' ><code>string</code></td><td><span>A short summary of what the operation does.</span></td></tr><tr><td><a name="operationDescription"></a><span>description</span></td><td style='text-align:center;' ><code>string</code></td><td><span>A verbose explanation of the operation behavior. </span><a href='http://spec.commonmark.org/'><span>CommonMark syntax</span></a><span> MAY be used for rich text representation.</span></td></tr><tr><td><a name="operationExternalDocs"></a><span>externalDocs</span></td><td style='text-align:center;' ><a href='#'><span>External Documentation Object</span></a></td><td><span>Additional external documentation for this operation.</span></td></tr><tr><td><a name="operationId"></a><span>operationId</span></td><td style='text-align:center;' ><code>string</code></td><td><span>Unique string used to identify the operation. The id MUST be unique among all operations described in the API. Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is RECOMMENDED to follow common programming naming conventions.</span></td></tr><tr><td><a name="operationParameters"></a><span>parameters</span></td><td style='text-align:center;' ><span>[</span><a href='#'><span>Parameter Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>A list of parameters that are applicable for this operation. If a parameter is already defined at the </span><a href='#'><span>Path Item</span></a><span>, the new definition will override it but can never remove it. The list MUST NOT include duplicated parameters. A unique parameter is defined by a combination of a </span><a href='#'><span>name</span></a><span> and </span><a href='#'><span>location</span></a><span>. The list can use the </span><a href='#'><span>Reference Object</span></a><span> to link to parameters that are defined at the </span><a href='#'><span>OpenAPI Object&#39;s components/parameters</span></a><span>.</span></td></tr><tr><td><a name="operationRequestBody"></a><span>requestBody</span></td><td style='text-align:center;' ><a href='#'><span>Request Body Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a></td><td><span>The request body applicable for this operation.  The </span><code>requestBody</code><span> is only supported in HTTP methods where the HTTP 1.1 specification </span><a href='https://tools.ietf.org/html/rfc7231#section-4.3.1'><span>RFC7231</span></a><span> has explicitly defined semantics for request bodies.  In other cases where the HTTP spec is vague, </span><code>requestBody</code><span> SHALL be ignored by consumers.</span></td></tr><tr><td><a name="operationResponses"></a><span>responses</span></td><td style='text-align:center;' ><a href='#'><span>Responses Object</span></a></td><td><strong><span>REQUIRED</span></strong><span>. The list of possible responses as they are returned from executing this operation.</span></td></tr><tr><td><a name="operationCallbacks"></a><span>callbacks</span></td><td style='text-align:center;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Callback Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>A map of possible out-of band callbacks related to the parent operation. The key is a unique identifier for the Callback Object. Each value in the map is a </span><a href='#'><span>Callback Object</span></a><span> that describes a request that may be initiated by the API provider and the expected responses. The key value used to identify the callback object is an expression, evaluated at runtime, that identifies a URL to use for the callback operation.</span></td></tr><tr><td><a name="operationDeprecated"></a><span>deprecated</span></td><td style='text-align:center;' ><code>boolean</code></td><td><span>Declares this operation to be deprecated. Consumers SHOULD refrain from usage of the declared operation. Default value is </span><code>false</code><span>.</span></td></tr><tr><td><a name="operationSecurity"></a><span>security</span></td><td style='text-align:center;' ><span>[</span><a href='#'><span>Security Requirement Object</span></a><span>]</span></td><td><span>A declaration of which security mechanisms can be used for this operation. The list of values includes alternative security requirement objects that can be used. Only one of the security requirement objects need to be satisfied to authorize a request. This definition overrides any declared top-level </span><a href='#'><code>security</code></a><span>. To remove a top-level security declaration, an empty array can be used.</span></td></tr><tr><td><a name="operationServers"></a><span>servers</span></td><td style='text-align:center;' ><span>[</span><a href='#'><span>Server Object</span></a><span>]</span></td><td><span>An alternative </span><code>server</code><span> array to service this operation. If an alternative </span><code>server</code><span> object is specified at the Path Item Object or Root level, it will be overridden by this value.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="operation-object-example" class="md-header-anchor"></a><span>Operation Object Example</span></h5>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;tags&quot;: [
+ *     &quot;pet&quot;
+ *   ],
+ *   &quot;summary&quot;: &quot;Updates a pet in the store with form data&quot;,
+ *   &quot;operationId&quot;: &quot;updatePetWithForm&quot;,
+ *   &quot;parameters&quot;: [
+ *     {
+ *       &quot;name&quot;: &quot;petId&quot;,
+ *       &quot;in&quot;: &quot;path&quot;,
+ *       &quot;description&quot;: &quot;ID of pet that needs to be updated&quot;,
+ *       &quot;required&quot;: true,
+ *       &quot;schema&quot;: {
+ *         &quot;type&quot;: &quot;string&quot;
+ *       }
+ *     }
+ *   ],
+ *   &quot;requestBody&quot;: {
+ *     &quot;content&quot;: {
+ *       &quot;application/x-www-form-urlencoded&quot;: {
+ *         &quot;schema&quot;: {
+ *           &quot;type&quot;: &quot;object&quot;,
+ *            &quot;properties&quot;: {
+ *               &quot;name&quot;: {
+ *                 &quot;description&quot;: &quot;Updated name of the pet&quot;,
+ *                 &quot;type&quot;: &quot;string&quot;
+ *               },
+ *               &quot;status&quot;: {
+ *                 &quot;description&quot;: &quot;Updated status of the pet&quot;,
+ *                 &quot;type&quot;: &quot;string&quot;
+ *              }
+ *            },
+ *         &quot;required&quot;: [&quot;status&quot;]
+ *         }
+ *       }
+ *     }
+ *   },
+ *   &quot;responses&quot;: {
+ *     &quot;200&quot;: {
+ *       &quot;description&quot;: &quot;Pet updated.&quot;,
+ *       &quot;content&quot;: {
+ *         &quot;application/json&quot;: {},
+ *         &quot;application/xml&quot;: {}
+ *       }
+ *     },
+ *     &quot;405&quot;: {
+ *       &quot;description&quot;: &quot;Invalid input&quot;,
+ *       &quot;content&quot;: {
+ *         &quot;application/json&quot;: {},
+ *         &quot;application/xml&quot;: {}
+ *       }
+ *     }
+ *   },
+ *   &quot;security&quot;: [
+ *     {
+ *       &quot;petstore_auth&quot;: [
+ *         &quot;write:pets&quot;,
+ *         &quot;read:pets&quot;
+ *       ]
+ *     }
+ *   ]
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>tags:
+ * - pet
+ * summary: Updates a pet in the store with form data
+ * operationId: updatePetWithForm
+ * parameters:
+ * - name: petId
+ *   in: path
+ *   description: ID of pet that needs to be updated
+ *   required: true
+ *   schema:
+ *     type: string
+ * requestBody:
+ *   content:
+ *     &#39;application/x-www-form-urlencoded&#39;:
+ *       schema:
+ *        properties:
+ *           name:
+ *             description: Updated name of the pet
+ *             type: string
+ *           status:
+ *             description: Updated status of the pet
+ *             type: string
+ *        required:
+ *          - status
+ * responses:
+ *   &#39;200&#39;:
+ *     description: Pet updated.
+ *     content:
+ *       &#39;application/json&#39;: {}
+ *       &#39;application/xml&#39;: {}
+ *   &#39;405&#39;:
+ *     description: Invalid input
+ *     content:
+ *       &#39;application/json&#39;: {}
+ *       &#39;application/xml&#39;: {}
+ * security:
+ * - petstore_auth:
+ *   - write:pets
+ *   - read:pets
+ * </code></pre>
  *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#operationObject"
  */
 
 public class Operation {
+
     private List<String> tags = null;
     private String summary = null;
     private String description = null;

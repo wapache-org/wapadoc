@@ -25,8 +25,18 @@ import java.util.Objects;
  */
 
 public class ComposedSchema extends Schema<Object> {
+
+    /**
+     * Inline or referenced schema MUST be of a [Schema Object](#schemaObject) and not a standard JSON Schema.
+     */
     private List<Schema> allOf = null;
+    /**
+     * Inline or referenced schema MUST be of a [Schema Object](#schemaObject) and not a standard JSON Schema.
+     */
     private List<Schema> anyOf = null;
+    /**
+     * Inline or referenced schema MUST be of a [Schema Object](#schemaObject) and not a standard JSON Schema.
+     */
     private List<Schema> oneOf = null;
 
     /**

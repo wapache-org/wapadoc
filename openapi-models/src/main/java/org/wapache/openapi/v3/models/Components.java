@@ -32,20 +32,217 @@ import java.util.Objects;
 
 /**
  * Components
+ *<h4><a name="%3Ca-name=%22componentsobject%22%3E%3C/a%3Ecomponents-object" class="md-header-anchor"></a><a name="componentsObject"></a><span>Components Object</span></h4>
+ * <p><span>Holds a set of reusable objects for different aspects of the OAS.</span>
+ * <span>All objects defined within the components object will have no effect on the API unless they are explicitly referenced from properties outside the components object.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:left;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="componentsSchemas"></a><span> schemas</span></td><td style='text-align:left;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Schema Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>An object to hold reusable </span><a href='#'><span>Schema Objects</span></a><span>.</span></td></tr><tr><td><a name="componentsResponses"></a><span> responses</span></td><td style='text-align:left;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Response Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>An object to hold reusable </span><a href='#'><span>Response Objects</span></a><span>.</span></td></tr><tr><td><a name="componentsParameters"></a><span> parameters</span></td><td style='text-align:left;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Parameter Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>An object to hold reusable </span><a href='#'><span>Parameter Objects</span></a><span>.</span></td></tr><tr><td><a name="componentsExamples"></a><span> examples</span></td><td style='text-align:left;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Example Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>An object to hold reusable </span><a href='#'><span>Example Objects</span></a><span>.</span></td></tr><tr><td><a name="componentsRequestBodies"></a><span> requestBodies</span></td><td style='text-align:left;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Request Body Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>An object to hold reusable </span><a href='#'><span>Request Body Objects</span></a><span>.</span></td></tr><tr><td><a name="componentsHeaders"></a><span> headers</span></td><td style='text-align:left;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Header Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>An object to hold reusable </span><a href='#'><span>Header Objects</span></a><span>.</span></td></tr><tr><td><a name="componentsSecuritySchemes"></a><span> securitySchemes</span></td><td style='text-align:left;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Security Scheme Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>An object to hold reusable </span><a href='#'><span>Security Scheme Objects</span></a><span>.</span></td></tr><tr><td><a name="componentsLinks"></a><span> links</span></td><td style='text-align:left;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Link Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>An object to hold reusable </span><a href='#'><span>Link Objects</span></a><span>.</span></td></tr><tr><td><a name="componentsCallbacks"></a><span> callbacks</span></td><td style='text-align:left;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Callback Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>An object to hold reusable </span><a href='#'><span>Callback Objects</span></a><span>.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <p><span>All the fixed fields declared above are objects that MUST use keys that match the regular expression: </span><code>^[a-zA-Z0-9\.\-_]+$</code><span>.</span></p>
+ * <p><span>Field Name Examples:</span></p>
+ * <pre><code>User
+ * User_1
+ * User_Name
+ * user-name
+ * my.org.User
+ * </code></pre>
+ * <h5><a name="components-object-example" class="md-header-anchor"></a><span>Components Object Example</span></h5>
+ * <pre><code class='language-json' lang='json'>&quot;components&quot;: {
+ *   &quot;schemas&quot;: {
+ *     &quot;Category&quot;: {
+ *       &quot;type&quot;: &quot;object&quot;,
+ *       &quot;properties&quot;: {
+ *         &quot;id&quot;: {
+ *           &quot;type&quot;: &quot;integer&quot;,
+ *           &quot;format&quot;: &quot;int64&quot;
+ *         },
+ *         &quot;name&quot;: {
+ *           &quot;type&quot;: &quot;string&quot;
+ *         }
+ *       }
+ *     },
+ *     &quot;Tag&quot;: {
+ *       &quot;type&quot;: &quot;object&quot;,
+ *       &quot;properties&quot;: {
+ *         &quot;id&quot;: {
+ *           &quot;type&quot;: &quot;integer&quot;,
+ *           &quot;format&quot;: &quot;int64&quot;
+ *         },
+ *         &quot;name&quot;: {
+ *           &quot;type&quot;: &quot;string&quot;
+ *         }
+ *       }
+ *     }
+ *   },
+ *   &quot;parameters&quot;: {
+ *     &quot;skipParam&quot;: {
+ *       &quot;name&quot;: &quot;skip&quot;,
+ *       &quot;in&quot;: &quot;query&quot;,
+ *       &quot;description&quot;: &quot;number of items to skip&quot;,
+ *       &quot;required&quot;: true,
+ *       &quot;schema&quot;: {
+ *         &quot;type&quot;: &quot;integer&quot;,
+ *         &quot;format&quot;: &quot;int32&quot;
+ *       }
+ *     },
+ *     &quot;limitParam&quot;: {
+ *       &quot;name&quot;: &quot;limit&quot;,
+ *       &quot;in&quot;: &quot;query&quot;,
+ *       &quot;description&quot;: &quot;max records to return&quot;,
+ *       &quot;required&quot;: true,
+ *       &quot;schema&quot; : {
+ *         &quot;type&quot;: &quot;integer&quot;,
+ *         &quot;format&quot;: &quot;int32&quot;
+ *       }
+ *     }
+ *   },
+ *   &quot;responses&quot;: {
+ *     &quot;NotFound&quot;: {
+ *       &quot;description&quot;: &quot;Entity not found.&quot;
+ *     },
+ *     &quot;IllegalInput&quot;: {
+ *       &quot;description&quot;: &quot;Illegal input for operation.&quot;
+ *     },
+ *     &quot;GeneralError&quot;: {
+ *       &quot;description&quot;: &quot;General Error&quot;,
+ *       &quot;content&quot;: {
+ *         &quot;application/json&quot;: {
+ *           &quot;schema&quot;: {
+ *             &quot;$ref&quot;: &quot;#/components/schemas/GeneralError&quot;
+ *           }
+ *         }
+ *       }
+ *     }
+ *   },
+ *   &quot;securitySchemes&quot;: {
+ *     &quot;api_key&quot;: {
+ *       &quot;type&quot;: &quot;apiKey&quot;,
+ *       &quot;name&quot;: &quot;api_key&quot;,
+ *       &quot;in&quot;: &quot;header&quot;
+ *     },
+ *     &quot;petstore_auth&quot;: {
+ *       &quot;type&quot;: &quot;oauth2&quot;,
+ *       &quot;flows&quot;: {
+ *         &quot;implicit&quot;: {
+ *           &quot;authorizationUrl&quot;: &quot;http://example.org/api/oauth/dialog&quot;,
+ *           &quot;scopes&quot;: {
+ *             &quot;write:pets&quot;: &quot;modify pets in your account&quot;,
+ *             &quot;read:pets&quot;: &quot;read your pets&quot;
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           format: int64
+ *         name:
+ *           type: string
+ *     Tag:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           format: int64
+ *         name:
+ *           type: string
+ *   parameters:
+ *     skipParam:
+ *       name: skip
+ *       in: query
+ *       description: number of items to skip
+ *       required: true
+ *       schema:
+ *         type: integer
+ *         format: int32
+ *     limitParam:
+ *       name: limit
+ *       in: query
+ *       description: max records to return
+ *       required: true
+ *       schema:
+ *         type: integer
+ *         format: int32
+ *   responses:
+ *     NotFound:
+ *       description: Entity not found.
+ *     IllegalInput:
+ *       description: Illegal input for operation.
+ *     GeneralError:
+ *       description: General Error
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: &#39;#/components/schemas/GeneralError&#39;
+ *   securitySchemes:
+ *     api_key:
+ *       type: apiKey
+ *       name: api_key
+ *       in: header
+ *     petstore_auth:
+ *       type: oauth2
+ *       flows:
+ *         implicit:
+ *           authorizationUrl: http://example.org/api/oauth/dialog
+ *           scopes:
+ *             write:pets: modify pets in your account
+ *             read:pets: read your pets
+ * </code></pre>
  *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#componentsObject"
  */
 
 public class Components {
+    /**
+     * An object to hold reusable [Schema Objects](#schemaObject).
+     */
     private Map<String, Schema> schemas = null;
+    /**
+     * An object to hold reusable [Response Objects](#responseObject).
+     */
     private Map<String, ApiResponse> responses = null;
+    /**
+     * An object to hold reusable [Parameter Objects](#parameterObject).
+     */
     private Map<String, Parameter> parameters = null;
+    /**
+     * An object to hold reusable [Example Objects](#exampleObject).
+     */
     private Map<String, Example> examples = null;
+    /**
+     * An object to hold reusable [Request Body Objects](#requestBodyObject).
+     */
     private Map<String, RequestBody> requestBodies = null;
+    /**
+     * An object to hold reusable [Header Objects](#headerObject).
+     */
     private Map<String, Header> headers = null;
+    /**
+     * An object to hold reusable [Security Scheme Objects](#securitySchemeObject).
+     */
     private Map<String, SecurityScheme> securitySchemes = null;
+    /**
+     * An object to hold reusable [Link Objects](#linkObject).
+     */
     private Map<String, Link> links = null;
+    /**
+     * An object to hold reusable [Callback Objects](#callbackObject).
+     */
     private Map<String, Callback> callbacks = null;
+    /**
+     * This object MAY be extended with [Specification Extensions](#specificationExtensions).
+     */
     private Map<String, Object> extensions = null;
 
     /**

@@ -22,7 +22,61 @@ import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
- * Callback
+ * <h4><a name="%3Ca-name=%22callbackobject%22%3E%3C/a%3Ecallback-object" class="md-header-anchor"></a><a name="callbackObject"></a><span>Callback Object</span></h4>
+ * <p><span>A map of possible out-of band callbacks related to the parent operation.</span>
+ * <span>Each value in the map is a </span><a href='#'><span>Path Item Object</span></a><span> that describes a set of requests that may be initiated by the API provider and the expected responses.</span>
+ * <span>The key value used to identify the callback object is an expression, evaluated at runtime, that identifies a URL to use for the callback operation.</span></p>
+ * <h5><a name="patterned-fields" class="md-header-anchor"></a><span>Patterned Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Pattern</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="callbackExpression"></a><span>{expression}</span></td><td style='text-align:center;' ><a href='#'><span>Path Item Object</span></a></td><td><span>A Path Item Object used to define a callback request and expected responses.  A </span><a href='../examples/v3.0/callback-example.yaml'><span>complete example</span></a><span> is available.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="key-expression" class="md-header-anchor"></a><span>Key Expression</span></h5>
+ * <p><span>The key that identifies the </span><a href='#'><span>Path Item Object</span></a><span> is a </span><a href='#'><span>runtime expression</span></a><span> that can be evaluated in the context of a runtime HTTP request/response to identify the URL to be used for the callback request.</span>
+ * <span>A simple example might be </span><code>$request.body#/url</code><span>.</span>
+ * <span>However, using a </span><a href='#'><span>runtime expression</span></a><span> the complete HTTP message can be accessed.</span>
+ * <span>This includes accessing any part of a body that a JSON Pointer </span><a href='https://tools.ietf.org/html/rfc6901'><span>RFC6901</span></a><span> can reference. </span></p>
+ * <p><span>For example, given the following HTTP request:</span></p>
+ * <pre><code class='language-http' lang='http'>POST /subscribe/myevent?queryUrl=http://clientdomain.com/stillrunning HTTP/1.1
+ * Host: example.org
+ * Content-Type: application/json
+ * Content-Length: 187
+ *
+ * {
+ *   &quot;failedUrl&quot; : &quot;http://clientdomain.com/failed&quot;,
+ *   &quot;successUrls&quot; : [
+ *     &quot;http://clientdomain.com/fast&quot;,
+ *     &quot;http://clientdomain.com/medium&quot;,
+ *     &quot;http://clientdomain.com/slow&quot;
+ *   ]
+ * }
+ *
+ * 201 Created
+ * Location: http://example.org/subscription/1
+ * </code></pre>
+ * <p><span>The following examples show how the various expressions evaluate, assuming the callback operation has a path parameter named </span><code>eventType</code><span> and a query parameter named </span><code>queryUrl</code><span>.</span></p>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Expression</span></th><th style='text-align:left;' ><span>Value</span></th></tr></thead>
+ * <tbody><tr><td><span>$url</span></td><td style='text-align:left;' ><a href='http://example.org/subscribe/myevent?queryUrl=http://clientdomain.com/stillrunning' target='_blank' class='url'>http://example.org/subscribe/myevent?queryUrl=http://clientdomain.com/stillrunning</a></td></tr><tr><td><span>$method</span></td><td style='text-align:left;' ><span>POST</span></td></tr><tr><td><span>$request.path.eventType</span></td><td style='text-align:left;' ><span>myevent</span></td></tr><tr><td><span>$request.query.queryUrl</span></td><td style='text-align:left;' ><a href='http://clientdomain.com/stillrunning' target='_blank' class='url'>http://clientdomain.com/stillrunning</a></td></tr><tr><td><span>$request.header.content-Type</span></td><td style='text-align:left;' ><span>application/json</span></td></tr><tr><td><span>$request.body#/failedUrl</span></td><td style='text-align:left;' ><a href='http://clientdomain.com/stillrunning' target='_blank' class='url'>http://clientdomain.com/stillrunning</a></td></tr><tr><td><span>$request.body#/successUrls/2</span></td><td style='text-align:left;' ><a href='http://clientdomain.com/medium' target='_blank' class='url'>http://clientdomain.com/medium</a></td></tr><tr><td><span>$response.header.Location</span></td><td style='text-align:left;' ><a href='http://example.org/subscription/1' target='_blank' class='url'>http://example.org/subscription/1</a></td></tr></tbody>
+ * </table></figure>
+ * <h5><a name="callback-object-example" class="md-header-anchor"></a><span>Callback Object Example</span></h5>
+ * <p><span>The following example shows a callback to the URL specified by the </span><code>id</code><span> and </span><code>email</code><span> property in the request body.</span></p>
+ * <pre><code class='language-yaml' lang='yaml'>myWebhook:
+ *   &#39;http://notificationServer.com?transactionId={$request.body#/id}&amp;email={$request.body#/email}&#39;:
+ *     post:
+ *       requestBody:
+ *         description: Callback payload
+ *         content:
+ *           &#39;application/json&#39;:
+ *             schema:
+ *               $ref: &#39;#/components/schemas/SomePayload&#39;
+ *       responses:
+ *         &#39;200&#39;:
+ *           description: webhook successfully processed and no retries will be performed
+ * </code></pre>
  *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#callbackObject"
  */

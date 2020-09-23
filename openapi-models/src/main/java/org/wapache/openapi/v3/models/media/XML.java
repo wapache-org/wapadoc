@@ -19,17 +19,314 @@ package org.wapache.openapi.v3.models.media;
 import java.util.Objects;
 
 /**
- * XML
+ *
+
+ * <h4><a name="%3Ca-name=%22xmlobject%22%3E%3C/a%3Exml-object" class="md-header-anchor"></a><a name="xmlObject"></a><span>XML Object</span></h4>
+ * <p><span>A metadata object that allows for more fine-tuned XML model definitions.</span></p>
+ * <p><span>When using arrays, XML element names are </span><em><span>not</span></em><span> inferred (for singular/plural forms) and the </span><code>name</code><span> property SHOULD be used to add that information.</span>
+ * <span>See examples for expected behavior.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="xmlName"></a><span>name</span></td><td style='text-align:center;' ><code>string</code></td><td><span>Replaces the name of the element/attribute used for the described schema property. When defined within </span><code>items</code><span>, it will affect the name of the individual XML elements within the list. When defined alongside </span><code>type</code><span> being </span><code>array</code><span> (outside the </span><code>items</code><span>), it will affect the wrapping element and only if </span><code>wrapped</code><span> is </span><code>true</code><span>. If </span><code>wrapped</code><span> is </span><code>false</code><span>, it will be ignored.</span></td></tr><tr><td><a name="xmlNamespace"></a><span>namespace</span></td><td style='text-align:center;' ><code>string</code></td><td><span>The URI of the namespace definition. Value MUST be in the form of an absolute URI.</span></td></tr><tr><td><a name="xmlPrefix"></a><span>prefix</span></td><td style='text-align:center;' ><code>string</code></td><td><span>The prefix to be used for the </span><a href='#'><span>name</span></a><span>.</span></td></tr><tr><td><a name="xmlAttribute"></a><span>attribute</span></td><td style='text-align:center;' ><code>boolean</code></td><td><span>Declares whether the property definition translates to an attribute instead of an element. Default value is </span><code>false</code><span>.</span></td></tr><tr><td><a name="xmlWrapped"></a><span>wrapped</span></td><td style='text-align:center;' ><code>boolean</code></td><td><span>MAY be used only for an array definition. Signifies whether the array is wrapped (for example, </span><code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;/books&gt;</code><span>) or unwrapped (</span><code>&lt;book/&gt;&lt;book/&gt;</code><span>). Default value is </span><code>false</code><span>. The definition takes effect only when defined alongside </span><code>type</code><span> being </span><code>array</code><span> (outside the </span><code>items</code><span>).</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="xml-object-examples" class="md-header-anchor"></a><span>XML Object Examples</span></h5>
+ * <p><span>The examples of the XML object definitions are included inside a property definition of a </span><a href='#'><span>Schema Object</span></a><span> with a sample of the XML representation of it.</span></p>
+ * <h6><a name="no-xml-element" class="md-header-anchor"></a><span>No XML Element</span></h6>
+ * <p><span>Basic string property:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *     &quot;animals&quot;: {
+ *         &quot;type&quot;: &quot;string&quot;
+ *     }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>animals:
+ *   type: string
+ * </code></pre>
+ * <pre><code class='language-xml' lang='xml'>&lt;animals&gt;...&lt;/animals&gt;
+ * </code></pre>
+ * <p><span>Basic string array property (</span><a href='#'><code>wrapped</code></a><span> is </span><code>false</code><span> by default):</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *     &quot;animals&quot;: {
+ *         &quot;type&quot;: &quot;array&quot;,
+ *         &quot;items&quot;: {
+ *             &quot;type&quot;: &quot;string&quot;
+ *         }
+ *     }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>animals:
+ *   type: array
+ *   items:
+ *     type: string
+ * </code></pre>
+ * <pre><code class='language-xml' lang='xml'>&lt;animals&gt;...&lt;/animals&gt;
+ * &lt;animals&gt;...&lt;/animals&gt;
+ * &lt;animals&gt;...&lt;/animals&gt;
+ * </code></pre>
+ * <h6><a name="xml-name-replacement" class="md-header-anchor"></a><span>XML Name Replacement</span></h6>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;animals&quot;: {
+ *     &quot;type&quot;: &quot;string&quot;,
+ *     &quot;xml&quot;: {
+ *       &quot;name&quot;: &quot;animal&quot;
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>animals:
+ *   type: string
+ *   xml:
+ *     name: animal
+ * </code></pre>
+ * <pre><code class='language-xml' lang='xml'>&lt;animal&gt;...&lt;/animal&gt;
+ * </code></pre>
+ * <h6><a name="xml-attribute,-prefix-and-namespace" class="md-header-anchor"></a><span>XML Attribute, Prefix and Namespace</span></h6>
+ * <p><span>In this example, a full model definition is shown.</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;Person&quot;: {
+ *     &quot;type&quot;: &quot;object&quot;,
+ *     &quot;properties&quot;: {
+ *       &quot;id&quot;: {
+ *         &quot;type&quot;: &quot;integer&quot;,
+ *         &quot;format&quot;: &quot;int32&quot;,
+ *         &quot;xml&quot;: {
+ *           &quot;attribute&quot;: true
+ *         }
+ *       },
+ *       &quot;name&quot;: {
+ *         &quot;type&quot;: &quot;string&quot;,
+ *         &quot;xml&quot;: {
+ *           &quot;namespace&quot;: &quot;http://example.com/schema/sample&quot;,
+ *           &quot;prefix&quot;: &quot;sample&quot;
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>Person:
+ *   type: object
+ *   properties:
+ *     id:
+ *       type: integer
+ *       format: int32
+ *       xml:
+ *         attribute: true
+ *     name:
+ *       type: string
+ *       xml:
+ *         namespace: http://example.com/schema/sample
+ *         prefix: sample
+ * </code></pre>
+ * <pre><code class='language-xml' lang='xml'>&lt;Person id=&quot;123&quot;&gt;
+ *     &lt;sample:name xmlns:sample=&quot;http://example.com/schema/sample&quot;&gt;example&lt;/sample:name&gt;
+ * &lt;/Person&gt;
+ * </code></pre>
+ * <h6><a name="xml-arrays" class="md-header-anchor"></a><span>XML Arrays</span></h6>
+ * <p><span>Changing the element names:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;animals&quot;: {
+ *     &quot;type&quot;: &quot;array&quot;,
+ *     &quot;items&quot;: {
+ *       &quot;type&quot;: &quot;string&quot;,
+ *       &quot;xml&quot;: {
+ *         &quot;name&quot;: &quot;animal&quot;
+ *       }
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>animals:
+ *   type: array
+ *   items:
+ *     type: string
+ *     xml:
+ *       name: animal
+ * </code></pre>
+ * <pre><code class='language-xml' lang='xml'>&lt;animal&gt;value&lt;/animal&gt;
+ * &lt;animal&gt;value&lt;/animal&gt;
+ * </code></pre>
+ * <p><span>The external </span><code>name</code><span> property has no effect on the XML:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;animals&quot;: {
+ *     &quot;type&quot;: &quot;array&quot;,
+ *     &quot;items&quot;: {
+ *       &quot;type&quot;: &quot;string&quot;,
+ *       &quot;xml&quot;: {
+ *         &quot;name&quot;: &quot;animal&quot;
+ *       }
+ *     },
+ *     &quot;xml&quot;: {
+ *       &quot;name&quot;: &quot;aliens&quot;
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>animals:
+ *   type: array
+ *   items:
+ *     type: string
+ *     xml:
+ *       name: animal
+ *   xml:
+ *     name: aliens
+ * </code></pre>
+ * <pre><code class='language-xml' lang='xml'>&lt;animal&gt;value&lt;/animal&gt;
+ * &lt;animal&gt;value&lt;/animal&gt;
+ * </code></pre>
+ * <p><span>Even when the array is wrapped, if a name is not explicitly defined, the same name will be used both internally and externally:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;animals&quot;: {
+ *     &quot;type&quot;: &quot;array&quot;,
+ *     &quot;items&quot;: {
+ *       &quot;type&quot;: &quot;string&quot;
+ *     },
+ *     &quot;xml&quot;: {
+ *       &quot;wrapped&quot;: true
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>animals:
+ *   type: array
+ *   items:
+ *     type: string
+ *   xml:
+ *     wrapped: true
+ * </code></pre>
+ * <pre><code class='language-xml' lang='xml'>&lt;animals&gt;
+ *   &lt;animals&gt;value&lt;/animals&gt;
+ *   &lt;animals&gt;value&lt;/animals&gt;
+ * &lt;/animals&gt;
+ * </code></pre>
+ * <p><span>To overcome the naming problem in the example above, the following definition can be used:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;animals&quot;: {
+ *     &quot;type&quot;: &quot;array&quot;,
+ *     &quot;items&quot;: {
+ *       &quot;type&quot;: &quot;string&quot;,
+ *       &quot;xml&quot;: {
+ *         &quot;name&quot;: &quot;animal&quot;
+ *       }
+ *     },
+ *     &quot;xml&quot;: {
+ *       &quot;wrapped&quot;: true
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>animals:
+ *   type: array
+ *   items:
+ *     type: string
+ *     xml:
+ *       name: animal
+ *   xml:
+ *     wrapped: true
+ * </code></pre>
+ * <pre><code class='language-xml' lang='xml'>&lt;animals&gt;
+ *   &lt;animal&gt;value&lt;/animal&gt;
+ *   &lt;animal&gt;value&lt;/animal&gt;
+ * &lt;/animals&gt;
+ * </code></pre>
+ * <p><span>Affecting both internal and external names:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;animals&quot;: {
+ *     &quot;type&quot;: &quot;array&quot;,
+ *     &quot;items&quot;: {
+ *       &quot;type&quot;: &quot;string&quot;,
+ *       &quot;xml&quot;: {
+ *         &quot;name&quot;: &quot;animal&quot;
+ *       }
+ *     },
+ *     &quot;xml&quot;: {
+ *       &quot;name&quot;: &quot;aliens&quot;,
+ *       &quot;wrapped&quot;: true
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>animals:
+ *   type: array
+ *   items:
+ *     type: string
+ *     xml:
+ *       name: animal
+ *   xml:
+ *     name: aliens
+ *     wrapped: true
+ * </code></pre>
+ * <pre><code class='language-xml' lang='xml'>&lt;aliens&gt;
+ *   &lt;animal&gt;value&lt;/animal&gt;
+ *   &lt;animal&gt;value&lt;/animal&gt;
+ * &lt;/aliens&gt;
+ * </code></pre>
+ * <p><span>If we change the external element but not the internal ones:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;animals&quot;: {
+ *     &quot;type&quot;: &quot;array&quot;,
+ *     &quot;items&quot;: {
+ *       &quot;type&quot;: &quot;string&quot;
+ *     },
+ *     &quot;xml&quot;: {
+ *       &quot;name&quot;: &quot;aliens&quot;,
+ *       &quot;wrapped&quot;: true
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>animals:
+ *   type: array
+ *   items:
+ *     type: string
+ *   xml:
+ *     name: aliens
+ *     wrapped: true
+ * </code></pre>
+ * <pre><code class='language-xml' lang='xml'>&lt;aliens&gt;
+ *   &lt;aliens&gt;value&lt;/aliens&gt;
+ *   &lt;aliens&gt;value&lt;/aliens&gt;
+ * &lt;/aliens&gt;
+ * </code></pre>
+ * 
+ * 
  *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#xmlObject"
  */
 
 public class XML {
+    /**
+     * Replaces the name of the element/attribute used for the described schema property.
+     * When defined within `items`, it will affect the name of the individual XML elements within the list.
+     * When defined alongside `type` being `array` (outside the `items`), it will affect the wrapping element and only if `wrapped` is `true`.
+     * If `wrapped` is `false`, it will be ignored.
+     */
     private String name = null;
+    /**
+     * The URI of the namespace definition. Value MUST be in the form of an absolute URI.
+     */
     private String namespace = null;
+    /**
+     * The prefix to be used for the [name](#xmlName).
+     */
     private String prefix = null;
+    /**
+     * Declares whether the property definition translates to an attribute instead of an element. Default value is `false`.
+     */
     private Boolean attribute = null;
+    /**
+     * MAY be used only for an array definition.
+     * Signifies whether the array is wrapped (for example, `<books><book/><book/></books>`) or unwrapped (`<book/><book/>`).
+     * Default value is `false`.
+     * The definition takes effect only when defined alongside `type` being `array` (outside the `items`).
+     */
     private Boolean wrapped = null;
+    /**
+     *
+     */
     private java.util.Map<String, Object> extensions = null;
 
     /**

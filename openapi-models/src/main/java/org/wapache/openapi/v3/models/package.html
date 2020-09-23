@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+    <title>3.0.1</title></head>
+<body><h1><a name="openapi-specification" class="md-header-anchor"></a><span>OpenAPI Specification</span></h1>
+<h4><a name="version-3.0.1" class="md-header-anchor"></a><span>Version 3.0.1</span></h4>
+<p><span>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;NOT RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be interpreted as described in </span><a href='https://tools.ietf.org/html/bcp14'><span>BCP 14</span></a><span> </span><a href='https://tools.ietf.org/html/rfc2119'><span>RFC2119</span></a><span> </span><a href='https://tools.ietf.org/html/rfc8174'><span>RFC8174</span></a><span> when, and only when, they appear in all capitals, as shown here.</span></p>
+<p><span>This document is licensed under </span><a href='https://www.apache.org/licenses/LICENSE-2.0.html'><span>The Apache License, Version 2.0</span></a><span>.</span></p>
+<h2><a name="introduction" class="md-header-anchor"></a><span>Introduction</span></h2>
+<p><span>The OpenAPI Specification (OAS) defines a standard, language-agnostic interface to RESTful APIs which allows both humans and computers to discover and understand the capabilities of the service without access to source code, documentation, or through network traffic inspection. When properly defined, a consumer can understand and interact with the remote service with a minimal amount of implementation logic.</span></p>
+<p><span>An OpenAPI definition can then be used by documentation generation tools to display the API, code generation tools to generate servers and clients in various programming languages, testing tools, and many other use cases.</span></p>
+<h2><a name="table-of-contents" class="md-header-anchor"></a><span>Table of Contents</span></h2>
+<!-- TOC depthFrom:1 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
+<ul>
+    <li><p><a href='#definitions'><span>Definitions</span></a></p>
+        <ul>
+            <li><a href='#'><span>OpenAPI Document</span></a></li>
+            <li><a href='#'><span>Path Templating</span></a></li>
+            <li><a href='#'><span>Media Types</span></a></li>
+            <li><a href='#'><span>HTTP Status Codes</span></a></li>
+
+        </ul>
+    </li>
+    <li><p><a href='#specification'><span>Specification</span></a></p>
+        <ul>
+            <li><p><a href='#versions'><span>Versions</span></a></p>
+            </li>
+            <li><p><a href='#format'><span>Format</span></a></p>
+            </li>
+            <li><p><a href='#'><span>Document Structure</span></a></p>
+            </li>
+            <li><p><a href='#'><span>Data Types</span></a></p>
+            </li>
+            <li><p><a href='#'><span>Rich Text Formatting</span></a></p>
+            </li>
+            <li><p><a href='#'><span>Relative References In URLs</span></a></p>
+            </li>
+            <li><p><a href='#schema'><span>Schema</span></a></p>
+                <ul>
+                    <li><a href='#'><span>OpenAPI Object</span></a></li>
+                    <li><a href='#'><span>Info Object</span></a></li>
+                    <li><a href='#'><span>Contact Object</span></a></li>
+                    <li><a href='#'><span>License Object</span></a></li>
+                    <li><a href='#'><span>Server Object</span></a></li>
+                    <li><a href='#'><span>Server Variable Object</span></a></li>
+                    <li><a href='#'><span>Components Object</span></a></li>
+                    <li><a href='#'><span>Paths Object</span></a></li>
+                    <li><a href='#'><span>Path Item Object</span></a></li>
+                    <li><a href='#'><span>Operation Object</span></a></li>
+                    <li><a href='#'><span>External Documentation Object</span></a></li>
+                    <li><a href='#'><span>Parameter Object</span></a></li>
+                    <li><a href='#'><span>Request Body Object</span></a></li>
+                    <li><a href='#'><span>Media Type Object</span></a></li>
+                    <li><a href='#'><span>Encoding Object</span></a></li>
+                    <li><a href='#'><span>Responses Object</span></a></li>
+                    <li><a href='#'><span>Response Object</span></a></li>
+                    <li><a href='#'><span>Callback Object</span></a></li>
+                    <li><a href='#'><span>Example Object</span></a></li>
+                    <li><a href='#'><span>Link Object</span></a></li>
+                    <li><a href='#'><span>Header Object</span></a></li>
+                    <li><a href='#'><span>Tag Object</span></a></li>
+                    <li><a href='#'><span>Reference Object</span></a></li>
+                    <li><a href='#'><span>Schema Object</span></a></li>
+                    <li><a href='#'><span>Discriminator Object</span></a></li>
+                    <li><a href='#'><span>XML Object</span></a></li>
+                    <li><a href='#'><span>Security Scheme Object</span></a></li>
+                    <li><a href='#'><span>OAuth Flows Object</span></a></li>
+                    <li><a href='#'><span>OAuth Flow Object</span></a></li>
+                    <li><a href='#'><span>Security Requirement Object</span></a></li>
+
+                </ul>
+            </li>
+            <li><p><a href='#'><span>Specification Extensions</span></a></p>
+            </li>
+            <li><p><a href='#'><span>Security Filtering</span></a></p>
+            </li>
+
+        </ul>
+    </li>
+    <li><p><a href='#'><span>Appendix A: Revision History</span></a></p>
+    </li>
+
+</ul>
+<!-- /TOC -->
+
+<h2><a name="definitions" class="md-header-anchor"></a><span>Definitions</span></h2>
+
+<h5><a name="%3Ca-name=%22oasdocument%22%3E%3C/a%3Eopenapi-document" class="md-header-anchor"></a><a name="oasDocument"></a><span>OpenAPI Document</span></h5>
+<p><span>A document (or set of documents) that defines or describes an API. An OpenAPI definition uses and conforms to the OpenAPI Specification.</span></p>
+
+<h5><a name="%3Ca-name=%22pathtemplating%22%3E%3C/a%3Epath-templating" class="md-header-anchor"></a><a name="pathTemplating"></a><span>Path Templating</span></h5>
+<p><span>Path templating refers to the usage of curly braces ({}) to mark a section of a URL path as replaceable using path parameters.</span></p>
+
+<h5><a name="%3Ca-name=%22mediatypes%22%3E%3C/a%3Emedia-types" class="md-header-anchor"></a><a name="mediaTypes"></a><span>Media Types</span></h5>
+<p><span>Media type definitions are spread across several resources.</span>
+    <span>The media type definitions SHOULD be in compliance with </span><a href='https://tools.ietf.org/html/rfc6838'><span>RFC6838</span></a><span>.</span></p>
+<p><span>Some examples of possible media type definitions:</span></p>
+<pre><code>  text/plain; charset=utf-8
+  application/json
+  application/vnd.github+json
+  application/vnd.github.v3+json
+  application/vnd.github.v3.raw+json
+  application/vnd.github.v3.text+json
+  application/vnd.github.v3.html+json
+  application/vnd.github.v3.full+json
+  application/vnd.github.v3.diff
+  application/vnd.github.v3.patch
+</code></pre>
+
+<h5><a name="%3Ca-name=%22httpcodes%22%3E%3C/a%3Ehttp-status-codes" class="md-header-anchor"></a><a name="httpCodes"></a><span>HTTP Status Codes</span></h5>
+<p><span>The HTTP Status Codes are used to indicate the status of the executed operation. </span>
+    <span>The available status codes are defined by </span><a href='https://tools.ietf.org/html/rfc7231#section-6'><span>RFC7231</span></a><span> and registered status codes are listed in the </span><a href='https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml'><span>IANA Status Code Registry</span></a><span>.</span></p>
+
+<h2><a name="specification" class="md-header-anchor"></a><span>Specification</span></h2>
+
+<h3><a name="versions" class="md-header-anchor"></a><span>Versions</span></h3>
+<p><span>The OpenAPI Specification is versioned using </span><a href='https://semver.org/spec/v2.0.0.html'><span>Semantic Versioning 2.0.0</span></a><span> (semver) and follows the semver specification.</span></p>
+<p><span>The </span><code>major</code><span>.</span><code>minor</code><span> portion of the semver (for example </span><code>3.0</code><span>) SHALL designate the OAS feature set. Typically, </span><em><code>.patch</code></em><span> versions address errors in this document, not the feature set. Tooling which supports OAS 3.0 SHOULD be compatible with all OAS 3.0.</span><span>*</span><span> versions. The patch version SHOULD NOT be considered by tooling, making no distinction between </span><code>3.0.0</code><span> and </span><code>3.0.1</code><span> for example.</span></p>
+<p><span>Subsequent minor version releases of the OpenAPI Specification (incrementing the </span><code>minor</code><span> version number) SHOULD NOT interfere with tooling developed to a lower minor version and same major version.  Thus a hypothetical </span><code>3.1.0</code><span> specification SHOULD be usable with tooling designed for </span><code>3.0.0</code><span>.</span></p>
+<p><span>An OpenAPI document compatible with OAS 3.</span><span>*</span><span>.</span><span>*</span><span> contains a required </span><a href='#'><code>openapi</code></a><span> field which designates the semantic version of the OAS that it uses. (OAS 2.0 documents contain a top-level version field named </span><a href='https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#swaggerObject'><code>swagger</code></a><span> and value </span><code>&quot;2.0&quot;</code><span>.)</span></p>
+<h3><a name="format" class="md-header-anchor"></a><span>Format</span></h3>
+<p><span>An OpenAPI document that conforms to the OpenAPI Specification is itself a JSON object, which may be represented either in JSON or YAML format.</span></p>
+<p><span>For example, if a field has an array value, the JSON array representation will be used:</span></p>
+<pre><code class='language-json' lang='json'>{
+   &quot;field&quot;: [ 1, 2, 3 ]
+}
+</code></pre>
+<p><span>All field names in the specification are </span><strong><span>case sensitive</span></strong><span>.</span></p>
+<p><span>The schema exposes two types of fields: Fixed fields, which have a declared name, and Patterned fields, which declare a regex pattern for the field name.</span></p>
+<p><span>Patterned fields MUST have unique names within the containing object. </span></p>
+<p><span>In order to preserve the ability to round-trip between YAML and JSON formats, YAML version </span><a href='http://www.yaml.org/spec/1.2/spec.html'><span>1.2</span></a><span> is RECOMMENDED along with some additional constraints:</span></p>
+<ul>
+    <li><span>Tags MUST be limited to those allowed by the </span><a href='http://www.yaml.org/spec/1.2/spec.html#id2803231'><span>JSON Schema ruleset</span></a><span>.</span></li>
+    <li><span>Keys used in YAML maps MUST be limited to a scalar string, as defined by the </span><a href='http://yaml.org/spec/1.2/spec.html#id2802346'><span>YAML Failsafe schema ruleset</span></a><span>.</span></li>
+
+</ul>
+<p><strong><span>Note:</span></strong><span> While APIs may be defined by OpenAPI documents in either YAML or JSON format, the API request and response bodies and other content are not required to be JSON or YAML.</span></p>
+
+
+<h3><a name="%3Ca-name=%22documentstructure%22%3E%3C/a%3Edocument-structure" class="md-header-anchor"></a><a name="documentStructure"></a><span>Document Structure</span></h3>
+<p><span>An OpenAPI document MAY be made up of a single document or be divided into multiple, connected parts at the discretion of the user. In the latter case, </span><code>$ref</code><span> fields MUST be used in the specification to reference those parts as follows from the </span><a href='http://json-schema.org'><span>JSON Schema</span></a><span> definitions.</span></p>
+<p><span>It is RECOMMENDED that the root OpenAPI document be named: </span><code>openapi.json</code><span> or </span><code>openapi.yaml</code><span>.</span></p>
+<h3><a name="%3Ca-name=%22datatypes%22%3E%3C/a%3Edata-types" class="md-header-anchor"></a><a name="dataTypes"></a><span>Data Types</span></h3>
+<p><span>Primitive data types in the OAS are based on the types supported by the </span><a href='https://tools.ietf.org/html/draft-wright-json-schema-00#section-4.2'><span>JSON Schema Specification Wright Draft 00</span></a><span>. </span>
+    <span>Note that </span><code>integer</code><span> as a type is also supported and is defined as a JSON number without a fraction or exponent part. </span>
+    <code>null</code><span> is not supported as a type (see </span><a href='#'><code>nullable</code></a><span> for an alternative solution).</span>
+    <span>Models are defined using the </span><a href='#'><span>Schema Object</span></a><span>, which is an extended subset of JSON Schema Specification Wright Draft 00.</span></p>
+<p><a name="dataTypeFormat"></a><span>Primitives have an optional modifier property: </span><code>format</code><span>.</span>
+    <span>OAS uses several known formats to define in fine detail the data type being used.</span>
+    <span>However, to support documentation needs, the </span><code>format</code><span> property is an open </span><code>string</code><span>-valued property, and can have any value.</span>
+    <span>Formats such as </span><code>&quot;email&quot;</code><span>, </span><code>&quot;uuid&quot;</code><span>, and so on, MAY be used even though undefined by this specification.</span>
+    <span>Types that are not accompanied by a </span><code>format</code><span> property follow the type definition in the JSON Schema. Tools that do not recognize a specific </span><code>format</code><span> MAY default back to the </span><code>type</code><span> alone, as if the </span><code>format</code><span> is not specified.</span></p>
+<p><span>The formats defined by the OAS are:</span></p>
+<figure><table>
+    <thead>
+    <tr><th><span>Common Name</span></th><th><a href='#'><code>type</code></a></th><th><a href='#'><code>format</code></a></th><th><span>Comments</span></th></tr></thead>
+    <tbody><tr><td><span>integer</span></td><td><code>integer</code></td><td><code>int32</code></td><td><span>signed 32 bits</span></td></tr><tr><td><span>long</span></td><td><code>integer</code></td><td><code>int64</code></td><td><span>signed 64 bits</span></td></tr><tr><td><span>float</span></td><td><code>number</code></td><td><code>float</code></td><td>&nbsp;</td></tr><tr><td><span>double</span></td><td><code>number</code></td><td><code>double</code></td><td>&nbsp;</td></tr><tr><td><span>string</span></td><td><code>string</code></td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><span>byte</span></td><td><code>string</code></td><td><code>byte</code></td><td><span>base64 encoded characters</span></td></tr><tr><td><span>binary</span></td><td><code>string</code></td><td><code>binary</code></td><td><span>any sequence of octets</span></td></tr><tr><td><span>boolean</span></td><td><code>boolean</code></td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><span>date</span></td><td><code>string</code></td><td><code>date</code></td><td><span>As defined by </span><code>full-date</code><span> - </span><a href='https://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'><span>RFC3339</span></a></td></tr><tr><td><span>dateTime</span></td><td><code>string</code></td><td><code>date-time</code></td><td><span>As defined by </span><code>date-time</code><span> - </span><a href='https://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'><span>RFC3339</span></a></td></tr><tr><td><span>password</span></td><td><code>string</code></td><td><code>password</code></td><td><span>A hint to UIs to obscure input.</span></td></tr></tbody>
+</table></figure>
+
+<h3><a name="%3Ca-name=%22richtext%22%3E%3C/a%3Erich-text-formatting" class="md-header-anchor"></a><a name="richText"></a><span>Rich Text Formatting</span></h3>
+<p><span>Throughout the specification </span><code>description</code><span> fields are noted as supporting CommonMark markdown formatting.</span>
+    <span>Where OpenAPI tooling renders rich text it MUST support, at a minimum, markdown syntax as described by </span><a href='http://spec.commonmark.org/0.27/'><span>CommonMark 0.27</span></a><span>. Tooling MAY choose to ignore some CommonMark features to address security concerns. </span></p>
+
+<h3><a name="%3Ca-name=%22relativereferences%22%3E%3C/a%3Erelative-references-in-urls" class="md-header-anchor"></a><a name="relativeReferences"></a><span>Relative References in URLs</span></h3>
+<p><span>Unless specified otherwise, all properties that are URLs MAY be relative references as defined by </span><a href='https://tools.ietf.org/html/rfc3986#section-4.2'><span>RFC3986</span></a><span>.</span>
+    <span>Relative references are resolved using the URLs defined in the </span><a href='#'><code>Server Object</code></a><span> as a Base URI.</span></p>
+<p><span>Relative references used in </span><code>$ref</code><span> are processed as per </span><a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'><span>JSON Reference</span></a><span>, using the URL of the current document as the base URI. See also the </span><a href='#'><span>Reference Object</span></a><span>.</span></p>
+<h3><a name="schema" class="md-header-anchor"></a><span>Schema</span></h3>
+<p><span>In the following description, if a field is not explicitly </span><strong><span>REQUIRED</span></strong><span> or described with a MUST or SHALL, it can be considered OPTIONAL.</span></p>
+
+<h4><a name="%3Ca-name=%22referenceobject%22%3E%3C/a%3Ereference-object" class="md-header-anchor"></a><a name="referenceObject"></a><span>Reference Object</span></h4>
+<p><span>A simple object to allow referencing other components in the specification, internally and externally.</span></p>
+<p><span>The Reference Object is defined by </span><a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'><span>JSON Reference</span></a><span> and follows the same structure, behavior and rules. </span></p>
+<p><span>For this specification, reference resolution is accomplished as defined by the JSON Reference specification and not by the JSON Schema specification.</span></p>
+<h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+<figure><table>
+    <thead>
+    <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+    <tbody><tr><td><a name="referenceRef"></a><span>$ref</span></td><td style='text-align:center;' ><code>string</code></td><td><strong><span>REQUIRED</span></strong><span>. The reference string.</span></td></tr></tbody>
+</table></figure>
+<p><span>This object cannot be extended with additional properties and any properties added SHALL be ignored.</span></p>
+<h5><a name="reference-object-example" class="md-header-anchor"></a><span>Reference Object Example</span></h5>
+<pre><code class='language-json' lang='json'>{
+	&quot;$ref&quot;: &quot;#/components/schemas/Pet&quot;
+}
+</code></pre>
+<pre><code class='language-yaml' lang='yaml'>$ref: &#39;#/components/schemas/Pet&#39;
+</code></pre>
+<h5><a name="relative-schema-document-example" class="md-header-anchor"></a><span>Relative Schema Document Example</span></h5>
+<pre><code class='language-json' lang='json'>{
+  &quot;$ref&quot;: &quot;Pet.json&quot;
+}
+</code></pre>
+<pre><code class='language-yaml' lang='yaml'>$ref: Pet.yaml
+</code></pre>
+<h5><a name="relative-documents-with-embedded-schema-example" class="md-header-anchor"></a><span>Relative Documents With Embedded Schema Example</span></h5>
+<pre><code class='language-json' lang='json'>{
+  &quot;$ref&quot;: &quot;definitions.json#/Pet&quot;
+}
+</code></pre>
+<pre><code class='language-yaml' lang='yaml'>$ref: definitions.yaml#/Pet
+</code></pre>
+
+
+<h3><a name="%3Ca-name=%22specificationextensions%22%3E%3C/a%3Especification-extensions" class="md-header-anchor"></a><a name="specificationExtensions"></a><span>Specification Extensions</span></h3>
+<p><span>While the OpenAPI Specification tries to accommodate most use cases, additional data can be added to extend the specification at certain points.</span></p>
+<p><span>The extensions properties are implemented as patterned fields that are always prefixed by </span><code>&quot;x-&quot;</code><span>.</span></p>
+<figure><table>
+    <thead>
+    <tr><th><span>Field Pattern</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+    <tbody><tr><td><a name="infoExtensions"></a><span>^x-</span></td><td style='text-align:center;' ><span>Any</span></td><td><span>Allows extensions to the OpenAPI Schema. The field name MUST begin with </span><code>x-</code><span>, for example, </span><code>x-internal-id</code><span>. The value can be </span><code>null</code><span>, a primitive, an array or an object. Can have any valid JSON format value.</span></td></tr></tbody>
+</table></figure>
+<p><span>The extensions may or may not be supported by the available tooling, but those may be extended as well to add requested support (if tools are internal or open-sourced).</span></p>
+
+
+
+<h3><a name="%3Ca-name=%22securityfiltering%22%3E%3C/a%3Esecurity-filtering" class="md-header-anchor"></a><a name="securityFiltering"></a><span>Security Filtering</span></h3>
+<p><span>Some objects in the OpenAPI Specification MAY be declared and remain empty, or be completely removed, even though they are inherently the core of the API documentation. </span></p>
+<p><span>The reasoning is to allow an additional layer of access control over the documentation.</span>
+    <span>While not part of the specification itself, certain libraries MAY choose to allow access to parts of the documentation based on some form of authentication/authorization.</span></p>
+<p><span>Two examples of this:</span></p>
+<ol start='' >
+    <li><span>The </span><a href='#'><span>Paths Object</span></a><span> MAY be empty. It may be counterintuitive, but this may tell the viewer that they got to the right place, but can&#39;t access any documentation. They&#39;d still have access to the </span><a href='#'><span>Info Object</span></a><span> which may contain additional information regarding authentication.</span></li>
+    <li><span>The </span><a href='#'><span>Path Item Object</span></a><span> MAY be empty. In this case, the viewer will be aware that the path exists, but will not be able to see any of its operations or parameters. This is different than hiding the path itself from the </span><a href='#'><span>Paths Object</span></a><span>, so the user will not be aware of its existence. This allows the documentation provider to finely control what the viewer can see.</span></li>
+
+</ol>
+
+
+
+<h2><a name="%3Ca-name=%22revisionhistory%22%3E%3C/a%3Eappendix-a:-revision-history" class="md-header-anchor"></a><a name="revisionHistory"></a><span>Appendix A: Revision History</span></h2>
+<figure><table>
+    <thead>
+    <tr><th><span>Version</span></th><th><span>Date</span></th><th><span>Notes</span></th></tr></thead>
+    <tbody><tr><td><span>3.0.1</span></td><td><span>2017-12-06</span></td><td><span>Patch release of the OpenAPI Specification 3.0.1</span></td></tr><tr><td><span>3.0.0</span></td><td><span>2017-07-26</span></td><td><span>Release of the OpenAPI Specification 3.0.0</span></td></tr><tr><td><span>3.0.0-rc2</span></td><td><span>2017-06-16</span></td><td><span>rc2 of the 3.0 specification</span></td></tr><tr><td><span>3.0.0-rc1</span></td><td><span>2017-04-27</span></td><td><span>rc1 of the 3.0 specification</span></td></tr><tr><td><span>3.0.0-rc0</span></td><td><span>2017-02-28</span></td><td><span>Implementer&#39;s Draft of the 3.0 specification</span></td></tr><tr><td><span>2.0</span></td><td><span>2015-12-31</span></td><td><span>Donation of Swagger 2.0 to the Open API Initiative</span></td></tr><tr><td><span>2.0</span></td><td><span>2014-09-08</span></td><td><span>Release of Swagger 2.0</span></td></tr><tr><td><span>1.2</span></td><td><span>2014-03-14</span></td><td><span>Initial release of the formal document.</span></td></tr><tr><td><span>1.1</span></td><td><span>2012-08-22</span></td><td><span>Release of Swagger 1.1</span></td></tr><tr><td><span>1.0</span></td><td><span>2011-08-10</span></td><td><span>First release of the Swagger Specification</span></td></tr></tbody>
+</table></figure>
+</body>
+</html>

@@ -19,8 +19,24 @@ package org.wapache.openapi.v3.models.info;
 import java.util.Objects;
 
 /**
- * License
- *
+ * <h4><a name="%3Ca-name=%22licenseobject%22%3E%3C/a%3Elicense-object" class="md-header-anchor"></a><a name="licenseObject"></a><span>License Object</span></h4>
+ * <p><span>License information for the exposed API.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="licenseName"></a><span>name</span></td><td style='text-align:center;' ><code>string</code></td><td><strong><span>REQUIRED</span></strong><span>. The license name used for the API.</span></td></tr><tr><td><a name="licenseUrl"></a><span>url</span></td><td style='text-align:center;' ><code>string</code></td><td><span>A URL to the license used for the API. MUST be in the format of a URL.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="license-object-example:" class="md-header-anchor"></a><span>License Object Example:</span></h5>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;name&quot;: &quot;Apache 2.0&quot;,
+ *   &quot;url&quot;: &quot;https://www.apache.org/licenses/LICENSE-2.0.html&quot;
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>name: Apache 2.0
+ * url: https://www.apache.org/licenses/LICENSE-2.0.html
+ * </code></pre>
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#licenseObject"
  */
 

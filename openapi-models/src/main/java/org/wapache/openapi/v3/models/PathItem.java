@@ -25,8 +25,96 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * PathItem
- *
+ * <h4><a name="%3Ca-name=%22pathitemobject%22%3E%3C/a%3Epath-item-object" class="md-header-anchor"></a><a name="pathItemObject"></a><span>Path Item Object</span></h4>
+ * <p><span>Describes the operations available on a single path.</span>
+ * <span>A Path Item MAY be empty, due to </span><a href='#'><span>ACL constraints</span></a><span>.</span>
+ * <span>The path itself is still exposed to the documentation viewer but they will not know which operations and parameters are available.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="pathItemRef"></a><span>$ref</span></td><td style='text-align:center;' ><code>string</code></td><td><span>Allows for an external definition of this path item. The referenced structure MUST be in the format of a </span><a href='#'><span>Path Item Object</span></a><span>. If there are conflicts between the referenced definition and this Path Item&#39;s definition, the behavior is </span><em><span>undefined</span></em><span>.</span></td></tr><tr><td><a name="pathItemSummary"></a><span>summary</span></td><td style='text-align:center;' ><code>string</code></td><td><span>An optional, string summary, intended to apply to all operations in this path.</span></td></tr><tr><td><a name="pathItemDescription"></a><span>description</span></td><td style='text-align:center;' ><code>string</code></td><td><span>An optional, string description, intended to apply to all operations in this path. </span><a href='http://spec.commonmark.org/'><span>CommonMark syntax</span></a><span> MAY be used for rich text representation.</span></td></tr><tr><td><a name="pathItemGet"></a><span>get</span></td><td style='text-align:center;' ><a href='#'><span>Operation Object</span></a></td><td><span>A definition of a GET operation on this path.</span></td></tr><tr><td><a name="pathItemPut"></a><span>put</span></td><td style='text-align:center;' ><a href='#'><span>Operation Object</span></a></td><td><span>A definition of a PUT operation on this path.</span></td></tr><tr><td><a name="pathItemPost"></a><span>post</span></td><td style='text-align:center;' ><a href='#'><span>Operation Object</span></a></td><td><span>A definition of a POST operation on this path.</span></td></tr><tr><td><a name="pathItemDelete"></a><span>delete</span></td><td style='text-align:center;' ><a href='#'><span>Operation Object</span></a></td><td><span>A definition of a DELETE operation on this path.</span></td></tr><tr><td><a name="pathItemOptions"></a><span>options</span></td><td style='text-align:center;' ><a href='#'><span>Operation Object</span></a></td><td><span>A definition of a OPTIONS operation on this path.</span></td></tr><tr><td><a name="pathItemHead"></a><span>head</span></td><td style='text-align:center;' ><a href='#'><span>Operation Object</span></a></td><td><span>A definition of a HEAD operation on this path.</span></td></tr><tr><td><a name="pathItemPatch"></a><span>patch</span></td><td style='text-align:center;' ><a href='#'><span>Operation Object</span></a></td><td><span>A definition of a PATCH operation on this path.</span></td></tr><tr><td><a name="pathItemTrace"></a><span>trace</span></td><td style='text-align:center;' ><a href='#'><span>Operation Object</span></a></td><td><span>A definition of a TRACE operation on this path.</span></td></tr><tr><td><a name="pathItemServers"></a><span>servers</span></td><td style='text-align:center;' ><span>[</span><a href='#'><span>Server Object</span></a><span>]</span></td><td><span>An alternative </span><code>server</code><span> array to service all operations in this path.</span></td></tr><tr><td><a name="pathItemParameters"></a><span>parameters</span></td><td style='text-align:center;' ><span>[</span><a href='#'><span>Parameter Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>A list of parameters that are applicable for all the operations described under this path. These parameters can be overridden at the operation level, but cannot be removed there. The list MUST NOT include duplicated parameters. A unique parameter is defined by a combination of a </span><a href='#'><span>name</span></a><span> and </span><a href='#'><span>location</span></a><span>. The list can use the </span><a href='#'><span>Reference Object</span></a><span> to link to parameters that are defined at the </span><a href='#'><span>OpenAPI Object&#39;s components/parameters</span></a><span>.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="path-item-object-example" class="md-header-anchor"></a><span>Path Item Object Example</span></h5>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;get&quot;: {
+ *     &quot;description&quot;: &quot;Returns pets based on ID&quot;,
+ *     &quot;summary&quot;: &quot;Find pets by ID&quot;,
+ *     &quot;operationId&quot;: &quot;getPetsById&quot;,
+ *     &quot;responses&quot;: {
+ *       &quot;200&quot;: {
+ *         &quot;description&quot;: &quot;pet response&quot;,
+ *         &quot;content&quot;: {
+ *           &quot;*\/*&quot;:{
+ *             &quot;schema&quot;:{
+ *             &quot;type&quot;:&quot;array&quot;,
+ *             &quot;items&quot;:{
+ *             &quot;$ref&quot;:&quot;#/components/schemas/Pet&quot;
+ *             }
+ *             }
+ *             }
+ *             }
+ *             },
+ *             &quot;default&quot;:{
+ *             &quot;description&quot;:&quot;error payload&quot;,
+ *             &quot;content&quot;:{
+ *             &quot;text/html&quot;:{
+ *             &quot;schema&quot;:{
+ *             &quot;$ref&quot;:&quot;#/components/schemas/ErrorModel&quot;
+ *             }
+ *             }
+ *             }
+ *             }
+ *             }
+ *             },
+ *             &quot;parameters&quot;:[
+ *             {
+ *             &quot;name&quot;:&quot;id&quot;,
+ *             &quot;in&quot;:&quot;path&quot;,
+ *             &quot;description&quot;:&quot;ID of pet to use&quot;,
+ *             &quot;required&quot;:true,
+ *             &quot;schema&quot;:{
+ *             &quot;type&quot;:&quot;array&quot;,
+ *             &quot;items&quot;:{
+ *             &quot;type&quot;:&quot;string&quot;
+ *             }
+ *             },
+ *             &quot;style&quot;:&quot;simple&quot;
+ *             }
+ *             ]
+ *             }
+ *             </code></pre>
+ *             <pre><code class='language-yaml'lang='yaml'>get:
+ *             description:Returns pets based on ID
+ *             summary:Find pets by ID
+ *             operationId:getPetsById
+ *             responses:
+ *             &#39;200&#39;:
+ *             description:pet response
+ *             content:
+ *             &#39;*\/*&#39; :
+ *           schema:
+ *             type: array
+ *             items:
+ *               $ref: &#39;#/components/schemas/Pet&#39;
+ *     default:
+ *       description: error payload
+ *       content:
+ *         &#39;text/html&#39;:
+ *           schema:
+ *             $ref: &#39;#/components/schemas/ErrorModel&#39;
+ * parameters:
+ * - name: id
+ *   in: path
+ *   description: ID of pet to use
+ *   required: true
+ *   schema:
+ *     type: array
+ *     style: simple
+ *     items:
+ *       type: string
+ * </code></pre>
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#pathItemObject"
  */
 

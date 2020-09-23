@@ -19,6 +19,46 @@ package org.wapache.openapi.v3.models.info;
 import java.util.Objects;
 
 /**
+ * <h4><a name="%3Ca-name=%22infoobject%22%3E%3C/a%3Einfo-object" class="md-header-anchor"></a><a name="infoObject"></a><span>Info Object</span></h4>
+ * <p><span>The object provides metadata about the API.</span>
+ * <span>The metadata MAY be used by the clients if needed, and MAY be presented in editing or documentation generation tools for convenience.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="infoTitle"></a><span>title</span></td><td style='text-align:center;' ><code>string</code></td><td><strong><span>REQUIRED</span></strong><span>. The title of the application.</span></td></tr><tr><td><a name="infoDescription"></a><span>description</span></td><td style='text-align:center;' ><code>string</code></td><td><span>A short description of the application. </span><a href='http://spec.commonmark.org/'><span>CommonMark syntax</span></a><span> MAY be used for rich text representation.</span></td></tr><tr><td><a name="infoTermsOfService"></a><span>termsOfService</span></td><td style='text-align:center;' ><code>string</code></td><td><span>A URL to the Terms of Service for the API. MUST be in the format of a URL.</span></td></tr><tr><td><a name="infoContact"></a><span>contact</span></td><td style='text-align:center;' ><a href='#'><span>Contact Object</span></a></td><td><span>The contact information for the exposed API.</span></td></tr><tr><td><a name="infoLicense"></a><span>license</span></td><td style='text-align:center;' ><a href='#'><span>License Object</span></a></td><td><span>The license information for the exposed API.</span></td></tr><tr><td><a name="infoVersion"></a><span>version</span></td><td style='text-align:center;' ><code>string</code></td><td><strong><span>REQUIRED</span></strong><span>. The version of the OpenAPI document (which is distinct from the </span><a href='#'><span>OpenAPI Specification version</span></a><span> or the API implementation version).</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="info-object-example:" class="md-header-anchor"></a><span>Info Object Example:</span></h5>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;title&quot;: &quot;Sample Pet Store App&quot;,
+ *   &quot;description&quot;: &quot;This is a sample server for a pet store.&quot;,
+ *   &quot;termsOfService&quot;: &quot;http://example.com/terms/&quot;,
+ *   &quot;contact&quot;: {
+ *     &quot;name&quot;: &quot;API Support&quot;,
+ *     &quot;url&quot;: &quot;http://www.example.com/support&quot;,
+ *     &quot;email&quot;: &quot;support@example.com&quot;
+ *   },
+ *   &quot;license&quot;: {
+ *     &quot;name&quot;: &quot;Apache 2.0&quot;,
+ *     &quot;url&quot;: &quot;https://www.apache.org/licenses/LICENSE-2.0.html&quot;
+ *   },
+ *   &quot;version&quot;: &quot;1.0.1&quot;
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>title: Sample Pet Store App
+ * description: This is a sample server for a pet store.
+ * termsOfService: http://example.com/terms/
+ * contact:
+ *   name: API Support
+ *   url: http://www.example.com/support
+ *   email: support@example.com
+ * license:
+ *   name: Apache 2.0
+ *   url: https://www.apache.org/licenses/LICENSE-2.0.html
+ * version: 1.0.1
+ * </code></pre>
+ *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#infoObject"
  */
 

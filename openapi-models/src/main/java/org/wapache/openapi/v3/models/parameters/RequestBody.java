@@ -19,8 +19,112 @@ package org.wapache.openapi.v3.models.parameters;
 import org.wapache.openapi.v3.models.media.Content;
 
 /**
- * RequestBody
- *
+ * <h4><a name="%3Ca-name=%22requestbodyobject%22%3E%3C/a%3Erequest-body-object" class="md-header-anchor"></a><a name="requestBodyObject"></a><span>Request Body Object</span></h4>
+ * <p><span>Describes a single request body.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="requestBodyDescription"></a><span>description</span></td><td style='text-align:center;' ><code>string</code></td><td><span>A brief description of the request body. This could contain examples of use.  </span><a href='http://spec.commonmark.org/'><span>CommonMark syntax</span></a><span> MAY be used for rich text representation.</span></td></tr><tr><td><a name="requestBodyContent"></a><span>content</span></td><td style='text-align:center;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Media Type Object</span></a><span>]</span></td><td><strong><span>REQUIRED</span></strong><span>. The content of the request body. The key is a media type or </span><a href='https://tools.ietf.org/html/rfc7231#appendix-D'><span>media type range</span></a><span> and the value describes it.  For requests that match multiple keys, only the most specific key is applicable. e.g. text/plain overrides text/*</span></td></tr><tr><td><a name="requestBodyRequired"></a><span>required</span></td><td style='text-align:center;' ><code>boolean</code></td><td><span>Determines if the request body is required in the request. Defaults to </span><code>false</code><span>.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="request-body-examples" class="md-header-anchor"></a><span>Request Body Examples</span></h5>
+ * <p><span>A request body with a referenced model definition.</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;description&quot;: &quot;user to add to the system&quot;,
+ *   &quot;content&quot;: {
+ *     &quot;application/json&quot;: {
+ *       &quot;schema&quot;: {
+ *         &quot;$ref&quot;: &quot;#/components/schemas/User&quot;
+ *       },
+ *       &quot;examples&quot;: {
+ *           &quot;user&quot; : {
+ *             &quot;summary&quot;: &quot;User Example&quot;,
+ *             &quot;externalValue&quot;: &quot;http://foo.bar/examples/user-example.json&quot;
+ *           }
+ *         }
+ *     },
+ *     &quot;application/xml&quot;: {
+ *       &quot;schema&quot;: {
+ *         &quot;$ref&quot;: &quot;#/components/schemas/User&quot;
+ *       },
+ *       &quot;examples&quot;: {
+ *           &quot;user&quot; : {
+ *             &quot;summary&quot;: &quot;User example in XML&quot;,
+ *             &quot;externalValue&quot;: &quot;http://foo.bar/examples/user-example.xml&quot;
+ *           }
+ *         }
+ *     },
+ *     &quot;text/plain&quot;: {
+ *       &quot;examples&quot;: {
+ *         &quot;user&quot; : {
+ *             &quot;summary&quot;: &quot;User example in Plain text&quot;,
+ *             &quot;externalValue&quot;: &quot;http://foo.bar/examples/user-example.txt&quot;
+ *         }
+ *       }
+ *     },
+ *     &quot;*\/*&quot;:{
+ *       &quot;examples&quot;:{
+ *       &quot;user&quot;:{
+ *       &quot;summary&quot;:&quot;User example in other format&quot;,
+ *       &quot;externalValue&quot;:&quot;http://foo.bar/examples/user-example.whatever&quot;
+ *       }
+ *       }
+ *       }
+ *       }
+ *       }
+ *       </code></pre>
+ *       <pre><code class='language-yaml'lang='yaml'>description:user to add to the system
+ *       content:
+ *       &#39;application/json&#39;:
+ *       schema:
+ *       $ref:&#39;#/components/schemas/User&#39;
+ *       examples:
+ *       user:
+ *       summary:User Example
+ *       externalValue:&#39;http://foo.bar/examples/user-example.json&#39;
+ *       &#39;application/xml&#39;:
+ *       schema:
+ *       $ref:&#39;#/components/schemas/User&#39;
+ *       examples:
+ *       user:
+ *       summary:User Example in XML
+ *       externalValue:&#39;http://foo.bar/examples/user-example.xml&#39;
+ *       &#39;text/plain&#39;:
+ *       examples:
+ *       user:
+ *       summary:User example in text plain format
+ *       externalValue:&#39;http://foo.bar/examples/user-example.txt&#39;
+ *       &#39;*\/*&#39;:
+ *     examples:
+ *       user:
+ *         summary: User example in other format
+ *         externalValue: &#39;http://foo.bar/examples/user-example.whatever&#39;
+ * </code></pre>
+ * <p><span>A body parameter that is an array of string values:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;description&quot;: &quot;user to add to the system&quot;,
+ *   &quot;content&quot;: {
+ *     &quot;text/plain&quot;: {
+ *       &quot;schema&quot;: {
+ *         &quot;type&quot;: &quot;array&quot;,
+ *         &quot;items&quot;: {
+ *           &quot;type&quot;: &quot;string&quot;
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>description: user to add to the system
+ * required: true
+ * content:
+ *   text/plain:
+ *     schema:
+ *       type: array
+ *       items:
+ *         type: string
+ * </code></pre>
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#requestBodyObject"
  */
 

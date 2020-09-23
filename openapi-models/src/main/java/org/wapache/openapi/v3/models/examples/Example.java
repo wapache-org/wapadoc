@@ -17,7 +17,75 @@
 package org.wapache.openapi.v3.models.examples;
 
 /**
- * Example
+ * <h4><a name="%3Ca-name=%22exampleobject%22%3E%3C/a%3Eexample-object" class="md-header-anchor"></a><a name="exampleObject"></a><span>Example Object</span></h4>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="exampleSummary"></a><span>summary</span></td><td style='text-align:center;' ><code>string</code></td><td><span>Short description for the example.</span></td></tr><tr><td><a name="exampleDescription"></a><span>description</span></td><td style='text-align:center;' ><code>string</code></td><td><span>Long description for the example. </span><a href='http://spec.commonmark.org/'><span>CommonMark syntax</span></a><span> MAY be used for rich text representation.</span></td></tr><tr><td><a name="exampleValue"></a><span>value</span></td><td style='text-align:center;' ><span>Any</span></td><td><span>Embedded literal example. The </span><code>value</code><span> field and </span><code>externalValue</code><span> field are mutually exclusive. To represent examples of media types that cannot naturally represented in JSON or YAML, use a string value to contain the example, escaping where necessary.</span></td></tr><tr><td><a name="exampleExternalValue"></a><span>externalValue</span></td><td style='text-align:center;' ><code>string</code></td><td><span>A URL that points to the literal example. This provides the capability to reference examples that cannot easily be included in JSON or YAML documents.  The </span><code>value</code><span> field and </span><code>externalValue</code><span> field are mutually exclusive.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <p><span>In all cases, the example value is expected to be compatible with the type schema </span>
+ * <span>of its associated value.  Tooling implementations MAY choose to </span>
+ * <span>validate compatibility automatically, and reject the example value(s) if incompatible.</span></p>
+ * <h5><a name="example-object-example" class="md-header-anchor"></a><span>Example Object Example</span></h5>
+ * <pre><code class='language-yaml' lang='yaml'># in a model
+ * schemas:
+ *   properties:
+ *     name:
+ *       type: string
+ *       examples:
+ *         name:
+ *           $ref: http://example.org/petapi-examples/openapi.json#/components/examples/name-example
+ *
+ * # in a request body:
+ *   requestBody:
+ *     content:
+ *       &#39;application/json&#39;:
+ *         schema:
+ *           $ref: &#39;#/components/schemas/Address&#39;
+ *         examples:
+ *           foo:
+ *             summary: A foo example
+ *             value: {&quot;foo&quot;: &quot;bar&quot;}
+ *           bar:
+ *             summary: A bar example
+ *             value: {&quot;bar&quot;: &quot;baz&quot;}
+ *       &#39;application/xml&#39;:
+ *         examples:
+ *           xmlExample:
+ *             summary: This is an example in XML
+ *             externalValue: &#39;http://example.org/examples/address-example.xml&#39;
+ *       &#39;text/plain&#39;:
+ *         examples:
+ *           textExample:
+ *             summary: This is a text example
+ *             externalValue: &#39;http://foo.bar/examples/address-example.txt&#39;
+ *
+ *
+ * # in a parameter
+ *   parameters:
+ *     - name: &#39;zipCode&#39;
+ *       in: &#39;query&#39;
+ *       schema:
+ *         type: &#39;string&#39;
+ *         format: &#39;zip-code&#39;
+ *         examples:
+ *           zip-example:
+ *             $ref: &#39;#/components/examples/zip-example&#39;
+ *
+ * # in a response
+ *   responses:
+ *     &#39;200&#39;:
+ *       description: your car appointment has been booked
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: &#39;#/components/schemas/SuccessResponse&#39;
+ *           examples:
+ *             confirmation-success:
+ *               $ref: &#39;#/components/examples/confirmation-success&#39;
+ * </code></pre>
  */
 
 public class Example {

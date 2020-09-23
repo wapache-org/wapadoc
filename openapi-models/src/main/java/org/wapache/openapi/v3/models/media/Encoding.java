@@ -22,7 +22,52 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Encoding
+ * <h4><a name="%3Ca-name=%22encodingobject%22%3E%3C/a%3Eencoding-object" class="md-header-anchor"></a><a name="encodingObject"></a><span>Encoding Object</span></h4>
+ * <p><span>A single encoding definition applied to a single schema property.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="encodingContentType"></a><span>contentType</span></td><td style='text-align:center;' ><code>string</code></td><td><span>The Content-Type for encoding a specific property. Default value depends on the property type: for </span><code>string</code><span> with </span><code>format</code><span> being </span><code>binary</code><span> – </span><code>application/octet-stream</code><span>; for other primitive types – </span><code>text/plain</code><span>; for </span><code>object</code><span> - </span><code>application/json</code><span>; for </span><code>array</code><span> – the default is defined based on the inner type. The value can be a specific media type (e.g. </span><code>application/json</code><span>), a wildcard media type (e.g. </span><code>image/*</code><span>), or a comma-separated list of the two types.</span></td></tr><tr><td><a name="encodingHeaders"></a><span>headers</span></td><td style='text-align:center;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Header Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>A map allowing additional information to be provided as headers, for example </span><code>Content-Disposition</code><span>.  </span><code>Content-Type</code><span> is described separately and SHALL be ignored in this section. This property SHALL be ignored if the request body media type is not a </span><code>multipart</code><span>.</span></td></tr><tr><td><a name="encodingStyle"></a><span>style</span></td><td style='text-align:center;' ><code>string</code></td><td><span>Describes how a specific property value will be serialized depending on its type.  See </span><a href='#'><span>Parameter Object</span></a><span> for details on the </span><a href='#'><code>style</code></a><span> property. The behavior follows the same values as </span><code>query</code><span> parameters, including default values. This property SHALL be ignored if the request body media type is not </span><code>application/x-www-form-urlencoded</code><span>.</span></td></tr><tr><td><a name="encodingExplode"></a><span>explode</span></td><td style='text-align:center;' ><code>boolean</code></td><td><span>When this is true, property values of type </span><code>array</code><span> or </span><code>object</code><span> generate separate parameters for each value of the array, or key-value-pair of the map.  For other types of properties this property has no effect. When </span><a href='#'><code>style</code></a><span> is </span><code>form</code><span>, the default value is </span><code>true</code><span>. For all other styles, the default value is </span><code>false</code><span>. This property SHALL be ignored if the request body media type is not </span><code>application/x-www-form-urlencoded</code><span>.</span></td></tr><tr><td><a name="encodingAllowReserved"></a><span>allowReserved</span></td><td style='text-align:center;' ><code>boolean</code></td><td><span>Determines whether the parameter value SHOULD allow reserved characters, as defined by </span><a href='https://tools.ietf.org/html/rfc3986#section-2.2'><span>RFC3986</span></a><span> </span><code>:/?#[]@!$&amp;&#39;()*+,;=</code><span> to be included without percent-encoding. The default value is </span><code>false</code><span>. This property SHALL be ignored if the request body media type is not </span><code>application/x-www-form-urlencoded</code><span>.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="encoding-object-example" class="md-header-anchor"></a><span>Encoding Object Example</span></h5>
+ * <pre><code class='language-yaml' lang='yaml'>requestBody:
+ *   content:
+ *     multipart/mixed:
+ *       schema:
+ *         type: object
+ *         properties:
+ *           id:
+ *             # default is text/plain
+ *             type: string
+ *             format: uuid
+ *           address:
+ *             # default is application/json
+ *             type: object
+ *             properties: {}
+ *           historyMetadata:
+ *             # need to declare XML format!
+ *             description: metadata in XML format
+ *             type: object
+ *             properties: {}
+ *           profileImage:
+ *             # default is application/octet-stream, need to declare an image type only!
+ *             type: string
+ *             format: binary
+ *       encoding:
+ *         historyMetadata:
+ *           # require XML Content-Type in utf-8 encoding
+ *           contentType: application/xml; charset=utf-8
+ *         profileImage:
+ *           # only accept png/jpeg
+ *           contentType: image/png, image/jpeg
+ *           headers:
+ *             X-Rate-Limit-Limit:
+ *               description: The number of allowed requests in the current period
+ *               schema:
+ *                 type: integer
+ * </code></pre>
  *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#encodingObject"
  */

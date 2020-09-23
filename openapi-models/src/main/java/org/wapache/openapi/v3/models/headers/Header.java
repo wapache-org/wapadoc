@@ -25,7 +25,27 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Header
+ * <h4><a name="%3Ca-name=%22headerobject%22%3E%3C/a%3Eheader-object" class="md-header-anchor"></a><a name="headerObject"></a><span>Header Object</span></h4>
+ * <p><span>The Header Object follows the structure of the </span><a href='#'><span>Parameter Object</span></a><span> with the following changes:</span></p>
+ * <ol start='' >
+ * <li><code>name</code><span> MUST NOT be specified, it is given in the corresponding </span><code>headers</code><span> map.</span></li>
+ * <li><code>in</code><span> MUST NOT be specified, it is implicitly in </span><code>header</code><span>.</span></li>
+ * <li><span>All traits that are affected by the location MUST be applicable to a location of </span><code>header</code><span> (for example, </span><a href='#'><code>style</code></a><span>).</span></li>
+ *
+ * </ol>
+ * <h5><a name="header-object-example" class="md-header-anchor"></a><span>Header Object Example</span></h5>
+ * <p><span>A simple header of type </span><code>integer</code><span>:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;description&quot;: &quot;The number of allowed requests in the current period&quot;,
+ *   &quot;schema&quot;: {
+ *     &quot;type&quot;: &quot;integer&quot;
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>description: The number of allowed requests in the current period
+ * schema:
+ *   type: integer
+ * </code></pre>
  *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#headerObject"
  */

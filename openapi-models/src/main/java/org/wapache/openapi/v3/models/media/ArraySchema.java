@@ -20,9 +20,21 @@ import java.util.Objects;
 
 /**
  * ArraySchema
+ *
+ *
  */
 
 public class ArraySchema extends Schema<Object> {
+
+    /**
+     * items
+     *
+     * Value MUST be an object and not an array.
+     *
+     * Inline or referenced schema MUST be of a [Schema Object](#schemaObject) and not a standard JSON Schema.
+     * `items` MUST be present if the `type` is `array`.
+     *
+     */
     private Schema<?> items = null;
 
     public ArraySchema() {

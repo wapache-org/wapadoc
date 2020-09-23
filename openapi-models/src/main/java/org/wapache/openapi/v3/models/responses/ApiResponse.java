@@ -25,8 +25,118 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * ApiResponse
+ * <h4><a name="%3Ca-name=%22responseobject%22%3E%3C/a%3Eresponse-object" class="md-header-anchor"></a><a name="responseObject"></a><span>Response Object</span></h4>
+ * <p><span>Describes a single response from an API Operation, including design-time, static </span>
+ * <code>links</code><span> to operations based on the response.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="responseDescription"></a><span>description</span></td><td style='text-align:center;' ><code>string</code></td><td><strong><span>REQUIRED</span></strong><span>. A short description of the response. </span><a href='http://spec.commonmark.org/'><span>CommonMark syntax</span></a><span> MAY be used for rich text representation.</span></td></tr><tr><td><a name="responseHeaders"></a><span>headers</span></td><td style='text-align:center;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Header Object</span></a><span>  </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>Maps a header name to its definition. </span><a href='https://tools.ietf.org/html/rfc7230#page-22'><span>RFC7230</span></a><span> states header names are case insensitive. If a response header is defined with the name </span><code>&quot;Content-Type&quot;</code><span>, it SHALL be ignored.</span></td></tr><tr><td><a name="responseContent"></a><span>content</span></td><td style='text-align:center;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Media Type Object</span></a><span>]</span></td><td><span>A map containing descriptions of potential response payloads. The key is a media type or </span><a href='https://tools.ietf.org/html/rfc7231#appendix-D'><span>media type range</span></a><span> and the value describes it.  For responses that match multiple keys, only the most specific key is applicable. e.g. text/plain overrides text/*</span></td></tr><tr><td><a name="responseLinks"></a><span>links</span></td><td style='text-align:center;' ><span>Map[</span><code>string</code><span>, </span><a href='#'><span>Link Object</span></a><span> </span><span>|</span><span> </span><a href='#'><span>Reference Object</span></a><span>]</span></td><td><span>A map of operations links that can be followed from the response. The key of the map is a short name for the link, following the naming constraints of the names for </span><a href='#'><span>Component Objects</span></a><span>.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
+ * <h5><a name="response-object-examples" class="md-header-anchor"></a><span>Response Object Examples</span></h5>
+ * <p><span>Response of an array of a complex type:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;description&quot;: &quot;A complex object array response&quot;,
+ *   &quot;content&quot;: {
+ *     &quot;application/json&quot;: {
+ *       &quot;schema&quot;: {
+ *         &quot;type&quot;: &quot;array&quot;,
+ *         &quot;items&quot;: {
+ *           &quot;$ref&quot;: &quot;#/components/schemas/VeryComplexType&quot;
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>description: A complex object array response
+ * content:
+ *   application/json:
+ *     schema:
+ *       type: array
+ *       items:
+ *         $ref: &#39;#/components/schemas/VeryComplexType&#39;
+ * </code></pre>
+ * <p><span>Response with a string type:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;description&quot;: &quot;A simple string response&quot;,
+ *   &quot;content&quot;: {
+ *     &quot;text/plain&quot;: {
+ *       &quot;schema&quot;: {
+ *         &quot;type&quot;: &quot;string&quot;
+ *       }
+ *     }
+ *   }
  *
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>description: A simple string response
+ * content:
+ *   text/plain:
+ *     schema:
+ *       type: string
+ * </code></pre>
+ * <p><span>Plain text response with headers:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;description&quot;: &quot;A simple string response&quot;,
+ *   &quot;content&quot;: {
+ *     &quot;text/plain&quot;: {
+ *       &quot;schema&quot;: {
+ *         &quot;type&quot;: &quot;string&quot;
+ *       }
+ *     }
+ *   },
+ *   &quot;headers&quot;: {
+ *     &quot;X-Rate-Limit-Limit&quot;: {
+ *       &quot;description&quot;: &quot;The number of allowed requests in the current period&quot;,
+ *       &quot;schema&quot;: {
+ *         &quot;type&quot;: &quot;integer&quot;
+ *       }
+ *     },
+ *     &quot;X-Rate-Limit-Remaining&quot;: {
+ *       &quot;description&quot;: &quot;The number of remaining requests in the current period&quot;,
+ *       &quot;schema&quot;: {
+ *         &quot;type&quot;: &quot;integer&quot;
+ *       }
+ *     },
+ *     &quot;X-Rate-Limit-Reset&quot;: {
+ *       &quot;description&quot;: &quot;The number of seconds left in the current period&quot;,
+ *       &quot;schema&quot;: {
+ *         &quot;type&quot;: &quot;integer&quot;
+ *       }
+ *     }
+ *   }
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>description: A simple string response
+ * content:
+ *   text/plain:
+ *     schema:
+ *       type: string
+ *     example: &#39;whoa!&#39;
+ * headers:
+ *   X-Rate-Limit-Limit:
+ *     description: The number of allowed requests in the current period
+ *     schema:
+ *       type: integer
+ *   X-Rate-Limit-Remaining:
+ *     description: The number of remaining requests in the current period
+ *     schema:
+ *       type: integer
+ *   X-Rate-Limit-Reset:
+ *     description: The number of seconds left in the current period
+ *     schema:
+ *       type: integer
+ * </code></pre>
+ * <p><span>Response with no return value:</span></p>
+ * <pre><code class='language-json' lang='json'>{
+ *   &quot;description&quot;: &quot;object created&quot;
+ * }
+ * </code></pre>
+ * <pre><code class='language-yaml' lang='yaml'>description: object created
+ * </code></pre>
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#responseObject"
  */
 

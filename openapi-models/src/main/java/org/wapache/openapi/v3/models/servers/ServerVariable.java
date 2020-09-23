@@ -21,7 +21,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * ServerVariable
+ * <h4><a name="%3Ca-name=%22servervariableobject%22%3E%3C/a%3Eserver-variable-object" class="md-header-anchor"></a><a name="serverVariableObject"></a><span>Server Variable Object</span></h4>
+ * <p><span>An object representing a Server Variable for server URL template substitution.</span></p>
+ * <h5><a name="fixed-fields" class="md-header-anchor"></a><span>Fixed Fields</span></h5>
+ * <figure><table>
+ * <thead>
+ * <tr><th><span>Field Name</span></th><th style='text-align:center;' ><span>Type</span></th><th><span>Description</span></th></tr></thead>
+ * <tbody><tr><td><a name="serverVariableEnum"></a><span>enum</span></td><td style='text-align:center;' ><span>[</span><code>string</code><span>]</span></td><td><span>An enumeration of string values to be used if the substitution options are from a limited set.</span></td></tr><tr><td><a name="serverVariableDefault"></a><span>default</span></td><td style='text-align:center;' ><code>string</code></td><td><strong><span>REQUIRED</span></strong><span>. The default value to use for substitution, and to send, if an alternate value is </span><em><span>not</span></em><span> supplied. Unlike the </span><a href='#'><span>Schema Object&#39;s</span></a><span> </span><code>default</code><span>, this value MUST be provided by the consumer.</span></td></tr><tr><td><a name="serverVariableDescription"></a><span>description</span></td><td style='text-align:center;' ><code>string</code></td><td><span>An optional description for the server variable. </span><a href='http://spec.commonmark.org/'><span>CommonMark syntax</span></a><span> MAY be used for rich text representation.</span></td></tr></tbody>
+ * </table></figure>
+ * <p><span>This object MAY be extended with </span><a href='#'><span>Specification Extensions</span></a><span>.</span></p>
  *
  * @see "https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#serverVariableObject"
  */
