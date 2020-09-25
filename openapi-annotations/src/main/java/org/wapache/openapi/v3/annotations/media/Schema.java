@@ -51,6 +51,7 @@ import static java.lang.annotation.ElementType.PARAMETER;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface Schema {
+
     /**
      * Provides a java class as implementation for this schema.  When provided, additional information in the Schema annotation (except for type information) will augment the java class after introspection.
      *
@@ -192,7 +193,13 @@ public @interface Schema {
     String description() default "";
 
     /**
-     * Provides an optional override for the format.  If a consumer is unaware of the meaning of the format, they shall fall back to using the basic type without format.  For example, if \&quot;type: integer, format: int128\&quot; were used to designate a very large integer, most consumers will not understand how to handle it, and fall back to simply \&quot;type: integer\&quot;
+     * Provides an optional override for the format.
+     *
+     * If a consumer is unaware of the meaning of the format, they shall fall back to using the basic type without format.
+     * For example, if \&quot;type: integer, format: int128\&quot; were used to designate a very large integer,
+     * most consumers will not understand how to handle it, and fall back to simply \&quot;type: integer\&quot;
+     *
+     * 客户端如果无法理解或者无法处理这个format, 那么应该降级成用默认方式处理。
      *
      * @return the schema's format
      **/

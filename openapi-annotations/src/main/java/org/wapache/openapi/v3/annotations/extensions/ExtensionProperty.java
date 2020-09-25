@@ -34,4 +34,5 @@ public @interface ExtensionProperty {
      * @return the value of `parseValue` annotation field
      */
     boolean parseValue() default false;
+
 }

@@ -57,15 +57,22 @@ import static java.lang.annotation.ElementType.PARAMETER;
 @Repeatable(Parameters.class)
 @Inherited
 public @interface Parameter {
+
     /**
      * The name of the parameter.
+     *
+     * 参数名
      *
      * @return the parameter's name
      **/
     String name() default "";
 
     /**
-     * The location of the parameter.  Possible values are "query", "header", "path" or "cookie".  Ignored when empty string.
+     * The location of the parameter.
+     * Possible values are "query", "header", "path" or "cookie".
+     * Ignored when empty string.
+     *
+     * 以前有"body", 现在没有了
      *
      * @return the parameter's location
      **/
@@ -74,12 +81,20 @@ public @interface Parameter {
     /**
      * Additional description data to provide on the purpose of the parameter
      *
+     * 参数描述, 这里增加一个约定, 格式如下:
+     *
+     * 参数中文名称[, 中文描述]
+     *
      * @return the parameter's description
      **/
     String description() default "";
 
     /**
-     * Determines whether this parameter is mandatory. If the parameter location is "path", this property is required and its value must be true. Otherwise, the property may be included and its default value is false.
+     * Determines whether this parameter is mandatory.
+     * If the parameter location is "path", this property is required and its value must be true.
+     * Otherwise, the property may be included and its default value is false.
+     *
+     * 是否必填
      *
      * @return whether or not the parameter is required
      **/
@@ -88,47 +103,72 @@ public @interface Parameter {
     /**
      * Specifies that a parameter is deprecated and should be transitioned out of usage.
      *
+     *  是否已经过时
+     *
      * @return whether or not the parameter is deprecated
      **/
     boolean deprecated() default false;
 
     /**
-     * When true, allows sending an empty value.  If false, the parameter will be considered \&quot;null\&quot; if no value is present.  This may create validation errors when the parameter is required.
+     * When true, allows sending an empty value.
+     * If false, the parameter will be considered \&quot;null\&quot; if no value is present.
+     * This may create validation errors when the parameter is required.
+     *
+     * 是否允许空字符串, 如果不允许, 空字符串会当成`null`处理。
      *
      * @return whether or not the parameter allows empty values
      **/
     boolean allowEmptyValue() default false;
 
     /**
-     * Describes how the parameter value will be serialized depending on the type of the parameter value. Default values (based on value of in): for query - form; for path - simple; for header - simple; for cookie - form.  Ignored if the properties content or array are specified.
+     * Describes how the parameter value will be serialized depending on the type of the parameter value.
+     * Default values (based on value of in):
+     * for query - form;
+     * for path - simple;
+     * for header - simple;
+     * for cookie - form.
+     * Ignored if the properties content or array are specified.
+     *
+     *  描述参数的序列化格式
      *
      * @return the style of the parameter
      **/
     ParameterStyle style() default ParameterStyle.DEFAULT;
 
     /**
-     * When this is true, parameter values of type array or object generate separate parameters for each value of the array or key-value pair of the map. For other types of parameters this property has no effect. When style is form, the default value is true. For all other styles, the default value is false.  Ignored if the properties content or array are specified.
+     * When this is true, parameter values of
+     *   type array or object generate separate parameters for each value of the array or key-value pair of the map.
+     * For other types of parameters this property has no effect.
+     *
+     * When style is form, the default value is true.
+     * For all other styles, the default value is false.
+     * Ignored if the properties content or array are specified.
      *
      * @return whether or not to expand individual array members
      **/
     Explode explode() default Explode.DEFAULT;
 
     /**
-     * Determines whether the parameter value should allow reserved characters, as defined by RFC3986. This property only applies to parameters with an in value of query. The default value is false.  Ignored if the properties content or array are specified.
+     * Determines whether the parameter value should allow reserved characters, as defined by RFC3986.
+     * This property only applies to parameters with an in value of query.
+     * The default value is false.
+     * Ignored if the properties content or array are specified.
      *
      * @return whether or not the parameter allows reserved characters
      **/
     boolean allowReserved() default false;
 
     /**
-     * The schema defining the type used for the parameter.  Ignored if the properties content or array are specified.
+     * The schema defining the type used for the parameter.
+     * Ignored if the properties content or array are specified.
      *
      * @return the schema of the parameter
      **/
     Schema schema() default @Schema();
 
     /**
-     * The schema of the array that defines this parameter.  Ignored if the property content is specified.
+     * The schema of the array that defines this parameter.
+     * Ignored if the property content is specified.
      *
      * @return the schema of the array
      */
@@ -156,7 +196,10 @@ public @interface Parameter {
     ExampleObject[] examples() default {};
 
     /**
-     * Provides an example of the schema.  When associated with a specific media type, the example string shall be parsed by the consumer to be treated as an object or an array.  Ignored if the properties examples, content or array are specified.
+     * Provides an example of the schema.
+     * When associated with a specific media type,
+     * the example string shall be parsed by the consumer to be treated as an object or an array.
+     * Ignored if the properties examples, content or array are specified.
      *
      * @return an example of the parameter
      **/

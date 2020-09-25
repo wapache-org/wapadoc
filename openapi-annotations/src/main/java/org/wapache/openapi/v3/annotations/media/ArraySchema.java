@@ -14,9 +14,11 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
- * The annotation may be used to define a schema of type "array" for a set of elements of the OpenAPI spec, and/or to define additional
- * properties for the schema. It is applicable e.g. to parameters, schema classes (aka "models"), properties of such
- * models, request and response content, header.
+ * The annotation may be used to
+ * define a schema of type "array" for a set of elements of the OpenAPI spec,
+ * and/or to define additional properties for the schema.
+ * It is applicable e.g. to parameters, schema classes (aka "models"),
+ * properties of such models, request and response content, header.
  *
  * <p>swagger-core resolver and swagger-jaxrs2 reader engine consider this annotation along with JAX-RS annotations,
  * element type and context as input to resolve the annotated element into an OpenAPI schema definition for such element.</p>
@@ -40,8 +42,8 @@ public @interface ArraySchema {
     Schema schema() default @Schema;
 
     /**
-     * Allows to define the properties to be resolved into properties of the schema of type `array` (not the ones of the
-     * `items` of such schema which are defined in {@link #schema() schema}.
+     * Allows to define the properties to be resolved into properties of the schema of type `array`
+     * (not the ones of the `items` of such schema which are defined in {@link #schema() schema}.
      *
      * @return arraySchema
      *
