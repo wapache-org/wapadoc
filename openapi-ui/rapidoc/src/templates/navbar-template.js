@@ -80,7 +80,7 @@ export default function navbarTemplate() {
         @click = '${(e) => this.scrollToEl(e)}'
         title="${p.summary}"
       > 
-        <span style = "${p.deprecated ? 'filter:opacity(0.5)' : ''}">
+        <span style = "${p.deprecated ? 'text-decoration:line-through;' : ''}">
           ${this.usePathInNavBar.includes('path') ? html`
           <span class='regular-font upper method-fg bold-text ${p.method}'>${p.method}</span>
           <span class='mono-font method-fg bold-text ${p.method}'>${p.path}</span>
