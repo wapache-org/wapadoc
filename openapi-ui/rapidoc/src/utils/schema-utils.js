@@ -24,6 +24,7 @@ export function getTypeInfo(schema) {
     example: typeof schema.example === 'undefined' ? '' : `${schema.example}`,
     default: typeof schema.default === 'undefined' ? '' : `${schema.default}`,
     description: schema.description ? schema.description : '',
+    title: schema.title ? schema.title : '',
     constrain: '',
     allowedValues: '',
     arrayType: '',
@@ -76,7 +77,7 @@ export function getTypeInfo(schema) {
       info.constrain = `max ${schema.maxLength} chars`;
     }
   }
-  info.html = `${info.type}~|~${info.readOrWriteOnly} ${info.deprecated}~|~${info.constrain}~|~${info.default}~|~${info.allowedValues}~|~${info.pattern}~|~${info.description}`;
+  info.html = `${info.type}~|~${info.readOrWriteOnly} ${info.deprecated}~|~${info.constrain}~|~${info.default}~|~${info.allowedValues}~|~${info.pattern}~|~${info.title}~|~${info.description}`;
   return info;
 }
 
@@ -335,6 +336,7 @@ export function schemaInObjectNotation(schema, obj, level = 0, suffix = '') {
     // 1. First iterate the regular properties
     if (schema.type === 'object' || schema.properties) {
       obj['::description'] = schema.description ? schema.description : '';
+      obj['::title'] = schema.title ? schema.title : '';
       obj['::type'] = 'object';
       for (const key in schema.properties) {
         if (schema.required && schema.required.includes(key)) {
@@ -366,6 +368,7 @@ export function schemaInObjectNotation(schema, obj, level = 0, suffix = '') {
     obj['::type'] = 'xxx-of';
   } else if (schema.type === 'object' || schema.properties) {
     obj['::description'] = schema.description ? schema.description : '';
+    obj['::title'] = schema.title ? schema.title : '';
     obj['::type'] = 'object';
     for (const key in schema.properties) {
       if (schema.required && schema.required.includes(key)) {
@@ -379,6 +382,7 @@ export function schemaInObjectNotation(schema, obj, level = 0, suffix = '') {
     }
   } else if (schema.items) { // If Array
     obj['::description'] = schema.description ? schema.description : '';
+    obj['::title'] = schema.title ? schema.title : '';
     obj['::type'] = 'array';
     obj['::props'] = schemaInObjectNotation(schema.items, {}, (level + 1));
   } else {

@@ -44,6 +44,10 @@ export default class SchemaTable extends LitElement {
         white-space: normal;
         width: 70px;
       }
+      .table .key-name {
+        white-space: normal;
+        width: 120px;
+      }
       .collapsed-descr .tr {
         max-height: calc(var(--font-size-small) + var(--font-size-small) + 4px);
       }
@@ -79,17 +83,23 @@ export default class SchemaTable extends LitElement {
         <div class='toolbar'> 
           <div style="flex:1"></div>
           <div class='toolbar-item' @click='${() => { this.schemaDescriptionExpanded = (this.schemaDescriptionExpanded === 'true' ? 'false' : 'true'); }}'> 
-            ${this.schemaDescriptionExpanded === 'true' ? 'Single line description' : 'Multiline description'}
+            ${this.schemaDescriptionExpanded === 'true' ? '隐藏详细说明' : '显示详细说明'}
           </div>
         </div>
           <div style='padding: 5px 0; color:var(--fg2)'> 
             <span class='bold-text upper'> ${this.data ? this.data['::type'] : ''}</span> 
-            <span class='m-markdown' >${this.data ? unsafeHTML(marked(this.data['::description'] || '')) : ''}</span>
+            <span class=''> ${this.data ? this.data['::title'] || '' : ''}</span> 
+            ${this.schemaDescriptionExpanded === 'true' ? html`
+            <div style=''> 
+              <span class='m-markdown-small key-descr' >${this.data ? unsafeHTML(marked(this.data['::description'] || '')) : ''}</span>
+            </div>
+            ` : ''}
           </div>
           <div style = "border:1px solid var(--light-border-color)">
             <div style='display:flex; height:calc(var(--font-size-small) + 6px); background-color: var(--bg2); line-height:calc(var(--font-size-small) + 6px); padding:8px 2px; border-bottom:1px solid var(--light-border-color);'>
               <div class='td key' style='font-family:var(--font-regular); font-weight:bold; color:var(--fg)'> 属性</div>
               <div class='td key-type' style='font-family:var(--font-regular); font-weight:bold; color:var(--fg)'> 类型 </div>
+              <div class='td key-name' style='font-family:var(--font-regular); font-weight:bold; color:var(--fg)'> 名称 </div>
               <div class='td key-descr' style='font-family:var(--font-regular); font-weight:bold; color:var(--fg)'>说明</div>
             </div>
             ${this.data
@@ -105,7 +115,7 @@ export default class SchemaTable extends LitElement {
     `;
   }
 
-  generateTree(data, prevDataType = 'object', prevKey = '', prevDescr = '', level = 0) {
+  generateTree(data, prevDataType = 'object', prevKey = '', prevName = '', prevDescr = '', level = 0) {
     const leftPadding = 16 * level; // 2 space indentation at each level
     if (!data) {
       return html`<div class="null" style="display:inline;">null</div>`;
@@ -146,18 +156,20 @@ export default class SchemaTable extends LitElement {
                 }
               </div>
               <div class='td key-type'>${prevDataType.startsWith('xxx-') ? '' : prevDataType}</div>
+              <div class='td key-name'>${prevName}</div>
               <div class='td key-descr m-markdown-small' style='line-height:1.7'>${unsafeHTML(marked(prevDescr || ''))}</div>
             </div>`
           : ''
         }
         <div class='object-body'>
           ${Object.keys(data).map((key) => html`
-            ${['::description', '::type', '::props'].includes(key)
+            ${['::description', '::type', '::props', '::title'].includes(key)
               ? ''
               : html`${this.generateTree(
                 data[key]['::type'] === 'array' ? data[key]['::props'] : data[key],
                 data[key]['::type'],
                 key,
+                data[key]['::title'],
                 data[key]['::description'],
                 (level + 1),
               )}`
@@ -179,6 +191,7 @@ export default class SchemaTable extends LitElement {
           }
         </div>
         <div class='td key-type ${dataTypeCss}'>${prevDataType === 'array' ? `[${itemParts[0]}]` : itemParts[0]} <span style="font-family: var(--font-mono);">${itemParts[1]}</span> </div>
+        <div class='td key-name'>${itemParts[6] || ''}</div>
         <div class='td key-descr'>
           ${prevDataType === 'array' ? prevDescr : ''}
           ${itemParts[2]
@@ -186,19 +199,19 @@ export default class SchemaTable extends LitElement {
             : ''
           }
           ${itemParts[3]
-            ? html`<div style='color: var(--fg2); padding-bottom:3px;' ><span class='bold-text'>Default:</span> ${itemParts[3]}</div>`
+            ? html`<div style='color: var(--fg2); padding-bottom:3px;' ><span class='bold-text'>默认值:</span> ${itemParts[3]}</div>`
             : ''
           }
           ${itemParts[4]
-            ? html`<div style='color: var(--fg2); padding-bottom:3px;'><span class='bold-text'>Allowed: </span> &nbsp; ${itemParts[4]}</div>`
+            ? html`<div style='color: var(--fg2); padding-bottom:3px;'><span class='bold-text'>可选值: </span> &nbsp; ${itemParts[4]}</div>`
             : ''
           }
           ${itemParts[5]
-            ? html`<div style='color: var(--fg2); padding-bottom:3px;'><span class='bold-text'>Pattern:</span>  &nbsp; ${itemParts[5]}</div>`
+            ? html`<div style='color: var(--fg2); padding-bottom:3px;'><span class='bold-text'>模式:</span>  &nbsp; ${itemParts[5]}</div>`
             : ''
           }
-          ${itemParts[6]
-            ? html`<span class="m-markdown-small">${unsafeHTML(marked(itemParts[6]))}</span>`
+          ${itemParts[7]
+            ? html`<span class="m-markdown-small">${unsafeHTML(marked(itemParts[7]))}</span>`
             : ''
           }
         </div>

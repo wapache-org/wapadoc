@@ -86,7 +86,7 @@ export default class SchemaTree extends LitElement {
           <div class='toolbar-item bold-text upper' style='cursor:auto; color:var(--fg2)'> ${this.data ? this.data['::type'] : ''} </div>
           <div style="flex:1"></div>
           <div class='toolbar-item' @click='${() => { this.schemaDescriptionExpanded = (this.schemaDescriptionExpanded === 'true' ? 'false' : 'true'); }}'> 
-            ${this.schemaDescriptionExpanded === 'true' ? 'Single line description' : 'Multiline description'}
+            ${this.schemaDescriptionExpanded === 'true' ? '隐藏详细说明' : '显示详细说明'}
           </div>
         </div>
         <span class='m-markdown'> ${this.data ? unsafeHTML(marked(this.data['::description'] || '')) : ''}</span>
@@ -158,7 +158,7 @@ export default class SchemaTree extends LitElement {
         </div>
         <div class='inside-bracket ${data['::type']}' style='padding-left:${data['::type'] !== 'xxx-of-option' ? leftPadding : 0}px;'>
           ${Object.keys(data).map((key) => html`
-            ${['::description', '::type', '::props'].includes(key)
+            ${['::description', '::type', '::props', '::title'].includes(key)
               ? ''
               : html`${this.generateTree(
                 data[key]['::type'] === 'array' ? data[key]['::props'] : data[key],
@@ -210,8 +210,8 @@ export default class SchemaTree extends LitElement {
             ? html`<div style='color: var(--fg2)'><span class='bold-text'>Pattern:</span> ${itemParts[5]}</div>`
             : ''
           }
-          ${itemParts[6]
-            ? html`<span class="m-markdown-small">${unsafeHTML(marked(itemParts[6]))}</span>`
+          ${itemParts[7]
+            ? html`<span class="m-markdown-small">${unsafeHTML(marked(itemParts[7]))}</span>`
             : ''
           }
         </div>
