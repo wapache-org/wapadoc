@@ -523,6 +523,10 @@ export default class RapiDoc extends LitElement {
     reader.readAsText(specFile);
   }
 
+  reloadUrlSepc() {
+    this.loadSpec(this.getAttribute('spec-url'));
+  }
+
   onFileLoadClick() {
     this.shadowRoot.getElementById('spec-file').click();
   }

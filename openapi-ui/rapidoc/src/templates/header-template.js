@@ -26,7 +26,7 @@ export default function headerTemplate() {
             @change="${this.onSepcUrlChange}" 
             spellcheck="false" 
           >
-          <div style="margin: 6px 5px 0 -24px; font-size:var(--title-font-size); cursor:pointer;">&#x2b90;</div> 
+          <div style="margin: 6px 5px 0 -24px; font-size:var(--title-font-size); cursor:pointer;" @click="${this.reloadUrlSepc}">&#x2b90;</div> 
         `
       }
       <slot name="header"></slot>
