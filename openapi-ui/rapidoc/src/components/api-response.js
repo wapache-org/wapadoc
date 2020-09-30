@@ -11,6 +11,8 @@ import BorderStyles from '@/styles/border-styles';
 import '@/components/schema-tree';
 import '@/components/schema-table';
 
+import '@/components/api-try';
+
 export default class ApiResponse extends LitElement {
   constructor() {
     super();
@@ -32,6 +34,17 @@ export default class ApiResponse extends LitElement {
       activeSchemaTab: { type: String, attribute: 'active-schema-tab' },
       schemaExpandLevel: { type: Number, attribute: 'schema-expand-level' },
       schemaDescriptionExpanded: { type: String, attribute: 'schema-description-expanded' },
+
+      serverUrl: { type: String, attribute: 'server-url' },
+      servers: { type: Array },
+      method: { type: String },
+      path: { type: String },
+      parameters: { type: Array },
+      request_body: { type: Object },
+      api_keys: { type: Array },
+      accept: { type: String },
+      allowTry: { type: String, attribute: 'allow-try' },
+
     };
   }
 
@@ -76,13 +89,32 @@ export default class ApiResponse extends LitElement {
 
   render() {
     return html`
+    <div class="col regular-font response-try-panel ${this.renderStyle}-mode">
+      ${this.allowTry === 'false' ? '' : html`<api-try
+          class="try-panel"  
+          method = "${this.method}", 
+          path = "${this.path}" 
+          .parameters = "${this.parameters}" 
+          .request_body = "${this.requestBody}"
+          .api_keys = "${this.api_keys}"
+          .servers = "${this.servers}" 
+          server-url = "${this.serverUrl}" 
+          allow-try = "${this.allowTry}"
+          accept = "${this.accept}"
+          render-style="${this.renderStyle}" 
+          schema-style = "${this.schemaStyle}"
+          active-schema-tab = "${this.activeSchemaTab}"
+          schema-expand-level = "${this.schemaExpandLevel}"
+          schema-description-expanded = "${this.schemaDescriptionExpanded}"
+        ></api-try>`}
+    </div>
     <div class="col regular-font response-panel ${this.renderStyle}-mode">
       <div class=" ${this.callback === 'true' ? 'tiny-title' : 'req-res-title'} "> 
         ${this.callback === 'true' ? '回调响应' : '响应'}
       </div>
       <div>
         ${this.responseTemplate()}
-      <div>  
+      </div>  
     </div>  
     `;
   }

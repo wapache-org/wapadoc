@@ -69,6 +69,17 @@ export function expandedEndpointBodyTemplate(path) {
         schema-expand-level = "${this.schemaExpandLevel}"
         schema-description-expanded = "${this.schemaDescriptionExpanded}"
         selected-status = "${Object.keys(path.responses || {})[0] || ''}"
+
+        method = "${path.method}"
+        path = "${path.path}" 
+        .parameters = "${path.parameters}" 
+        .request_body = "${path.requestBody}"
+        .api_keys = "${nonEmptyApiKeys}"
+        .servers = "${path.servers}" 
+        server-url = "${path.servers?.[0]?.url || this.selectedServer.computedUrl}" 
+        allow-try = "${this.allowTry}"
+        accept = "${accept}"
+
       > </api-response>
     </div>
   </div>
