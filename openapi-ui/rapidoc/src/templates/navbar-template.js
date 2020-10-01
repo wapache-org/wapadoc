@@ -9,7 +9,8 @@ export default function navbarTemplate() {
     <div style="padding:0 30px 0 16px;">
       <slot name="nav-logo" class="logo"></slot>
     </div>
-    ${(this.allowSearch === 'false' || (this.allowSearch !== 'false' && this.showHeader === 'true'))
+    ${// 是否显示搜索框
+      (this.allowSearch === 'false' || (this.allowSearch !== 'false' && this.showHeader === 'true'))
       ? ''
       : html`
         <div style="position:sticky; top:0; display:flex; flex-direction:row; align-items: stretch; padding:24px; border-bottom: 1px solid var(--nav-hover-bg-color)">
@@ -53,6 +54,7 @@ export default function navbarTemplate() {
       ? ''
       : html`<div class='nav-bar-info' id='link-api-servers' data-content-id='api-servers' @click = '${(e) => this.scrollToEl(e)}' > 服务器地址 </div>`
     }
+
     ${(this.allowAuthentication === 'false' || !this.resolvedSpec.securitySchemes)
       ? ''
       : html`<div class='nav-bar-info' id='link-authentication' data-content-id='authentication' @click = '${(e) => this.scrollToEl(e)}' > 认证授权 </div>`
@@ -62,7 +64,12 @@ export default function navbarTemplate() {
     ${this.resolvedSpec.tags.map((tag) => html`
       <!-- Tag -->
       <div class='nav-bar-tag' id="link-tag--${tag.name.replace(invalidCharsRegEx, '-')}" data-content-id='tag--${tag.name.replace(invalidCharsRegEx, '-')}' @click='${(e) => this.scrollToEl(e)}'>
-        ${tag.name} - ${tag.description}
+        ${this.navTagFormat === 'title'
+          ? tag.description
+          : this.navTagFormat.includes('name') && this.usePathInNavBar.includes('title')
+          ? `${tag.name}-${tag.description}`
+          : tag.name
+        }
       </div>
 
       <!-- Path (endpoints) -->
