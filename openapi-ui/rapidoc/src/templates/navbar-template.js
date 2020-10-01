@@ -8,6 +8,12 @@ export default function navbarTemplate() {
   const showPath = this.usePathInNavBar.includes('path');
   const showOperationId = this.usePathInNavBar.includes('operation');
   const showSummary = this.usePathInNavBar.includes('summary');
+  const pathFilterFn = (v) => {
+    if (this.matchPaths) {
+      return pathIsInSearch(this.matchPaths, v);
+    }
+    return true;
+  };
 
   return html`
   <aside class='nav-bar'>
@@ -86,16 +92,11 @@ export default function navbarTemplate() {
           : this.navTagFormat.includes('name') && this.usePathInNavBar.includes('title')
           ? `${tag.name}-${tag.description}`
           : tag.name
-        }
+        } (${tag.paths.filter(pathFilterFn).length})
       </div>
 
       <!-- Path (endpoints) -->
-      ${tag.paths.filter((v) => {
-        if (this.matchPaths) {
-          return pathIsInSearch(this.matchPaths, v);
-        }
-        return true;
-      }).map((p) => html`
+      ${tag.paths.filter(pathFilterFn).map((p) => html`
       <div 
         class='nav-bar-path 
         ${showMultiParts ? 'small-font' : ''}' 
