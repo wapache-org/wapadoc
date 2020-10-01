@@ -703,16 +703,18 @@ export default class RapiDoc extends LitElement {
     this.selectedContentId = navEl.dataset.contentId.startsWith('overview--') ? 'overview' : navEl.dataset.contentId;
     const targetElId = navEl.dataset.contentId;
     await sleep(0); // important - else contentEl will be null
+
+    const oldNavEl = this.shadowRoot.querySelector('.nav-bar-tag.active, .nav-bar-path.active, .nav-bar-info.active, .nav-bar-h1.active, .nav-bar-h2.active');
+    if (oldNavEl) {
+      oldNavEl.classList.remove('active');
+    }
+    navEl.classList.add('active');
+
     const contentEl = this.shadowRoot.getElementById(targetElId);
     if (contentEl) {
       // Disable IntersectionObserver before scrolling into the view, else it will try to scroll the navbar which is not needed here
       this.isIntersectionObserverActive = false;
       contentEl.scrollIntoView({ behavior: 'auto', block: 'start' });
-      const oldNavEl = this.shadowRoot.querySelector('.nav-bar-tag.active, .nav-bar-path.active, .nav-bar-info.active, .nav-bar-h1.active, .nav-bar-h2.active');
-      if (oldNavEl) {
-        oldNavEl.classList.remove('active');
-      }
-      navEl.classList.add('active');
       window.history.replaceState(null, null, `${window.location.href.split('#')[0]}#${targetElId}`);
       setTimeout(() => {
         this.isIntersectionObserverActive = true;
