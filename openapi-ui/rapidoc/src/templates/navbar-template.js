@@ -60,12 +60,24 @@ export default function navbarTemplate() {
       : html`<div class='nav-bar-info' id='link-authentication' data-content-id='authentication' @click = '${(e) => this.scrollToEl(e)}' > 认证授权 </div>`
     }
 
-    <span id='link-paths' class='nav-bar-section'>操作列表</span>
-    ${this.resolvedSpec.tags.map((tag) => html`
+    <span id='link-paths' class='nav-bar-section' @click='${(e) => this.taggleTagFilterDialog(e)}'>操作列表</span>
+    <div style="position: fixed; top: 50%;left: 50%;width:600px;height:400px;margin: -200px 0 0 -300px;z-index=1000;display:${this.navShowTagFilterDialog ? 'block' : 'none'};"> 
+      <div style="display:inline;" @click='${(e) => this.selectAllNavTagFilter(e)}'>全部显示</div>
+      <div style="padding-left:10px;display:inline;" @click='${(e) => this.unselectAllNavTagFilter(e)}'>全部隐藏</div>
+      <div style="float:right;" @click='${(e) => this.taggleTagFilterDialog(e)}'>关闭</div>
+      <div style="clear:both;"></div>
+      <select multiple style="width: 100%; height: 300px;" @click='${(e) => this.onNavTagFilterChange(e)}'>
+      ${this.resolvedSpec.tags.map((tag) => html`
+        <option value="${tag.name}">${tag.description || tag.name}</option>
+      `)}
+      </select>
+    </div>
+
+    ${this.resolvedSpec.tags.filter((t) => this.navTagFilter == ',' || this.navTagFilter.includes(`,${t.name},`)).map((tag) => html`
       <!-- Tag -->
       <div class='nav-bar-tag' id="link-tag--${tag.name.replace(invalidCharsRegEx, '-')}" data-content-id='tag--${tag.name.replace(invalidCharsRegEx, '-')}' @click='${(e) => this.scrollToEl(e)}'>
         ${this.navTagFormat === 'title'
-          ? tag.description
+          ? tag.description || tag.name
           : this.navTagFormat.includes('name') && this.usePathInNavBar.includes('title')
           ? `${tag.name}-${tag.description}`
           : tag.name

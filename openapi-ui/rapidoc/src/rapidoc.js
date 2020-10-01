@@ -103,6 +103,8 @@ export default class RapiDoc extends LitElement {
       infoDescriptionHeadingsInNavBar: { type: String, attribute: 'info-description-headings-in-navbar' },
 
       navTagFormat: { type: String, attribute: 'nav-tag-format' },
+      navTagFilter: { type: String, attribute: 'nav-tag-filter' },
+      navShowTagFilterDialog: { type: Boolean },
 
       // Filters
       matchPaths: { type: String, attribute: 'match-paths' },
@@ -360,6 +362,8 @@ export default class RapiDoc extends LitElement {
 
     if (!this.usePathInNavBar || !'path, summary,'.includes(`${this.usePathInNavBar},`)) { this.usePathInNavBar = 'summary'; }
     if (!this.navTagFormat || !'name, title,'.includes(`${this.navTagFormat},`)) { this.navTagFormat = 'title'; }
+    if (!this.navTagFilter) { this.navTagFilter = ','; }
+    if (!this.navShowTagFilterDialog) { this.navShowTagFilterDialog = false; }
 
     if (!this.fontSize || !'default, large, largest,'.includes(`${this.fontSize},`)) { this.fontSize = 'default'; }
 
@@ -392,6 +396,39 @@ export default class RapiDoc extends LitElement {
       this.intersectionObserver.disconnect();
     }
     super.disconnectedCallback();
+  }
+
+  taggleTagFilterDialog(e) {
+    this.navShowTagFilterDialog = !this.navShowTagFilterDialog;
+  }
+
+  selectAllNavTagFilter(e) {
+    const options = e.target.parentNode.querySelector('select').options;
+    let filter = ',';
+    for (let i = 0; i < options.length; i++) {
+      options[i].selected = true;
+      filter += `${options[i].value},`;
+    }
+    this.navTagFilter = filter;
+  }
+
+  unselectAllNavTagFilter(e) {
+    const options = e.target.parentNode.querySelector('select').options;
+    for (let i = 0; i < options.length; i++) {
+      options[i].selected = false;
+    }
+    this.navTagFilter = '';
+  }
+
+  onNavTagFilterChange(e) {
+    const options = e.target.options || e.target.parentNode.options;
+    let filter = ',';
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        filter += `${options[i].value},`;
+      }
+    }
+    this.navTagFilter = filter;
   }
 
   infoDescriptionHeadingRenderer() {
