@@ -360,7 +360,7 @@ export default class RapiDoc extends LitElement {
     if (!this.sortEndpointsBy || !'method, path,'.includes(`${this.sortEndpointsBy},`)) { this.sortEndpointsBy = 'path'; }
     if (!this.navItemSpacing || !'compact, relaxed, default,'.includes(`${this.navItemSpacing},`)) { this.navItemSpacing = 'default'; }
 
-    if (!this.usePathInNavBar || !'path, summary,'.includes(`${this.usePathInNavBar},`)) { this.usePathInNavBar = 'summary'; }
+    if (!this.usePathInNavBar) { this.usePathInNavBar = 'summary'; }
     if (!this.navTagFormat || !'name, title,'.includes(`${this.navTagFormat},`)) { this.navTagFormat = 'title'; }
     if (!this.navTagFilter) { this.navTagFilter = ','; }
     if (!this.navShowTagFilterDialog) { this.navShowTagFilterDialog = false; }

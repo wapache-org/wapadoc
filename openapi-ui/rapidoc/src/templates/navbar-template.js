@@ -4,6 +4,11 @@ import marked from 'marked';
 
 /* eslint-disable indent */
 export default function navbarTemplate() {
+  const showMultiParts = this.usePathInNavBar.includes(',');
+  const showPath = this.usePathInNavBar.includes('path');
+  const showOperationId = this.usePathInNavBar.includes('operation');
+  const showSummary = this.usePathInNavBar.includes('summary');
+
   return html`
   <aside class='nav-bar'>
     <div style="padding:0 30px 0 16px;">
@@ -61,7 +66,7 @@ export default function navbarTemplate() {
     }
 
     <span id='link-paths' class='nav-bar-section' @click='${(e) => this.taggleTagFilterDialog(e)}'>操作列表</span>
-    <div style="position: fixed; top: 50%;left: 50%;width:600px;height:400px;margin: -200px 0 0 -300px;z-index=1000;display:${this.navShowTagFilterDialog ? 'block' : 'none'};"> 
+    <div style="position: fixed; top: 50%;left: 50%;width:600px;height:400px;margin: -200px 0 0 -300px;z-index:1000;display:${this.navShowTagFilterDialog ? 'block' : 'none'};"> 
       <div style="display:inline;" @click='${(e) => this.selectAllNavTagFilter(e)}'>全部显示</div>
       <div style="padding-left:10px;display:inline;" @click='${(e) => this.unselectAllNavTagFilter(e)}'>全部隐藏</div>
       <div style="float:right;" @click='${(e) => this.taggleTagFilterDialog(e)}'>关闭</div>
@@ -93,23 +98,38 @@ export default function navbarTemplate() {
       }).map((p) => html`
       <div 
         class='nav-bar-path 
-        ${this.usePathInNavBar.includes('summary') ? 'small-font' : ''}' 
+        ${showMultiParts ? 'small-font' : ''}' 
         data-content-id='${p.method}-${p.path}' 
         id='link-${p.method}-${p.path.replace(invalidCharsRegEx, '-')}' 
         @click = '${(e) => this.scrollToEl(e)}'
         title="${p.operationId} - ${p.method} ${p.path} - ${p.summary}"
       > 
         <span style = "${p.deprecated ? 'text-decoration:line-through;' : ''}">
-          ${this.usePathInNavBar.includes('path') ? html`
-          <span class='regular-font upper method-fg bold-text ${p.method}'>${p.method}</span>
-          <span class='mono-font method-fg bold-text ${p.method}'>${p.path}</span>
-          ` : ''}
-          ${this.usePathInNavBar.includes(',') ? html`<br/>` : ''}
-          ${this.usePathInNavBar === 'summary'
-          ? html`<span class='regular-font bold-text method-fg ${p.method}' style='text-overflow:ellipsis;overflow: hidden;white-space: nowrap;'>${p.summary}</span>`
-          : this.usePathInNavBar.includes('summary')
-          ? html`<span style='text-overflow:ellipsis;overflow: hidden;white-space: nowrap;'>${p.summary}</span>`
-          : ''
+          ${showPath
+            ? html`
+              <span class='regular-font upper method-fg bold-text ${p.method}'>${p.method}</span>
+              <span class='mono-font method-fg ${p.method}' style='text-overflow:ellipsis;overflow: hidden;white-space: nowrap;'>${p.path}</span>
+              `
+            : showOperationId
+            ? html`
+              <span class='regular-font method-fg ${showSummary ? 'bold-text' : ''} ${p.method}' style='text-overflow:ellipsis;overflow: hidden;white-space: nowrap;'>${p.operationId}</span>
+              `
+            : showSummary
+            ? html`
+              <span class='regular-font method-fg ${p.method}' style='text-overflow:ellipsis;overflow: hidden;white-space: nowrap;'>${p.summary}</span>
+              `
+            : ''
+          }
+          ${showMultiParts
+            ? html`<br/><span style='text-overflow:ellipsis;overflow: hidden;white-space: nowrap;'>
+              ${showPath && showOperationId && showSummary
+                ? `${p.summary}(${p.operationId})`
+                : showOperationId && !showSummary
+                ? p.operationId
+                : p.summary
+              }
+              </span>`
+            : ''
           }
         </span>
       </div>`)}

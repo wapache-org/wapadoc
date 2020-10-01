@@ -18,14 +18,18 @@ export default function headerTemplate() {
     <button class='header-btn' @click='${this.setAttribute2}' key='render-style' value='focused' >导航</button>
   </div>
 
-  <div style="display: flex;justify-content: center; margin: 2px 0"">
+  <div style="display: flex;justify-content: center; margin: 2px 0">
     <span style="text-align: center; padding: 0 0 0 0; color:#47AFE8">导航:</span>
     <button class='header-btn' @click='${this.toggleAttribute}' key='show-info' title="是否显示接口说明">说明</button>
     <button class='header-btn' @click='${this.toggleAttribute}' key='allow-server-selection' title="是否显示服务器地址">服务器</button>
     <button class='header-btn' @click='${this.toggleAttribute}' key='allow-authentication' title="是否显示认证授权">授权</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='path' >仅路径</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='summary' >仅简介</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='path,summary' >路径和简介</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='path' title="仅显示路径">路</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='operation' title="仅显示操作ID">操</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='summary' title="仅显示操作描述">简</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='path,operation' title="显示操作ID和路径">路+操</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='path,summary' title="显示操作描述和路径">路+简</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='operation,summary' title="显示操作描述和操作ID">操+简</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='path,operation,summary' title="显示操作ID,操作描述和路径">路+操+简</button>
   </div>
 
   <div style="display: flex;justify-content: center; margin: 2px 0">
