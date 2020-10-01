@@ -44,7 +44,7 @@ export default function navbarTemplate() {
               }
               ${this.resolvedSpec.infoDescriptionHeaders.length > 0 ? html`<hr style='border-top: 1px solid var(--nav-hover-bg-color); border-width:1px 0 0 0; margin: 15px 0 0 0'/>` : ''}
             `
-            : html`<div class='nav-bar-info'  id='link-overview' data-content-id='overview' @click = '${(e) => this.scrollToEl(e)}' > 接口说明 </div>`
+            : html`<div class='nav-bar-info'  id='link-overview' data-content-id='overview' @click = '${(e) => this.scrollToEl(e)}' > 接口说明 (${this.resolvedSpec.tags.map((tag) => tag.paths.length).reduce((a, b) => a + b)})</div>`
           }
         `
       }
@@ -78,7 +78,7 @@ export default function navbarTemplate() {
         data-content-id='${p.method}-${p.path}' 
         id='link-${p.method}-${p.path.replace(invalidCharsRegEx, '-')}' 
         @click = '${(e) => this.scrollToEl(e)}'
-        title="${p.summary}"
+        title="${p.operationId} - ${p.method} ${p.path} - ${p.summary}"
       > 
         <span style = "${p.deprecated ? 'text-decoration:line-through;' : ''}">
           ${this.usePathInNavBar.includes('path') ? html`
@@ -86,7 +86,12 @@ export default function navbarTemplate() {
           <span class='mono-font method-fg bold-text ${p.method}'>${p.path}</span>
           ` : ''}
           ${this.usePathInNavBar.includes(',') ? html`<br/>` : ''}
-          ${this.usePathInNavBar.includes('summary') ? html`<span style='text-overflow:ellipsis;overflow: hidden;white-space: nowrap;'>${p.summary}</span>` : ''}
+          ${this.usePathInNavBar === 'summary'
+          ? html`<span class='regular-font bold-text method-fg ${p.method}' style='text-overflow:ellipsis;overflow: hidden;white-space: nowrap;'>${p.summary}</span>`
+          : this.usePathInNavBar.includes('summary')
+          ? html`<span style='text-overflow:ellipsis;overflow: hidden;white-space: nowrap;'>${p.summary}</span>`
+          : ''
+          }
         </span>
       </div>`)}
     `)}
