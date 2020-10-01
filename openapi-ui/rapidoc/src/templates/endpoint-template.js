@@ -65,7 +65,7 @@ export function endpointBodyTemplate(path) {
     <div class='req-resp-container'> 
       <api-request 
         class="request"  
-        method = "${path.method}", 
+        method = "${path.method}"
         path = "${path.path}" 
         .parameters = "${path.parameters}"
         .request_body = "${path.requestBody}"
