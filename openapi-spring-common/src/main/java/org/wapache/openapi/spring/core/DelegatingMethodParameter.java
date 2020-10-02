@@ -20,12 +20,7 @@
 package org.wapache.openapi.spring.core;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Executable;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -98,7 +93,17 @@ public class DelegatingMethodParameter extends MethodParameter {
 		for (int i = 0; i < parameters.length; ++i) {
 			MethodParameter p = parameters[i];
 			Class<?> paramClass = AdditionalModelsConverter.getReplacement(p.getParameterType());
-			if (p.hasParameterAnnotation(ParameterObject.class) || AnnotatedElementUtils.isAnnotated(paramClass, ParameterObject.class)) {
+
+			boolean isParameterObject = p.hasParameterAnnotation(ParameterObject.class)
+				|| AnnotatedElementUtils.isAnnotated(paramClass, ParameterObject.class);
+
+			// FIXME: 低版本的spring才需要这样做.
+			if(!isParameterObject){
+				// 查找接口上的方法定义是否有ParameterObject注解
+				isParameterObject = isParameterObject(p);
+			}
+
+			if (isParameterObject) {
 				Stream<MethodParameter> methodParameterStream = MethodParameterPojoExtractor.extractFrom(paramClass);
 				if (!optionalDelegatingMethodParameterCustomizer.isPresent())
 					MethodParameterPojoExtractor.extractFrom(paramClass).forEach(explodedParameters::add);
@@ -116,6 +121,32 @@ public class DelegatingMethodParameter extends MethodParameter {
 			}
 		}
 		return explodedParameters.toArray(new MethodParameter[0]);
+	}
+
+	private static boolean isParameterObject(MethodParameter p) {
+		if(p.getMethod()!=null
+			&& p.getParameterType()!=null
+			&& !p.getParameterType().isPrimitive()
+			&& !p.getParameterType().getName().startsWith("java")
+		){
+			for(Class<?> type : p.getMethod().getDeclaringClass().getInterfaces()){
+				try {
+					Method method = type.getDeclaredMethod(p.getMethod().getName(), p.getMethod().getParameterTypes());
+					for(Parameter param : method.getParameters()){
+						if(param.getName().equals(p.getParameterName())
+							|| (p.getParameterName()==null && param.getType() == p.getParameterType())
+						){
+							if(AnnotatedElementUtils.isAnnotated(param, ParameterObject.class)){
+								return true;
+							}
+						}
+					}
+				} catch (NoSuchMethodException e) {
+					// ignore
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
