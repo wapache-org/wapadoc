@@ -264,6 +264,7 @@ function groupByTags(openApiSpec, sortTags = false, sortEndpointsBy) {
   const methods = ['get', 'put', 'post', 'delete', 'patch', 'head']; // this is also used for ordering endpoints by methods
   const tags = openApiSpec.tags && Array.isArray(openApiSpec.tags)
     ? openApiSpec.tags.map((v) => ({
+      index: parseIndex(v),
       show: true,
       name: v.name,
       description: v.description,
@@ -309,6 +310,7 @@ function groupByTags(openApiSpec, sortTags = false, sortEndpointsBy) {
           tagObj = tags.find((v) => v.name === tag);
           if (!tagObj) {
             tagObj = {
+              index: parseIndex(specTagsItem),
               show: true,
               name: tag,
               paths: [],
@@ -345,6 +347,7 @@ function groupByTags(openApiSpec, sortTags = false, sortEndpointsBy) {
 
           // Update Responses
           tagObj.paths.push({
+            index: parseIndex(fullPath),
             show: true,
             expanded: false,
             expandedAtLeastOnce: false,
@@ -381,9 +384,18 @@ function groupByTags(openApiSpec, sortTags = false, sortEndpointsBy) {
   } else {
     tagsWithSortedPaths.forEach((v) => {
       if (v.paths) {
-        v.paths.sort((a, b) => a.path.localeCompare(b.path));
+        v.paths.sort((a, b) => (a.index === b.index ? a.path.localeCompare(b.path) : a.index - b.index));
       }
     });
   }
-  return sortTags ? tagsWithSortedPaths.sort((a, b) => a.name.localeCompare(b.name)) : tagsWithSortedPaths;
+  return sortTags ? tagsWithSortedPaths.sort((a, b) => (a.index === b.index ? a.name.localeCompare(b.name) : a.index - b.index)) : tagsWithSortedPaths;
+}
+
+function parseIndex(obj) {
+  const v = obj ? obj['x-index'] : null;
+  if (v == null) {
+    return 9999;
+  }
+  const n = Number.parseInt(v);
+  return Number.isNaN(n) || n <= 0 ? 9999 : n;
 }
