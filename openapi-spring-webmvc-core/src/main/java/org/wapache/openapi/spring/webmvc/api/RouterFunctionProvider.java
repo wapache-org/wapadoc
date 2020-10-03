@@ -43,7 +43,7 @@ package org.wapache.openapi.spring.webmvc.api;
  * @author bnasslahsen
  */
 //To keep compatiblity with spring-boot 1
-@Deprecated // 不支持webflux
+@Deprecated // 不支持webflux和webmvc.fn
 public class RouterFunctionProvider {
 //
 //	/**

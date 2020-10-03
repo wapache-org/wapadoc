@@ -9,6 +9,7 @@ import org.wapache.openapi.spring.core.fn.RouterOperation;
  * The interface Repository rest resource provider.
  * @author bnasslahsen
  */
+@Deprecated // 不支持webflux和webmvc.fn
 public interface RepositoryRestResourceProvider {
 
 	/**

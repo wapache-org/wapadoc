@@ -393,6 +393,11 @@ import java.util.Objects;
 
 public class Schema<T> {
 
+/*
+* 当 $ref 有值的时候, 序列化成api-docs时, 其他字段都会被忽略 @see SchemaSerializer
+*
+*/
+
     private String name;
 
     // ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -702,6 +707,7 @@ public class Schema<T> {
      This allows referencing definitions instead of defining them inline.
      */
     private String $ref = null;
+
     /**
      * A `true` value adds `"null"` to the allowed type specified by the `type` keyword, only if `type` is explicitly defined within the same Schema Object.
      * Other Schema Object constraints retain their defined behavior, and therefore may disallow the use of `null` as a value.

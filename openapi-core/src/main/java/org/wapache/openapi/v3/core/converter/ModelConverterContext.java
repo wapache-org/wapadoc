@@ -6,11 +6,14 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * 将注解信息转换成Schema Model的上下文.
+ */
 public interface ModelConverterContext {
 
     /**
-     * needs to be called whenever a Model is defined which can be referenced from another
-     * Model or Property
+     * needs to be called whenever a Model is defined
+     * which can be referenced from another Model or Property
      *
      * @param name  the name of the model
      * @param model the Model
@@ -18,8 +21,8 @@ public interface ModelConverterContext {
     void defineModel(String name, Schema model);
 
     /**
-     * needs to be called whenever a Schema is defined which can be referenced from another
-     * Model or Property
+     * needs to be called whenever a Schema is defined
+     * which can be referenced from another Model or Property
      *
      * @param name     the name of the model
      * @param model    the Model
@@ -29,8 +32,8 @@ public interface ModelConverterContext {
     void defineModel(String name, Schema model, AnnotatedType type, String prevName);
 
     /**
-     * needs to be called whenever a Schema is defined which can be referenced from another
-     * Model or Property
+     * needs to be called whenever a Schema is defined
+     * which can be referenced from another Model or Property
      *
      * @param name     the name of the model
      * @param model    the Model
@@ -51,4 +54,5 @@ public interface ModelConverterContext {
      * @return an Iterator of ModelConverters.  This iterator is not reused
      */
     public Iterator<ModelConverter> getConverters();
+
 }

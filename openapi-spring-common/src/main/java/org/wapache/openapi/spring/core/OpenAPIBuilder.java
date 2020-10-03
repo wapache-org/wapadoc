@@ -597,7 +597,7 @@ public class OpenAPIBuilder {
 	/**
 	 * Gets mappings map.
 	 *
-	 * @return the mappings map
+	 * @return the mappings map, Map&lt;Bean Name, Bean Instance&gt;
 	 */
 	public Map<String, Object> getMappingsMap() {
 		return this.mappingsMap;

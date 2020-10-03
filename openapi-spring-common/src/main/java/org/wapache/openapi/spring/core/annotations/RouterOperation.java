@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * The annotation may be used to define a single Router Operation as an OpenAPI Operation, and/or to define additional
  * properties using  @Operation annotation.
  *
+ * @see "https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/web.html#webmvc-fn"
  * @author bnasslahsen
  */
 @Target({ ElementType.TYPE, ElementType.METHOD})

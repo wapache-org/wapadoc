@@ -11,18 +11,33 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+/**
+ *
+ */
 public class AnnotatedType {
+    /**  */
     private Type type;
+    /**  */
     private String name;
+    /**  */
     private Schema parent;
+    /**  */
     private Function<AnnotatedType, Schema> jsonUnwrappedHandler;
+    /**  */
     private boolean skipOverride;
+    /**  */
     private boolean schemaProperty;
+    /**  */
     private Annotation[] ctxAnnotations;
+    /**  */
     private boolean resolveAsRef;
+    /**  */
     private JsonView jsonViewAnnotation;
+    /**  */
     private boolean skipSchemaName;
+    /**  */
     private boolean skipJsonIdentity;
+    /**  */
     private String propertyName;
 
     public AnnotatedType() {

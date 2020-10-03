@@ -13,11 +13,12 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /**
- * Helper class used for converting well-known (property) types into
- * Swagger type names.
+ * Helper class used for converting well-known (property) types into Swagger type names.
  */
 public class TypeNameResolver {
+
     public static final TypeNameResolver std = new TypeNameResolver();
+
     private boolean useFqn=false;
 
     protected TypeNameResolver() {

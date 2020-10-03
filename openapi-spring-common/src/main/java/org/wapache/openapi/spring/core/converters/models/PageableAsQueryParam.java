@@ -32,6 +32,15 @@ import org.wapache.openapi.v3.annotations.media.Schema;
 
 /**
  * The interface Pageable as query param.
+ *
+ * <code>
+ *    @GetMapping("/page")
+ *    @PageableAsQueryParam
+ *    public Page<Account> findAll(@Parameter(hidden=true) Pageable pageable) {
+ * 		return accountRepository.findAll(pageable);
+ *    }
+ * </code>
+ *
  * @author bnasslahsen
  */
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
@@ -49,7 +58,6 @@ import org.wapache.openapi.v3.annotations.media.Schema;
 		+ "Default sort order is ascending. " + "Multiple sort criteria are supported."
 		, name = "sort"
 		, array = @ArraySchema(schema = @Schema(type = "string")))
-public @interface
-PageableAsQueryParam {
+public @interface PageableAsQueryParam {
 
 }
