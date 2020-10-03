@@ -83,3 +83,6 @@ java -jar openapi-spring-webmvc-demo-0.10.8-SNAPSHOT.jar
 4. [openapi整合spring-security表单登录](https://waynestalk.com/spring-security-form-login-jpa-springdoc-explained/)
 
 
+# 请作者喝杯奶茶
+
+![wechat_code](docs/images/wechat_code.jpg)
