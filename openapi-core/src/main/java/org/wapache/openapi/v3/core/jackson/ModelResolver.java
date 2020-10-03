@@ -93,7 +93,9 @@ import java.util.stream.Stream;
 import static org.wapache.openapi.v3.core.util.RefUtils.constructRef;
 
 public class ModelResolver extends AbstractModelConverter implements ModelConverter {
+
     Logger LOGGER = LoggerFactory.getLogger(ModelResolver.class);
+
     public static List<String> NOT_NULL_ANNOTATIONS = Arrays.asList("NotNull", "NonNull", "NotBlank", "NotEmpty");
 
     public static final String SET_PROPERTY_OF_COMPOSED_MODEL_AS_SIBLING = "composed-model-properties-as-sibiling";
@@ -139,11 +141,11 @@ public class ModelResolver extends AbstractModelConverter implements ModelConver
 
         final Annotation resolvedSchemaOrArrayAnnotation = AnnotationsUtils.mergeSchemaAnnotations(annotatedType.getCtxAnnotations(), type);
         final org.wapache.openapi.v3.annotations.media.Schema resolvedSchemaAnnotation =
-                resolvedSchemaOrArrayAnnotation == null ?
-                        null :
-                        resolvedSchemaOrArrayAnnotation instanceof org.wapache.openapi.v3.annotations.media.ArraySchema ?
-                                ((org.wapache.openapi.v3.annotations.media.ArraySchema) resolvedSchemaOrArrayAnnotation).schema() :
-                                (org.wapache.openapi.v3.annotations.media.Schema) resolvedSchemaOrArrayAnnotation;
+            resolvedSchemaOrArrayAnnotation == null
+                ? null
+                : resolvedSchemaOrArrayAnnotation instanceof org.wapache.openapi.v3.annotations.media.ArraySchema
+                ? ((org.wapache.openapi.v3.annotations.media.ArraySchema) resolvedSchemaOrArrayAnnotation).schema()
+                : (org.wapache.openapi.v3.annotations.media.Schema) resolvedSchemaOrArrayAnnotation;
 
         final org.wapache.openapi.v3.annotations.media.ArraySchema resolvedArrayAnnotation =
                 resolvedSchemaOrArrayAnnotation == null ?

@@ -20,8 +20,10 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ModelConverters {
+
     private static final ModelConverters SINGLETON = new ModelConverters();
     static Logger LOGGER = LoggerFactory.getLogger(ModelConverters.class);
+
     private final List<ModelConverter> converters;
     private final Set<String> skippedPackages = new HashSet<>();
     private final Set<String> skippedClasses = new HashSet<>();

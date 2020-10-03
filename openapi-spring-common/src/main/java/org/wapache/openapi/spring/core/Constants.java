@@ -30,40 +30,29 @@ import static org.springframework.util.AntPathMatcher.DEFAULT_PATH_SEPARATOR;
  */
 public final class Constants {
 
+	/** The constant DEFAULT_API_DOCS_URL. */
+	public static final String DEFAULT_API_DOCS_URL = "/v3/api-docs";
+	/** The constant API_DOCS_URL. */
+	public static final String API_DOCS_URL = "${springdoc.api-docs.path:#{T(org.wapache.openapi.spring.core.Constants).DEFAULT_API_DOCS_URL}}";
+	/** The constant DEFAULT_API_DOCS_URL_YAML. */
+	public static final String DEFAULT_API_DOCS_URL_YAML = API_DOCS_URL + ".yaml";
+
+	/** The constant SWAGGGER_CONFIG_FILE. */
+	public static final String SWAGGGER_CONFIG_FILE = "swagger-config";
+	/** The constant SWAGGER_CONFIG_URL. */
+	public static final String SWAGGER_CONFIG_URL = API_DOCS_URL + DEFAULT_PATH_SEPARATOR + SWAGGGER_CONFIG_FILE;
+
+	// 配置文件读取的配置项的KEY:
+
 	/**
 	 * The constant SPRINGDOC_PREFIX.
 	 */
 	public static final String SPRINGDOC_PREFIX = "springdoc";
 
 	/**
-	 * The constant DEFAULT_API_DOCS_URL.
-	 */
-	public static final String DEFAULT_API_DOCS_URL = "/v3/api-docs";
-
-	/**
 	 * The constant DEFAULT_SERVER_DESCRIPTION.
 	 */
 	public static final String DEFAULT_SERVER_DESCRIPTION = "Generated server url";
-
-	/**
-	 * The constant API_DOCS_URL.
-	 */
-	public static final String API_DOCS_URL = "${springdoc.api-docs.path:#{T(org.wapache.openapi.spring.core.Constants).DEFAULT_API_DOCS_URL}}";
-
-	/**
-	 * The constant SWAGGGER_CONFIG_FILE.
-	 */
-	public static final String SWAGGGER_CONFIG_FILE = "swagger-config";
-
-	/**
-	 * The constant SWAGGER_CONFIG_URL.
-	 */
-	public static final String SWAGGER_CONFIG_URL = API_DOCS_URL + DEFAULT_PATH_SEPARATOR + SWAGGGER_CONFIG_FILE;
-
-	/**
-	 * The constant DEFAULT_API_DOCS_URL_YAML.
-	 */
-	public static final String DEFAULT_API_DOCS_URL_YAML = API_DOCS_URL + ".yaml";
 
 	/**
 	 * The constant SPRINGDOC_ENABLED.
@@ -94,6 +83,8 @@ public final class Constants {
 	 * The constant SPRINGDOC_SWAGGER_UI_ENABLED.
 	 */
 	public static final String SPRINGDOC_SWAGGER_UI_ENABLED = "springdoc.swagger-ui.enabled";
+
+	// /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * The constant NULL.
@@ -140,6 +131,9 @@ public final class Constants {
 	 */
 	public static final String CLASSPATH_RESOURCE_LOCATION = ResourceUtils.CLASSPATH_URL_PREFIX + "/META-INF/resources";
 
+	// /////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// swagger-ui 相关
+
 	/**
 	 * The constant SWAGGER_UI_URL.
 	 */
@@ -164,6 +158,13 @@ public final class Constants {
 	 * The constant SWAGGER_UI_PATH.
 	 */
 	public static final String SWAGGER_UI_PATH = "${springdoc.swagger-ui.path:#{T(org.wapache.openapi.spring.core.Constants).DEFAULT_SWAGGER_UI_PATH}}";
+
+	/**
+	 * The constant SWAGGER_UI_DEFAULT_URL.
+	 */
+	public static final String SWAGGER_UI_DEFAULT_URL = "https://petstore.swagger.io/v2/swagger.json";
+
+	// /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * The constant DEFAULT_GROUP_NAME.
@@ -254,11 +255,6 @@ public final class Constants {
 	 * The constant GRACEFUL_EXCEPTION_OCCURRED.
 	 */
 	public static final String GRACEFUL_EXCEPTION_OCCURRED = "Graceful exception occurred";
-
-	/**
-	 * The constant SWAGGER_UI_DEFAULT_URL.
-	 */
-	public static final String SWAGGER_UI_DEFAULT_URL = "https://petstore.swagger.io/v2/swagger.json";
 
 	/**
 	 * The constant CSRF_DEFAULT_COOKIE_NAME.

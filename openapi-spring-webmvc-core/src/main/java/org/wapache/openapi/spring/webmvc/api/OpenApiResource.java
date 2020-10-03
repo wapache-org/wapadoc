@@ -74,6 +74,7 @@ import static org.springframework.util.AntPathMatcher.DEFAULT_PATH_SEPARATOR;
  */
 @RestController
 public class OpenApiResource extends AbstractOpenApiResource {
+// TODO 重命名为OpenApiController
 
 	/**
 	 * The Request mapping handler mapping.
@@ -173,14 +174,14 @@ public class OpenApiResource extends AbstractOpenApiResource {
 	 */
 	@Operation(hidden = true)
 	@GetMapping(value = API_DOCS_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-	public String openapiJson(HttpServletRequest request, @Value(API_DOCS_URL) String apiDocsUrl)
-			throws JsonProcessingException {
+	public String openapiJson(HttpServletRequest request, @Value(API_DOCS_URL) String apiDocsUrl) throws JsonProcessingException {
 		calculateServerUrl(request, apiDocsUrl);
 		OpenAPI openAPI = this.getOpenApi();
-		if (!springDocConfigProperties.isWriterWithDefaultPrettyPrinter())
-			return Json.mapper().writeValueAsString(openAPI);
-		else
+		if (springDocConfigProperties.isWriterWithDefaultPrettyPrinter()) {
 			return Json.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(openAPI);
+		} else {
+			return Json.mapper().writeValueAsString(openAPI);
+		}
 	}
 
 	/**
@@ -209,6 +210,7 @@ public class OpenApiResource extends AbstractOpenApiResource {
 		Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
 		calculatePath(restControllers, map);
 
+		// TODO actuator作为一个定制化模块custom方式接入.
 		if (actuatorProvider.isPresent()) {
 			map = actuatorProvider.get().getMethods();
 			this.openAPIBuilder.addTag(new HashSet<>(map.values()), actuatorProvider.get().getTag());
@@ -248,14 +250,16 @@ public class OpenApiResource extends AbstractOpenApiResource {
 			Map<String, String> regexMap = new LinkedHashMap<>();
 			for (String pattern : patterns) {
 				String operationPath = PathUtils.parsePath(pattern, regexMap);
-				if (((actuatorProvider.isPresent() && actuatorProvider.get().isRestController(operationPath, handlerMethod.getBeanType()))
-						|| isRestController(restControllers, handlerMethod, operationPath))
-						&& isPackageToScan(handlerMethod.getBeanType().getPackage())
-						&& isPathToMatch(operationPath)) {
+				if ((isRestController(restControllers, handlerMethod, operationPath)
+						|| (actuatorProvider.isPresent() && actuatorProvider.get().isRestController(operationPath, handlerMethod.getBeanType())))
+					&& isPackageToScan(handlerMethod.getBeanType().getPackage())
+					&& isPathToMatch(operationPath)
+				) {
 					Set<RequestMethod> requestMethods = requestMappingInfo.getMethodsCondition().getMethods();
 					// default allowed requestmethods
-					if (requestMethods.isEmpty())
+					if (requestMethods.isEmpty()) {
 						requestMethods = this.getDefaultAllowedHttpMethods();
+					}
 					calculatePath(handlerMethod, operationPath, requestMethods);
 				}
 			}
@@ -271,15 +275,19 @@ public class OpenApiResource extends AbstractOpenApiResource {
 	 * @param operationPath the operation path
 	 * @return the boolean
 	 */
-	protected boolean isRestController(Map<String, Object> restControllers, HandlerMethod handlerMethod,
-			String operationPath) {
+	protected boolean isRestController(Map<String, Object> restControllers, HandlerMethod handlerMethod, String operationPath) {
 		ResponseBody responseBodyAnnotation = AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), ResponseBody.class);
 		if (responseBodyAnnotation == null)
 			responseBodyAnnotation = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), ResponseBody.class);
 
-		return (responseBodyAnnotation != null && restControllers.containsKey(handlerMethod.getBean().toString()) || isAdditionalRestController(handlerMethod.getBeanType()))
+		return (responseBodyAnnotation != null
+					&& restControllers.containsKey(handlerMethod.getBean().toString())
+					|| isAdditionalRestController(handlerMethod.getBeanType())
+				)
 				&& operationPath.startsWith(DEFAULT_PATH_SEPARATOR)
-				&& (springDocConfigProperties.isModelAndViewAllowed() || !ModelAndView.class.isAssignableFrom(handlerMethod.getMethod().getReturnType()));
+				&& (springDocConfigProperties.isModelAndViewAllowed()
+					|| !ModelAndView.class.isAssignableFrom(handlerMethod.getMethod().getReturnType())
+				);
 	}
 
 	/**

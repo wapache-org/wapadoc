@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -220,60 +221,87 @@ public abstract class AbstractRequestBuilder {
 	 * @param openAPI the open api
 	 * @return the operation
 	 */
-	public Operation build(HandlerMethod handlerMethod, RequestMethod requestMethod,
-			Operation operation, MethodAttributes methodAttributes, OpenAPI openAPI) {
+	public Operation build(
+		HandlerMethod handlerMethod,
+		RequestMethod requestMethod,
+		Operation operation,
+		MethodAttributes methodAttributes,
+		OpenAPI openAPI
+	) {
 		// Documentation
-		String operationId = operationBuilder.getOperationId(handlerMethod.getMethod().getName(),
-				operation.getOperationId(), openAPI);
+		String operationId = operationBuilder.getOperationId(
+			handlerMethod.getMethod().getName(),
+			operation.getOperationId(),
+			openAPI
+		);
 		operation.setOperationId(operationId);
+
 		// requests
 		String[] pNames = this.localSpringDocParameterNameDiscoverer.getParameterNames(handlerMethod.getMethod());
-		MethodParameter[] parameters = handlerMethod.getMethodParameters();
-		String[] reflectionParametersNames = Arrays.stream(handlerMethod.getMethod().getParameters()).map(java.lang.reflect.Parameter::getName).toArray(String[]::new);
-		if (pNames == null || Arrays.stream(pNames).anyMatch(Objects::isNull))
-			pNames = reflectionParametersNames;
-		parameters = DelegatingMethodParameter.customize(pNames, parameters,parameterBuilder.getDelegatingMethodParameterCustomizer());
+		if (pNames == null || Arrays.stream(pNames).anyMatch(Objects::isNull)) {
+			pNames = Arrays.stream(handlerMethod.getMethod().getParameters())
+				.map(java.lang.reflect.Parameter::getName)
+				.toArray(String[]::new);
+		}
+
+		// 提取参数
+		MethodParameter[] parameters = DelegatingMethodParameter.customize(
+			pNames,
+			handlerMethod.getMethodParameters(),
+			parameterBuilder.getDelegatingMethodParameterCustomizer()
+		);
+
 		RequestBodyInfo requestBodyInfo = new RequestBodyInfo();
 		List<Parameter> operationParameters = (operation.getParameters() != null) ? operation.getParameters() : new ArrayList<>();
 		Map<String, org.wapache.openapi.v3.annotations.Parameter> parametersDocMap = getApiParameters(handlerMethod.getMethod());
 		Components components = openAPI.getComponents();
 
+		// 循环方法的参数
 		for (MethodParameter methodParameter : parameters) {
+
+			if (isParamToIgnore(methodParameter)) {
+				continue;
+			}
+
 			// check if query param
 			Parameter parameter = null;
+
 			org.wapache.openapi.v3.annotations.Parameter parameterDoc = AnnotatedElementUtils.findMergedAnnotation(
-					AnnotatedElementUtils.forAnnotations(methodParameter.getParameterAnnotations()),
-					org.wapache.openapi.v3.annotations.Parameter.class);
+				AnnotatedElementUtils.forAnnotations(methodParameter.getParameterAnnotations()),
+				org.wapache.openapi.v3.annotations.Parameter.class
+			);
 
 			final String pName = methodParameter.getParameterName();
 			ParameterInfo parameterInfo = new ParameterInfo(pName, methodParameter);
 
-			if (parameterDoc == null)
+			if (parameterDoc == null) {
+				// 如果参数上没有, 就在Operation上找
 				parameterDoc = parametersDocMap.get(parameterInfo.getpName());
+			}
+
 			// use documentation as reference
 			if (parameterDoc != null) {
-				if (parameterDoc.hidden() || parameterDoc.schema().hidden())
+				if (parameterDoc.hidden() || parameterDoc.schema().hidden()) {
 					continue;
+				}
 				parameter = parameterBuilder.buildParameterFromDoc(parameterDoc, components, methodAttributes.getJsonViewAnnotation());
 				parameterInfo.setParameterModel(parameter);
 			}
 
-			if (!isParamToIgnore(methodParameter)) {
-				parameter = buildParams(parameterInfo, components, requestMethod, methodAttributes.getJsonViewAnnotation());
-				// Merge with the operation parameters
-				parameter = GenericParameterBuilder.mergeParameter(operationParameters, parameter);
-				List<Annotation> parameterAnnotations = Arrays.asList(methodParameter.getParameterAnnotations());
-				if (isValidParameter(parameter))
-					applyBeanValidatorAnnotations(parameter, parameterAnnotations);
-				else if (!RequestMethod.GET.equals(requestMethod)) {
-					if (operation.getRequestBody() != null)
-						requestBodyInfo.setRequestBody(operation.getRequestBody());
-					requestBodyBuilder.calculateRequestBodyInfo(components, methodAttributes,
-							parameterInfo, requestBodyInfo);
-					applyBeanValidatorAnnotations(requestBodyInfo.getRequestBody(), parameterAnnotations, methodParameter.isOptional());
+			parameter = buildParams(parameterInfo, components, requestMethod, methodAttributes.getJsonViewAnnotation());
+			// Merge with the operation parameters
+			parameter = GenericParameterBuilder.mergeParameter(operationParameters, parameter);
+			List<Annotation> parameterAnnotations = Arrays.asList(methodParameter.getParameterAnnotations());
+			if (isValidParameter(parameter)) {
+				applyBeanValidatorAnnotations(parameter, parameterAnnotations);
+			} else if (!RequestMethod.GET.equals(requestMethod)) {
+				if (operation.getRequestBody() != null) {
+					requestBodyInfo.setRequestBody(operation.getRequestBody());
 				}
-				customiseParameter(parameter, parameterInfo);
+				requestBodyBuilder.calculateRequestBodyInfo(components, methodAttributes, parameterInfo, requestBodyInfo);
+				applyBeanValidatorAnnotations(requestBodyInfo.getRequestBody(), parameterAnnotations, methodParameter.isOptional());
 			}
+			customiseParameter(parameter, parameterInfo);
 		}
 
 		LinkedHashMap<String, Parameter> map = getParameterLinkedHashMap(components, methodAttributes, operationParameters, parametersDocMap);
@@ -409,43 +437,48 @@ public abstract class AbstractRequestBuilder {
 	 * @param jsonView the json view
 	 * @return the parameter
 	 */
-	public Parameter buildParams(ParameterInfo parameterInfo, Components components,
-			RequestMethod requestMethod, JsonView jsonView) {
+	public Parameter buildParams(ParameterInfo parameterInfo, Components components, RequestMethod requestMethod, JsonView jsonView) {
 		MethodParameter methodParameter = parameterInfo.getMethodParameter();
 		RequestHeader requestHeader = parameterInfo.getRequestHeader();
 		RequestParam requestParam = parameterInfo.getRequestParam();
 		PathVariable pathVar = parameterInfo.getPathVar();
 		CookieValue cookieValue = parameterInfo.getCookieValue();
 
+		// !methodParameter.isOptional()
+		// 如果==true, 那一定是可以为null,
+		// 如果==false, 可能是必填, 可能是默认可选
+
 		RequestInfo requestInfo;
 
 		if (requestHeader != null) {
-			requestInfo = new RequestInfo(ParameterIn.HEADER.toString(), parameterInfo.getpName(), requestHeader.required(),
-					requestHeader.defaultValue());
+			requestInfo = new RequestInfo(ParameterIn.HEADER.toString(), parameterInfo.getpName(), requestHeader.required(), requestHeader.defaultValue());
 			return buildParam(parameterInfo, components, requestInfo, jsonView);
-
 		}
-		else if (requestParam != null && !parameterBuilder.isFile(parameterInfo.getMethodParameter())) {
-			requestInfo = new RequestInfo(ParameterIn.QUERY.toString(), parameterInfo.getpName(), requestParam.required() && !methodParameter.isOptional(),
-					requestParam.defaultValue());
+		else if (requestParam != null && !parameterBuilder.isFile(methodParameter)) {
+			requestInfo = new RequestInfo(
+				ParameterIn.QUERY.toString(),
+				parameterInfo.getpName(),
+				requestParam.required(), //  && !methodParameter.isOptional()
+				requestParam.defaultValue()
+			);
 			return buildParam(parameterInfo, components, requestInfo, jsonView);
 		}
 		else if (pathVar != null) {
-			requestInfo = new RequestInfo(ParameterIn.PATH.toString(), parameterInfo.getpName(), !methodParameter.isOptional(), null);
+			requestInfo = new RequestInfo(ParameterIn.PATH.toString(), parameterInfo.getpName(), true, null);
 			return buildParam(parameterInfo, components, requestInfo, jsonView);
 		}
 		else if (cookieValue != null) {
-			requestInfo = new RequestInfo(ParameterIn.COOKIE.toString(), parameterInfo.getpName(), cookieValue.required(),
-					cookieValue.defaultValue());
+			requestInfo = new RequestInfo(ParameterIn.COOKIE.toString(), parameterInfo.getpName(), cookieValue.required(), cookieValue.defaultValue());
 			return buildParam(parameterInfo, components, requestInfo, jsonView);
 		}
 		// By default
 		DelegatingMethodParameter delegatingMethodParameter = (DelegatingMethodParameter) methodParameter;
 		if (RequestMethod.GET.equals(requestMethod)
-				|| (parameterInfo.getParameterModel() != null && (ParameterIn.PATH.toString().equals(parameterInfo.getParameterModel().getIn())))
-				|| delegatingMethodParameter.isParameterObject())
-			return this.buildParam(QUERY_PARAM, components, parameterInfo, !methodParameter.isOptional(), null, jsonView);
-
+			|| (parameterInfo.getParameterModel() != null && (ParameterIn.PATH.toString().equals(parameterInfo.getParameterModel().getIn())))
+			|| delegatingMethodParameter.isParameterObject()
+		) {
+			return this.buildParam(QUERY_PARAM, components, parameterInfo, null, null, jsonView);
+		}
 		return null;
 	}
 
@@ -458,19 +491,17 @@ public abstract class AbstractRequestBuilder {
 	 * @param jsonView the json view
 	 * @return the parameter
 	 */
-	private Parameter buildParam(ParameterInfo parameterInfo, Components components, RequestInfo requestInfo,
-			JsonView jsonView) {
+	private Parameter buildParam(ParameterInfo parameterInfo, Components components, RequestInfo requestInfo, JsonView jsonView) {
 		Parameter parameter;
 		String pName = parameterInfo.getpName();
 		String name = StringUtils.isBlank(requestInfo.value()) ? pName : requestInfo.value();
 		parameterInfo.setpName(name);
 
-		if (!ValueConstants.DEFAULT_NONE.equals(requestInfo.defaultValue()))
-			parameter = this.buildParam(requestInfo.type(), components, parameterInfo, false,
-					requestInfo.defaultValue(), jsonView);
-		else
-			parameter = this.buildParam(requestInfo.type(), components, parameterInfo, requestInfo.required(), null,
-					jsonView);
+		if (!ValueConstants.DEFAULT_NONE.equals(requestInfo.defaultValue())) {
+			parameter = this.buildParam(requestInfo.type(), components, parameterInfo, false, requestInfo.defaultValue(), jsonView);
+		} else {
+			parameter = this.buildParam(requestInfo.type(), components, parameterInfo, requestInfo.required(), null, jsonView);
+		}
 		return parameter;
 	}
 
@@ -485,8 +516,8 @@ public abstract class AbstractRequestBuilder {
 	 * @param jsonView the json view
 	 * @return the parameter
 	 */
-	private Parameter buildParam(String in, Components components, ParameterInfo parameterInfo, Boolean required,
-			String defaultValue, JsonView jsonView) {
+	private Parameter buildParam(String in, Components components, ParameterInfo parameterInfo, Boolean required, String defaultValue, JsonView jsonView) {
+
 		Parameter parameter = parameterInfo.getParameterModel();
 		String name = parameterInfo.getpName();
 
@@ -508,12 +539,13 @@ public abstract class AbstractRequestBuilder {
 			parameter.setDeprecated(true);
 
 		if (parameter.getSchema() == null && parameter.getContent() == null) {
-			Schema<?> schema = parameterBuilder.calculateSchema(components, parameterInfo, null,
-					jsonView);
-			if (defaultValue != null)
+			Schema<?> schema = parameterBuilder.calculateSchema(components, parameterInfo, null, jsonView);
+			if (defaultValue != null) {
 				schema.setDefault(defaultValue);
+			}
 			parameter.setSchema(schema);
 		}
+
 		return parameter;
 	}
 
@@ -597,34 +629,29 @@ public abstract class AbstractRequestBuilder {
 	 * @return the api parameters
 	 */
 	private Map<String, org.wapache.openapi.v3.annotations.Parameter> getApiParameters(Method method) {
+		Collector<org.wapache.openapi.v3.annotations.Parameter, ?, LinkedHashMap<String, org.wapache.openapi.v3.annotations.Parameter>> toMap =
+			Collectors.toMap(org.wapache.openapi.v3.annotations.Parameter::name, x -> x, (e1, e2) -> e2, LinkedHashMap::new);
+
+		// Map<Parameter::name, Parameter>
+		LinkedHashMap<String, org.wapache.openapi.v3.annotations.Parameter> apiParametersMap =
+			AnnotatedElementUtils.findAllMergedAnnotations(method, Parameters.class).stream()
+			.flatMap(x -> Stream.of(x.value()))
+			.collect(toMap);
+		apiParametersMap.putAll(AnnotatedElementUtils
+			.findAllMergedAnnotations(method, org.wapache.openapi.v3.annotations.Parameter.class).stream()
+			.collect(toMap)
+		);
+
 		Class<?> declaringClass = method.getDeclaringClass();
-
-		Set<Parameters> apiParametersDoc = AnnotatedElementUtils
-				.findAllMergedAnnotations(method, Parameters.class);
-		LinkedHashMap<String, org.wapache.openapi.v3.annotations.Parameter> apiParametersMap = apiParametersDoc.stream()
-				.flatMap(x -> Stream.of(x.value())).collect(Collectors.toMap(org.wapache.openapi.v3.annotations.Parameter::name, x -> x, (e1, e2) -> e2,
-						LinkedHashMap::new));
-
-		Set<Parameters> apiParametersDocDeclaringClass = AnnotatedElementUtils
-				.findAllMergedAnnotations(declaringClass, Parameters.class);
-		LinkedHashMap<String, org.wapache.openapi.v3.annotations.Parameter> apiParametersDocDeclaringClassMap = apiParametersDocDeclaringClass.stream()
-				.flatMap(x -> Stream.of(x.value())).collect(Collectors.toMap(org.wapache.openapi.v3.annotations.Parameter::name, x -> x, (e1, e2) -> e2,
-						LinkedHashMap::new));
-		apiParametersMap.putAll(apiParametersDocDeclaringClassMap);
-
-		Set<org.wapache.openapi.v3.annotations.Parameter> apiParameterDoc = AnnotatedElementUtils
-				.findAllMergedAnnotations(method, org.wapache.openapi.v3.annotations.Parameter.class);
-		LinkedHashMap<String, org.wapache.openapi.v3.annotations.Parameter> apiParameterDocMap = apiParameterDoc.stream()
-				.collect(Collectors.toMap(org.wapache.openapi.v3.annotations.Parameter::name, x -> x, (e1, e2) -> e2,
-						LinkedHashMap::new));
-		apiParametersMap.putAll(apiParameterDocMap);
-
-		Set<org.wapache.openapi.v3.annotations.Parameter> apiParameterDocDeclaringClass = AnnotatedElementUtils
-				.findAllMergedAnnotations(declaringClass, org.wapache.openapi.v3.annotations.Parameter.class);
-		LinkedHashMap<String, org.wapache.openapi.v3.annotations.Parameter> apiParameterDocDeclaringClassMap = apiParameterDocDeclaringClass.stream()
-				.collect(Collectors.toMap(org.wapache.openapi.v3.annotations.Parameter::name, x -> x, (e1, e2) -> e2,
-						LinkedHashMap::new));
-		apiParametersMap.putAll(apiParameterDocDeclaringClassMap);
+		apiParametersMap.putAll(AnnotatedElementUtils
+			.findAllMergedAnnotations(declaringClass, Parameters.class).stream()
+			.flatMap(x -> Stream.of(x.value()))
+			.collect(toMap)
+		);
+		apiParametersMap.putAll(AnnotatedElementUtils
+			.findAllMergedAnnotations(declaringClass, org.wapache.openapi.v3.annotations.Parameter.class).stream()
+			.collect(toMap)
+		);
 
 		return apiParametersMap;
 	}
