@@ -98,6 +98,8 @@ import org.springframework.web.method.HandlerMethod;
  */
 public abstract class AbstractOpenApiResource extends SpecFilter {
 
+	Logger log = LoggerFactory.getLogger(AbstractOpenApiResource.class);
+
 	/**
 	 * The constant LOGGER.
 	 */
@@ -181,13 +183,17 @@ public abstract class AbstractOpenApiResource extends SpecFilter {
 	 * @param springDocConfigProperties the spring doc config properties
 	 * @param actuatorProvider the actuator provider
 	 */
-	protected AbstractOpenApiResource(String groupName, ObjectFactory<OpenAPIBuilder> openAPIBuilderObjectFactory,
-			AbstractRequestBuilder requestBuilder,
-			GenericResponseBuilder responseBuilder, OperationBuilder operationParser,
-			Optional<List<OperationCustomizer>> operationCustomizers,
-			Optional<List<OpenApiCustomiser>> openApiCustomisers,
-			SpringDocConfigProperties springDocConfigProperties,
-			Optional<ActuatorProvider> actuatorProvider) {
+	protected AbstractOpenApiResource(
+		String groupName,
+		ObjectFactory<OpenAPIBuilder> openAPIBuilderObjectFactory,
+		AbstractRequestBuilder requestBuilder,
+		GenericResponseBuilder responseBuilder,
+		OperationBuilder operationParser,
+		Optional<List<OperationCustomizer>> operationCustomizers,
+		Optional<List<OpenApiCustomiser>> openApiCustomisers,
+		SpringDocConfigProperties springDocConfigProperties,
+		Optional<ActuatorProvider> actuatorProvider
+	) {
 		super();
 		this.groupName = Objects.requireNonNull(groupName, "groupName");
 		this.openAPIBuilderObjectFactory = openAPIBuilderObjectFactory;
@@ -250,7 +256,10 @@ public abstract class AbstractOpenApiResource extends SpecFilter {
 		OpenAPI openApi;
 		if (openAPIBuilder.getCachedOpenAPI() == null || springDocConfigProperties.isCacheDisabled()) {
 			Instant start = Instant.now();
+
 			openAPIBuilder.build();
+
+			// 过滤掉需要隐藏的接口
 			Map<String, Object> mappingsMap = openAPIBuilder.getMappingsMap().entrySet().stream()
 			.filter(controller -> (AnnotationUtils.findAnnotation(controller.getValue().getClass(), Hidden.class) == null))
 			.filter(controller -> !AbstractOpenApiResource.isHiddenRestControllers(controller.getValue().getClass()))
@@ -305,8 +314,10 @@ public abstract class AbstractOpenApiResource extends SpecFilter {
 	 * @param routerOperation the router operation
 	 */
 	protected void calculatePath(HandlerMethod handlerMethod, RouterOperation routerOperation) {
+
 		String operationPath = routerOperation.getPath();
 		Set<RequestMethod> requestMethods = new HashSet<>(Arrays.asList(routerOperation.getMethods()));
+		// 以下5个是没有值的, 非webmvc.fn情况下
 		org.wapache.openapi.v3.annotations.Operation apiOperation = routerOperation.getOperation();
 		String[] methodConsumes = routerOperation.getConsumes();
 		String[] methodProduces = routerOperation.getProduces();
@@ -324,51 +335,57 @@ public abstract class AbstractOpenApiResource extends SpecFilter {
 		}
 
 		for (RequestMethod requestMethod : requestMethods) {
-			Operation existingOperation = getExistingOperation(operationMap, requestMethod);
 			Method method = handlerMethod.getMethod();
 			// skip hidden operations
-			if (operationParser.isHidden(method))
+			if (operationParser.isHidden(method)) {
 				continue;
+			}
 
-			RequestMapping reqMappingClass = AnnotatedElementUtils.findMergedAnnotation(handlerMethod.getBeanType(),
-					RequestMapping.class);
+			MethodAttributes methodAttributes = new MethodAttributes(
+				springDocConfigProperties.getDefaultConsumesMediaType(),
+				springDocConfigProperties.getDefaultProducesMediaType(),
+				methodConsumes, methodProduces, headers
+			);
 
-			MethodAttributes methodAttributes = new MethodAttributes(springDocConfigProperties.getDefaultConsumesMediaType(), springDocConfigProperties.getDefaultProducesMediaType(), methodConsumes, methodProduces, headers);
+			Operation existingOperation = getExistingOperation(operationMap, requestMethod);
 			methodAttributes.setMethodOverloaded(existingOperation != null);
 
+			RequestMapping reqMappingClass = AnnotatedElementUtils.findMergedAnnotation(handlerMethod.getBeanType(), RequestMapping.class);
 			if (reqMappingClass != null) {
 				methodAttributes.setClassConsumes(reqMappingClass.consumes());
 				methodAttributes.setClassProduces(reqMappingClass.produces());
 			}
-
+			// TODO GetMapping, PostMapping这些没有处理???
 			methodAttributes.calculateConsumesProduces(method);
+
 
 			Operation operation = (existingOperation != null) ? existingOperation : new Operation();
 
-			if (SchemaPropertyDeprecatingConverter.isDeprecated(method))
+			if (SchemaPropertyDeprecatingConverter.isDeprecated(method)) {
 				operation.setDeprecated(true);
-
+			}
 			// Add documentation from operation annotation
-			if (apiOperation == null || StringUtils.isBlank(apiOperation.operationId()))
+			if (apiOperation == null || StringUtils.isBlank(apiOperation.operationId())) {
 				apiOperation = AnnotatedElementUtils.findMergedAnnotation(method,
-						org.wapache.openapi.v3.annotations.Operation.class);
+					org.wapache.openapi.v3.annotations.Operation.class);
+			}
 
 			calculateJsonView(apiOperation, methodAttributes, method);
-			if (apiOperation != null)
+			if (apiOperation != null) {
 				openAPI = operationParser.parse(apiOperation, operation, openAPI, methodAttributes);
+			}
 			fillParametersList(operation, queryParams, methodAttributes);
 
 			// compute tags
 			operation = openAPIBuilder.buildTags(handlerMethod, operation, openAPI);
 
-			ApiRequestBody requestBodyDoc = AnnotatedElementUtils.findMergedAnnotation(method,
-					ApiRequestBody.class);
+			ApiRequestBody requestBodyDoc = AnnotatedElementUtils.findMergedAnnotation(method, ApiRequestBody.class);
 
 			// RequestBody in Operation
 			requestBuilder.getRequestBodyBuilder()
-					.buildRequestBodyFromDoc(requestBodyDoc, methodAttributes, components,
-							methodAttributes.getJsonViewAnnotationForRequestBody())
-					.ifPresent(operation::setRequestBody);
+			.buildRequestBodyFromDoc(requestBodyDoc, methodAttributes, components, methodAttributes.getJsonViewAnnotationForRequestBody())
+			.ifPresent(operation::setRequestBody);
+
 			// requests
 			operation = requestBuilder.build(handlerMethod, requestMethod, operation, methodAttributes, openAPI);
 
@@ -805,16 +822,18 @@ public abstract class AbstractOpenApiResource extends SpecFilter {
 	 */
 	private void fillParametersList(Operation operation, Map<String, String> queryParams, MethodAttributes methodAttributes) {
 		List<Parameter> parametersList = operation.getParameters();
-		if (parametersList == null)
+		if (parametersList == null) {
 			parametersList = new ArrayList<>();
+		}
 		Collection<Parameter> headersMap = AbstractRequestBuilder.getHeaders(methodAttributes, new LinkedHashMap<>());
 		parametersList.addAll(headersMap);
+
 		if (!CollectionUtils.isEmpty(queryParams)) {
 			for (Map.Entry<String, String> entry : queryParams.entrySet()) {
 				Parameter parameter = new Parameter();
 				parameter.setName(entry.getKey());
 				parameter.setSchema(new StringSchema()._default(entry.getValue()));
-				parameter.setRequired(true);
+				parameter.setRequired(false);
 				parameter.setIn(ParameterIn.QUERY.toString());
 				GenericParameterBuilder.mergeParameter(parametersList, parameter);
 			}

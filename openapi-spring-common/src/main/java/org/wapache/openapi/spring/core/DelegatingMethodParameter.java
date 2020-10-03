@@ -97,11 +97,11 @@ public class DelegatingMethodParameter extends MethodParameter {
 			boolean isParameterObject = p.hasParameterAnnotation(ParameterObject.class)
 				|| AnnotatedElementUtils.isAnnotated(paramClass, ParameterObject.class);
 
-			// FIXME: 低版本的spring才需要这样做.
-			if(!isParameterObject){
-				// 查找接口上的方法定义是否有ParameterObject注解
-				isParameterObject = isParameterObject(p);
-			}
+//			// 低版本的spring才需要这样做.已经升级到spring 5.1.X, 已经支持
+//			if(!isParameterObject){
+//				// 查找接口上的方法定义是否有ParameterObject注解
+//				isParameterObject = isParameterObject(p);
+//			}
 
 			if (isParameterObject) {
 				Stream<MethodParameter> methodParameterStream = MethodParameterPojoExtractor.extractFrom(paramClass);
