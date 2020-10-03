@@ -54,7 +54,7 @@ npm run build # windows下运行: npm run build_windows
 cd ../..
 mvn clean package
 cd openapi-spring-webmvc-demo/target
-java -jar openapi-spring-webmvc-demo-0.9.18-SNAPSHOT.jar
+java -jar openapi-spring-webmvc-demo-0.10.8-SNAPSHOT.jar
 ```
 
 ## 界面预览
@@ -66,4 +66,20 @@ java -jar openapi-spring-webmvc-demo-0.9.18-SNAPSHOT.jar
 明亮主题:
 
 ![明亮主题](docs/images/openapi-ui-light.jpg)
+
+#其他资源
+
+1. 中文版规范: https://github.com/fishead/OpenAPI-Specification/blob/master/versions/3.0.0.zhCN.md
+
+2. 中文教程: https://www.breakyizhan.com/swagger/2806.html
+
+
+3. [API Documentation with springdoc-openapi](https://mflash.dev/blog/2020/06/27/api-documentation-with-springdoc-openapi/)
+
+    OpenAPI Initiative is a widely adopted industry standard to describe and document APIs, with Swagger being one of its most well-known implementations. For years, Springfox, using Swagger, has provided a well-adopted toolchain for Spring projects to generate OpenAPI documentation and provide a UI on the top of it. Unfortunately, the Springfox project is not frequently maintained; its latest release v2.9.2 at the timing of writing this post was in 2018. This is where springdoc-openapi comes into picture.
+
+    Springdoc is a relatively young open-source project that adds several new features not available in Springfox at the moment, including the support for OpenAPI Specification 3 (OAS 3) and functional and reactive Spring APIs to create REST endpoints. In this post, we'll explore how we can use Springdoc with a Spring Boot project.
+
+4. [openapi整合spring-security表单登录](https://waynestalk.com/spring-security-form-login-jpa-springdoc-explained/)
+
 

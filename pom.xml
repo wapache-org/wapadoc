@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.wapache.openapi</groupId>
 	<artifactId>wapache-openapi</artifactId>
-	<version>0.9.18</version>
+	<version>0.10.8-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>openapi project</name>
 	<description>整合openapi spec, swagger-api, springdoc, rapidoc, openapi-generator等多个项目, 并在此基础上做一定的裁剪扩展和汉化。</description>
@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.4.RELEASE</version>
+		<version>2.1.17.RELEASE</version>
 	</parent>
 
 	<licenses>
@@ -256,6 +256,7 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
+<!--
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -267,7 +268,53 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+-->
 
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+
+	<!-- 部署到私服的配置 -->
+	<distributionManagement>
+		<repository>
+			<id>nexus-releases</id>
+			<name>Nexus Release Repository</name>
+			<url>http://10.150.10.120:8081/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://10.150.10.120:8081/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>private nexus</id>
+			<url>http://10.150.10.120:8081/repository/maven-public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+<!--
 	<profiles>
 		<profile>
 			<id>gpg</id>
@@ -337,5 +384,5 @@
 			</build>
 		</profile>
 	</profiles>
-
+-->
 </project>

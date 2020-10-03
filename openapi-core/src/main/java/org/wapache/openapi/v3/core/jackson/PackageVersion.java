@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.util.VersionUtil;
 
 public final class PackageVersion implements Versioned {
     public static final Version VERSION = VersionUtil.parseVersion(
-            "0.5.1-SNAPSHOT", "org.wapache.openapi", "openapi-core");
+            "0.10.8", "org.wapache.openapi", "openapi-core");
 
     @Override
     public Version version() {
