@@ -18,7 +18,7 @@
  *
  */
 
-package org.wapache.openapi.spring.core;
+package org.wapache.openapi.spring.core.ui;
 
 
 import java.util.List;
@@ -30,6 +30,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
+import org.wapache.openapi.spring.core.SpringDocConfiguration;
+import org.wapache.openapi.spring.core.SpringDocPropertiesUtils;
 
 import static org.wapache.openapi.spring.core.Constants.SPRINGDOC_SWAGGER_UI_ENABLED;
 

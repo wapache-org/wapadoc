@@ -18,30 +18,32 @@
  *
  */
 
-package org.wapache.openapi.spring.core;
+package org.wapache.openapi.spring.core.ui;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.wapache.openapi.spring.core.Constants;
+import org.wapache.openapi.spring.core.SpringDocConfiguration;
 
-import static org.wapache.openapi.spring.core.Constants.SPRINGDOC_SWAGGER_UI_ENABLED;
+import static org.wapache.openapi.spring.core.Constants.*;
 
 
 /**
- * The type Swagger ui config properties.
- * @author bnasslahsen
+ * The type OpenApi ui config properties.
+ * @author ykuang
  */
 @Configuration//(proxyBeanMethods = false)
-@ConfigurationProperties(prefix = "springdoc.swagger-ui")
-@ConditionalOnProperty(name = SPRINGDOC_SWAGGER_UI_ENABLED, matchIfMissing = true)
+@ConfigurationProperties(prefix = SPRINGDOC_OPENAPI_UI)
+@ConditionalOnProperty(name = SPRINGDOC_OPENAPI_UI_ENABLED, matchIfMissing = true)
 @ConditionalOnBean(SpringDocConfiguration.class)
-public class SwaggerUiConfigProperties extends AbstractSwaggerUiConfigProperties{
+public class OpenApiUiConfigProperties extends AbstractOpenApiUiConfigProperties {
 
 	/**
-	 * The Disable swagger default url.
+	 * The Disable default url.
 	 */
-	private boolean disableSwaggerDefaultUrl;
+	private boolean disableDefaultUrl;
 
 	/**
 	 * The Display query params.
@@ -139,17 +141,17 @@ public class SwaggerUiConfigProperties extends AbstractSwaggerUiConfigProperties
 	 *
 	 * @return the boolean
 	 */
-	public boolean isDisableSwaggerDefaultUrl() {
-		return disableSwaggerDefaultUrl;
+	public boolean isDisableDefaultUrl() {
+		return disableDefaultUrl;
 	}
 
 	/**
 	 * Sets disable swagger default url.
 	 *
-	 * @param disableSwaggerDefaultUrl the disable swagger default url
+	 * @param disableDefaultUrl the disable swagger default url
 	 */
-	public void setDisableSwaggerDefaultUrl(boolean disableSwaggerDefaultUrl) {
-		this.disableSwaggerDefaultUrl = disableSwaggerDefaultUrl;
+	public void setDisableDefaultUrl(boolean disableDefaultUrl) {
+		this.disableDefaultUrl = disableDefaultUrl;
 	}
 
 	/**

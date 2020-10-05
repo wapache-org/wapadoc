@@ -20,19 +20,8 @@
 
 package org.wapache.openapi.spring.webmvc.ui;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.wapache.openapi.v3.annotations.Operation;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.wapache.openapi.spring.core.SpringDocConfigProperties;
-import org.wapache.openapi.spring.core.SpringDocConfiguration;
-import org.wapache.openapi.spring.core.ui.SwaggerUiConfigParameters;
-import org.wapache.openapi.spring.core.ui.SwaggerUiConfigProperties;
-import org.wapache.openapi.spring.ui.AbstractSwaggerWelcome;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -43,22 +32,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.wapache.openapi.spring.core.SpringDocConfigProperties;
+import org.wapache.openapi.spring.core.SpringDocConfiguration;
+import org.wapache.openapi.spring.core.ui.OpenApiUiConfigParameters;
+import org.wapache.openapi.spring.core.ui.OpenApiUiConfigProperties;
+import org.wapache.openapi.spring.ui.AbstractOpenApiWelcome;
+import org.wapache.openapi.v3.annotations.Operation;
 
-import static org.wapache.openapi.spring.core.Constants.MVC_SERVLET_PATH;
-import static org.wapache.openapi.spring.core.Constants.SPRINGDOC_SWAGGER_UI_ENABLED;
-import static org.wapache.openapi.spring.core.Constants.SWAGGER_CONFIG_URL;
-import static org.wapache.openapi.spring.core.Constants.SWAGGER_UI_PATH;
-import static org.wapache.openapi.spring.core.Constants.SWAGGER_UI_URL;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
 import static org.springframework.util.AntPathMatcher.DEFAULT_PATH_SEPARATOR;
+import static org.wapache.openapi.spring.core.Constants.*;
 
 /**
- * The type Swagger welcome.
+ * The type OpenAPI welcome.
  * @author bnasslahsen
  */
 @Controller
-@ConditionalOnProperty(name = SPRINGDOC_SWAGGER_UI_ENABLED, matchIfMissing = true)
-@ConditionalOnBean(SpringDocConfiguration.class)
-public class SwaggerWelcome extends AbstractSwaggerWelcome {
+public class OpenApiWelcome extends AbstractOpenApiWelcome {
 
 	/**
 	 * The Mvc servlet path.
@@ -68,14 +60,18 @@ public class SwaggerWelcome extends AbstractSwaggerWelcome {
 	private String mvcServletPath;
 
 	/**
-	 * Instantiates a new Swagger welcome.
+	 * Instantiates a new OpenApi welcome.
 	 *
-	 * @param swaggerUiConfig the swagger ui config
+	 * @param openApiUiConfig the openApi ui config
 	 * @param springDocConfigProperties the spring doc config properties
-	 * @param swaggerUiConfigParameters the swagger ui config parameters
+	 * @param openApiUiConfigParameters the openApi ui config parameters
 	 */
-	public SwaggerWelcome(SwaggerUiConfigProperties swaggerUiConfig, SpringDocConfigProperties springDocConfigProperties,SwaggerUiConfigParameters swaggerUiConfigParameters) {
-		super(swaggerUiConfig, springDocConfigProperties, swaggerUiConfigParameters);
+	public OpenApiWelcome(
+		OpenApiUiConfigProperties openApiUiConfig,
+		SpringDocConfigProperties springDocConfigProperties,
+		OpenApiUiConfigParameters openApiUiConfigParameters
+	) {
+		super(openApiUiConfig, springDocConfigProperties, openApiUiConfigParameters);
 	}
 
 	/**
@@ -85,10 +81,10 @@ public class SwaggerWelcome extends AbstractSwaggerWelcome {
 	 * @return the string
 	 */
 	@Operation(hidden = true)
-	@GetMapping(SWAGGER_UI_PATH)
+	@GetMapping(OPENAPI_UI_PATH)
 	public String redirectToUi(HttpServletRequest request) {
 		buildConfigUrl(request.getContextPath(), ServletUriComponentsBuilder.fromCurrentContextPath());
-		String sbUrl =   swaggerUiConfigParameters.getUiRootPath() + SWAGGER_UI_URL;
+		String sbUrl =   openApiUiConfigParameters.getUiRootPath() + OPENAPI_UI_URL;
 		UriComponentsBuilder uriBuilder = getUriComponentsBuilder(sbUrl);
 		return UrlBasedViewResolver.REDIRECT_URL_PREFIX + uriBuilder.build().encode().toString();
 	}
@@ -100,11 +96,11 @@ public class SwaggerWelcome extends AbstractSwaggerWelcome {
 	 * @return the map
 	 */
 	@Operation(hidden = true)
-	@GetMapping(value = SWAGGER_CONFIG_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = OPENAPI_CONFIG_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Map<String, Object> openapiJson(HttpServletRequest request) {
 		buildConfigUrl(request.getContextPath(), ServletUriComponentsBuilder.fromCurrentContextPath());
-		return swaggerUiConfigParameters.getConfigParameters();
+		return openApiUiConfigParameters.getConfigParameters();
 	}
 
 	@Override
@@ -114,10 +110,10 @@ public class SwaggerWelcome extends AbstractSwaggerWelcome {
 			sbUrl.append(mvcServletPath);
 		if (ArrayUtils.isNotEmpty(sbUrls))
 			sbUrl = sbUrls[0];
-		String swaggerPath = swaggerUiConfigParameters.getPath();
-		if (swaggerPath.contains(DEFAULT_PATH_SEPARATOR))
-			sbUrl.append(swaggerPath, 0, swaggerPath.lastIndexOf(DEFAULT_PATH_SEPARATOR));
-		swaggerUiConfigParameters.setUiRootPath(sbUrl.toString());
+		String openApiPath = openApiUiConfigParameters.getPath();
+		if (openApiPath.contains(DEFAULT_PATH_SEPARATOR))
+			sbUrl.append(openApiPath, 0, openApiPath.lastIndexOf(DEFAULT_PATH_SEPARATOR));
+		openApiUiConfigParameters.setUiRootPath(sbUrl.toString());
 	}
 
 	@Override
@@ -129,10 +125,10 @@ public class SwaggerWelcome extends AbstractSwaggerWelcome {
 
 	@Override
 	protected void calculateOauth2RedirectUrl(UriComponentsBuilder uriComponentsBuilder) {
-		if (!swaggerUiConfigParameters.isValidUrl(swaggerUiConfigParameters.getOauth2RedirectUrl()))
-			swaggerUiConfigParameters.setOauth2RedirectUrl(uriComponentsBuilder
-					.path(swaggerUiConfigParameters.getUiRootPath())
-					.path(swaggerUiConfigParameters.getOauth2RedirectUrl())
+		if (!openApiUiConfigParameters.isValidUrl(openApiUiConfigParameters.getOauth2RedirectUrl()))
+			openApiUiConfigParameters.setOauth2RedirectUrl(uriComponentsBuilder
+					.path(openApiUiConfigParameters.getUiRootPath())
+					.path(openApiUiConfigParameters.getOauth2RedirectUrl())
 					.build().toString());
 	}
 }

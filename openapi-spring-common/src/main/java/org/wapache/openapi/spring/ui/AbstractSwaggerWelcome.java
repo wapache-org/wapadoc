@@ -22,8 +22,8 @@ package org.wapache.openapi.spring.ui;
 
 import org.apache.commons.lang3.StringUtils;
 import org.wapache.openapi.spring.core.SpringDocConfigProperties;
-import org.wapache.openapi.spring.core.SwaggerUiConfigParameters;
-import org.wapache.openapi.spring.core.SwaggerUiConfigProperties;
+import org.wapache.openapi.spring.core.ui.SwaggerUiConfigParameters;
+import org.wapache.openapi.spring.core.ui.SwaggerUiConfigProperties;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;

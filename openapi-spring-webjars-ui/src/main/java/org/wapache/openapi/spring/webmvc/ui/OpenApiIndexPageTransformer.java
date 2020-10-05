@@ -20,42 +20,43 @@
 
 package org.wapache.openapi.spring.webmvc.ui;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.wapache.openapi.spring.core.ui.SwaggerUiConfigProperties;
-import org.wapache.openapi.spring.core.ui.SwaggerUiOAuthProperties;
-import org.wapache.openapi.spring.ui.AbstractSwaggerIndexTransformer;
-
 import org.springframework.core.io.Resource;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.resource.ResourceTransformerChain;
 import org.springframework.web.servlet.resource.TransformedResource;
+import org.wapache.openapi.spring.core.ui.OpenApiUiConfigProperties;
+import org.wapache.openapi.spring.core.ui.OpenApiUiOAuthProperties;
+import org.wapache.openapi.spring.ui.AbstractOpenApiUiIndexTransformer;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 /**
- * The type Swagger index transformer.
+ * The type OpenApi index transformer.
  * @author bnasslahsen
  */
-public class SwaggerIndexPageTransformer extends AbstractSwaggerIndexTransformer implements SwaggerIndexTransformer {
+public class OpenApiIndexPageTransformer extends AbstractOpenApiUiIndexTransformer implements OpenApiIndexTransformer {
 
 	/**
-	 * Instantiates a new Swagger index transformer.
+	 * Instantiates a new OpenApi index transformer.
 	 *
-	 * @param swaggerUiConfig the swagger ui config
-	 * @param swaggerUiOAuthProperties the swagger ui o auth properties
+	 * @param openApiUiConfig the openApi ui config
+	 * @param openApiUiOAuthProperties the openApi ui o auth properties
 	 * @param objectMapper the object mapper
 	 */
-	public SwaggerIndexPageTransformer(SwaggerUiConfigProperties swaggerUiConfig, SwaggerUiOAuthProperties swaggerUiOAuthProperties, ObjectMapper objectMapper) {
-		super(swaggerUiConfig, swaggerUiOAuthProperties, objectMapper);
+	public OpenApiIndexPageTransformer(OpenApiUiConfigProperties openApiUiConfig,
+									   OpenApiUiOAuthProperties openApiUiOAuthProperties,
+									   ObjectMapper objectMapper) {
+		super(openApiUiConfig, openApiUiOAuthProperties, objectMapper);
 	}
 
 	@Override
-	public Resource transform(HttpServletRequest request, Resource resource,
-			ResourceTransformerChain transformerChain) throws IOException {
+	public Resource transform(
+		HttpServletRequest request, Resource resource, ResourceTransformerChain transformerChain
+	) throws IOException {
 		final AntPathMatcher antPathMatcher = new AntPathMatcher();
-		boolean isIndexFound = antPathMatcher.match("**/swagger-ui/**/index.html", resource.getURL().toString());
+		boolean isIndexFound = antPathMatcher.match("**/openapi-ui/**/index.html", resource.getURL().toString());
 
 		if (isIndexFound && hasDefaultTransformations()) {
 			String html = defaultTransformations(resource.getInputStream());

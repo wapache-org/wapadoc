@@ -20,54 +20,59 @@
 
 package org.wapache.openapi.spring.webmvc.ui;
 
-import org.wapache.openapi.spring.core.ui.SwaggerUiConfigParameters;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.wapache.openapi.spring.core.ui.OpenApiUiConfigParameters;
 
+import static org.springframework.util.AntPathMatcher.DEFAULT_PATH_SEPARATOR;
 import static org.wapache.openapi.spring.core.Constants.CLASSPATH_RESOURCE_LOCATION;
 import static org.wapache.openapi.spring.core.Constants.DEFAULT_WEB_JARS_PREFIX_URL;
-import static org.springframework.util.AntPathMatcher.DEFAULT_PATH_SEPARATOR;
 
 /**
- * The type Swagger web mvc configurer.
+ * The type OpenApi web mvc configurer.
  * @author bnasslahsen
  */
 @SuppressWarnings("deprecation")
-public class SwaggerWebMvcConfigurer extends WebMvcConfigurerAdapter { // NOSONAR
+public class OpenApiWebMvcConfigurer extends WebMvcConfigurerAdapter { // NOSONAR
+
+	Logger log = LoggerFactory.getLogger(OpenApiWebMvcConfigurer.class);
 
 	/**
-	 * The Swagger path.
+	 * The OpenApi path.
 	 */
-	private String swaggerPath;
+	private String openApiPath;
 
 	/**
-	 * The Swagger index transformer.
+	 * The OpenApi index transformer.
 	 */
-	private SwaggerIndexTransformer swaggerIndexTransformer;
+	private OpenApiIndexTransformer openApiIndexTransformer;
 
 	/**
-	 * Instantiates a new Swagger web mvc configurer.
+	 * Instantiates a new OpenApi web mvc configurer.
 	 *
-	 * @param swaggerUiConfigParameters the swagger ui calculated config
-	 * @param swaggerIndexTransformer the swagger index transformer
+	 * @param openApiUiConfigParameters the openApi ui calculated config
+	 * @param openApiIndexTransformer the openApi index transformer
 	 */
-	public SwaggerWebMvcConfigurer(SwaggerUiConfigParameters swaggerUiConfigParameters, SwaggerIndexTransformer swaggerIndexTransformer) {
-		this.swaggerPath = swaggerUiConfigParameters.getPath();
-		this.swaggerIndexTransformer = swaggerIndexTransformer;
+	public OpenApiWebMvcConfigurer(OpenApiUiConfigParameters openApiUiConfigParameters, OpenApiIndexTransformer openApiIndexTransformer) {
+		this.openApiPath = openApiUiConfigParameters.getPath();
+		this.openApiIndexTransformer = openApiIndexTransformer;
 	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		StringBuilder uiRootPath = new StringBuilder();
-		if (swaggerPath.contains("/"))
-			uiRootPath.append(swaggerPath, 0, swaggerPath.lastIndexOf('/'));
+
+		if (openApiPath.contains("/")) {
+			uiRootPath.append(openApiPath, 0, openApiPath.lastIndexOf('/'));
+		}
 		uiRootPath.append("/**");
 
-		registry.addResourceHandler(uiRootPath + "/swagger-ui/**")
-				.addResourceLocations(CLASSPATH_RESOURCE_LOCATION + DEFAULT_WEB_JARS_PREFIX_URL + DEFAULT_PATH_SEPARATOR)
-				.resourceChain(false)
-				.addTransformer(swaggerIndexTransformer);
+		registry.addResourceHandler(uiRootPath + "/openapi-ui/**")
+		.addResourceLocations(CLASSPATH_RESOURCE_LOCATION + DEFAULT_WEB_JARS_PREFIX_URL + DEFAULT_PATH_SEPARATOR)
+		.resourceChain(false)
+		.addTransformer(openApiIndexTransformer);
 	}
 
 }

@@ -20,30 +20,24 @@
 
 package org.wapache.openapi.spring.ui;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
+import org.wapache.openapi.spring.core.Constants;
+import org.wapache.openapi.spring.core.ui.OpenApiUiConfigProperties;
+import org.wapache.openapi.spring.core.ui.OpenApiUiOAuthProperties;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.StringUtils;
-import org.wapache.openapi.spring.core.Constants;
-import org.wapache.openapi.spring.core.ui.SwaggerUiConfigProperties;
-import org.wapache.openapi.spring.core.ui.SwaggerUiOAuthProperties;
-
-import org.springframework.util.CollectionUtils;
-
 /**
- * The type Abstract swagger index transformer.
+ * The type Abstract UI index transformer.
  * @author bnasslahsen
  */
-public class AbstractSwaggerIndexTransformer {
-
-	/**
-	 * The Swagger ui o auth properties.
-	 */
-	protected SwaggerUiOAuthProperties swaggerUiOAuthProperties;
+public class AbstractOpenApiUiIndexTransformer {
 
 	/**
 	 * The Object mapper.
@@ -51,20 +45,29 @@ public class AbstractSwaggerIndexTransformer {
 	protected ObjectMapper objectMapper;
 
 	/**
-	 * The Swagger ui config.
+	 * The OpenApi ui config.
 	 */
-	protected SwaggerUiConfigProperties swaggerUiConfig;
+	protected OpenApiUiConfigProperties uiConfig;
+
+	/**
+	 * The OpenApi ui o auth properties.
+	 */
+	protected OpenApiUiOAuthProperties oAuthProperties;
 
 	/**
 	 * Instantiates a new Abstract swagger index transformer.
 	 *
-	 * @param swaggerUiConfig the swagger ui config
-	 * @param swaggerUiOAuthProperties the swagger ui o auth properties
+	 * @param uiConfig the swagger ui config
+	 * @param oAuthProperties the swagger ui o auth properties
 	 * @param objectMapper the object mapper
 	 */
-	public AbstractSwaggerIndexTransformer(SwaggerUiConfigProperties swaggerUiConfig, SwaggerUiOAuthProperties swaggerUiOAuthProperties, ObjectMapper objectMapper) {
-		this.swaggerUiConfig = swaggerUiConfig;
-		this.swaggerUiOAuthProperties = swaggerUiOAuthProperties;
+	public AbstractOpenApiUiIndexTransformer(
+		OpenApiUiConfigProperties uiConfig,
+		OpenApiUiOAuthProperties oAuthProperties,
+		ObjectMapper objectMapper
+	) {
+		this.uiConfig = uiConfig;
+		this.oAuthProperties = oAuthProperties;
 		this.objectMapper = objectMapper;
 	}
 
@@ -78,7 +81,7 @@ public class AbstractSwaggerIndexTransformer {
 	protected String addInitOauth(String html) throws JsonProcessingException {
 		StringBuilder stringBuilder = new StringBuilder("window.ui = ui\n");
 		stringBuilder.append("ui.initOAuth(\n");
-		String json = objectMapper.writeValueAsString(swaggerUiOAuthProperties.getConfigParameters());
+		String json = objectMapper.writeValueAsString(oAuthProperties.getConfigParameters());
 		stringBuilder.append(json);
 		stringBuilder.append(")");
 		return html.replace("window.ui = ui", stringBuilder.toString());
@@ -108,8 +111,8 @@ public class AbstractSwaggerIndexTransformer {
 	 * @param html the html
 	 * @return the string
 	 */
-	protected String overwriteSwaggerDefaultUrl(String html) {
-		return html.replace(Constants.SWAGGER_UI_DEFAULT_URL, StringUtils.EMPTY);
+	protected String overwriteOpenApiDefaultUrl(String html) {
+		return html.replace(Constants.OPENAPI_UI_DEFAULT_URL, StringUtils.EMPTY);
 	}
 
 	/**
@@ -118,8 +121,8 @@ public class AbstractSwaggerIndexTransformer {
 	 * @return the boolean
 	 */
 	protected boolean hasDefaultTransformations() {
-		boolean oauth2Configured = !CollectionUtils.isEmpty(swaggerUiOAuthProperties.getConfigParameters());
-		return oauth2Configured || swaggerUiConfig.isDisableSwaggerDefaultUrl() || swaggerUiConfig.isCsrfEnabled();
+		boolean oauth2Configured = !CollectionUtils.isEmpty(oAuthProperties.getConfigParameters());
+		return oauth2Configured || uiConfig.isDisableDefaultUrl() || uiConfig.isCsrfEnabled();
 	}
 
 	/**
@@ -131,13 +134,13 @@ public class AbstractSwaggerIndexTransformer {
 	 */
 	protected String defaultTransformations(InputStream inputStream) throws IOException {
 		String html = readFullyAsString(inputStream);
-		if (!CollectionUtils.isEmpty(swaggerUiOAuthProperties.getConfigParameters())) {
+		if (!CollectionUtils.isEmpty(oAuthProperties.getConfigParameters())) {
 			html = addInitOauth(html);
 		}
-		if (swaggerUiConfig.isDisableSwaggerDefaultUrl()) {
-			html = overwriteSwaggerDefaultUrl(html);
+		if (uiConfig.isDisableDefaultUrl()) {
+			html = overwriteOpenApiDefaultUrl(html);
 		}
-		if (swaggerUiConfig.isCsrfEnabled()) {
+		if (uiConfig.isCsrfEnabled()) {
 			html = addCSRF(html);
 		}
 		return html;
@@ -154,12 +157,12 @@ public class AbstractSwaggerIndexTransformer {
 		stringBuilder.append("requestInterceptor: function() {\n");
 		stringBuilder.append("const value = `; ${document.cookie}`;\n");
 		stringBuilder.append("const parts = value.split(`; ");
-		stringBuilder.append(swaggerUiConfig.getCsrf().getCookieName());
+		stringBuilder.append(uiConfig.getCsrf().getCookieName());
 		stringBuilder.append("=`);\n");
 		stringBuilder.append("console.log(parts);\n");
 		stringBuilder.append("if (parts.length === 2)\n");
 		stringBuilder.append("this.headers['");
-		stringBuilder.append(swaggerUiConfig.getCsrf().getHeaderName());
+		stringBuilder.append(uiConfig.getCsrf().getHeaderName());
 		stringBuilder.append("'] = parts.pop().split(';').shift();\n");
 		stringBuilder.append("return this;\n");
 		stringBuilder.append("},\n");

@@ -23,9 +23,9 @@ package org.wapache.openapi.spring.webmvc.ui;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.wapache.openapi.spring.core.SpringDocConfigProperties;
 import org.wapache.openapi.spring.core.SpringDocConfiguration;
-import org.wapache.openapi.spring.core.SwaggerUiConfigParameters;
-import org.wapache.openapi.spring.core.SwaggerUiConfigProperties;
-import org.wapache.openapi.spring.core.SwaggerUiOAuthProperties;
+import org.wapache.openapi.spring.core.ui.SwaggerUiConfigParameters;
+import org.wapache.openapi.spring.core.ui.SwaggerUiConfigProperties;
+import org.wapache.openapi.spring.core.ui.SwaggerUiOAuthProperties;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -33,6 +33,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static org.wapache.openapi.spring.core.Constants.SPRINGDOC_OPENAPI_UI_ENABLED;
 import static org.wapache.openapi.spring.core.Constants.SPRINGDOC_SWAGGER_UI_ENABLED;
 
 
@@ -69,7 +70,7 @@ public class SwaggerConfig {
 	 */
 	@Bean
 	@ConditionalOnMissingBean
-	SwaggerIndexTransformer indexPageTransformer(SwaggerUiConfigProperties swaggerUiConfig, SwaggerUiOAuthProperties swaggerUiOAuthProperties, ObjectMapper objectMapper) {
+	SwaggerIndexTransformer swaggerIndexTransformer(SwaggerUiConfigProperties swaggerUiConfig, SwaggerUiOAuthProperties swaggerUiOAuthProperties, ObjectMapper objectMapper) {
 		return new SwaggerIndexPageTransformer(swaggerUiConfig, swaggerUiOAuthProperties, objectMapper);
 	}
 

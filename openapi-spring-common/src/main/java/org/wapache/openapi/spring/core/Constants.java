@@ -37,11 +37,6 @@ public final class Constants {
 	/** The constant DEFAULT_API_DOCS_URL_YAML. */
 	public static final String DEFAULT_API_DOCS_URL_YAML = API_DOCS_URL + ".yaml";
 
-	/** The constant SWAGGGER_CONFIG_FILE. */
-	public static final String SWAGGGER_CONFIG_FILE = "swagger-config";
-	/** The constant SWAGGER_CONFIG_URL. */
-	public static final String SWAGGER_CONFIG_URL = API_DOCS_URL + DEFAULT_PATH_SEPARATOR + SWAGGGER_CONFIG_FILE;
-
 	// 配置文件读取的配置项的KEY:
 
 	/**
@@ -83,6 +78,14 @@ public final class Constants {
 	 * The constant SPRINGDOC_SWAGGER_UI_ENABLED.
 	 */
 	public static final String SPRINGDOC_SWAGGER_UI_ENABLED = "springdoc.swagger-ui.enabled";
+
+	// /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public static final String SPRINGDOC_OPENAPI_UI = "springdoc.openapi-ui";
+
+	public static final String SPRINGDOC_OPENAPI_UI_ENABLED = "springdoc.openapi-ui.enabled";
+
+	public static final String SPRINGDOC_OPENAPI_OAUTH = "springdoc.openapi-ui.oauth";
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,6 +137,11 @@ public final class Constants {
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// swagger-ui 相关
 
+	/** The constant SWAGGGER_CONFIG_FILE. */
+	public static final String SWAGGGER_CONFIG_FILE = "swagger-config";
+	/** The constant SWAGGER_CONFIG_URL. */
+	public static final String SWAGGER_CONFIG_URL = API_DOCS_URL + DEFAULT_PATH_SEPARATOR + SWAGGGER_CONFIG_FILE;
+
 	/**
 	 * The constant SWAGGER_UI_URL.
 	 */
@@ -163,6 +171,39 @@ public final class Constants {
 	 * The constant SWAGGER_UI_DEFAULT_URL.
 	 */
 	public static final String SWAGGER_UI_DEFAULT_URL = "https://petstore.swagger.io/v2/swagger.json";
+
+	// /////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// openapi-ui 相关
+
+	/** The constant SWAGGGER_CONFIG_FILE. */
+	public static final String OPENAPI_CONFIG_FILE = "openapi-config";
+	/** The constant SWAGGER_CONFIG_URL. */
+	public static final String OPENAPI_CONFIG_URL = API_DOCS_URL + DEFAULT_PATH_SEPARATOR + OPENAPI_CONFIG_FILE;
+
+	/**
+	 * The constant SWAGGER_UI_URL.
+	 */
+	public static final String OPENAPI_UI_URL = "/openapi-ui/index.html";
+
+	/**
+	 * The constant SWAGGER_UI_OAUTH_REDIRECT_URL.
+	 */
+	public static final String OPENAPI_UI_OAUTH_REDIRECT_URL = "/openapi-ui/oauth2-redirect.html";
+
+	/**
+	 * The constant DEFAULT_SWAGGER_UI_PATH.
+	 */
+	public static final String DEFAULT_OPENAPI_UI_PATH = DEFAULT_PATH_SEPARATOR + "openapi-ui.html";
+
+	/**
+	 * The constant SWAGGER_UI_PATH.
+	 */
+	public static final String OPENAPI_UI_PATH = "${springdoc.openapi-ui.path:#{T(org.wapache.openapi.spring.core.Constants).DEFAULT_OPENAPI_UI_PATH}}";
+
+	/**
+	 * The constant SWAGGER_UI_DEFAULT_URL.
+	 */
+	public static final String OPENAPI_UI_DEFAULT_URL = "https://petstore.swagger.io/v2/swagger.json";
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

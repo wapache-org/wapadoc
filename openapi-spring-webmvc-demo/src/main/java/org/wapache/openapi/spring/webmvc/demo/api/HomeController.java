@@ -18,9 +18,13 @@
 
 package org.wapache.openapi.spring.webmvc.demo.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.wapache.openapi.spring.core.ui.OpenApiUiConfigParameters;
+import org.wapache.openapi.spring.core.ui.SwaggerUiConfigParameters;
+import org.wapache.openapi.v3.annotations.Hidden;
 
 import static org.wapache.openapi.spring.core.Constants.SWAGGER_UI_PATH;
 import static org.springframework.util.AntPathMatcher.DEFAULT_PATH_SEPARATOR;
@@ -30,13 +34,21 @@ import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT
  * Home redirection to swagger api documentation
  */
 @Controller
+@Hidden
 public class HomeController {
 
-	@Value(SWAGGER_UI_PATH)
-	private String swaggerUiPath;
+	@Autowired(required = false)
+	OpenApiUiConfigParameters openApiUiConfigParameters;
+
+	@Autowired(required = false)
+	SwaggerUiConfigParameters swaggerUiConfigParameters;
 
 	@GetMapping(DEFAULT_PATH_SEPARATOR)
 	public String index() {
-		return REDIRECT_URL_PREFIX + swaggerUiPath;
+		return REDIRECT_URL_PREFIX + (
+			openApiUiConfigParameters!=null?openApiUiConfigParameters.getPath():
+				swaggerUiConfigParameters!=null? swaggerUiConfigParameters.getPath():
+					"404"
+			);
 	}
 }

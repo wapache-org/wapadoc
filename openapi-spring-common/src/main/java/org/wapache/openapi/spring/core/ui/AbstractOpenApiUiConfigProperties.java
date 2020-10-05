@@ -18,7 +18,7 @@
  *
  */
 
-package org.wapache.openapi.spring.core;
+package org.wapache.openapi.spring.core.ui;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +32,7 @@ import static org.wapache.openapi.spring.core.Constants.GROUP_NAME_NOT_NULL;
  * to get the idea what each parameter does.
  * @author bnasslahsen
  */
-public abstract class AbstractSwaggerUiConfigProperties {
+public abstract class AbstractOpenApiUiConfigProperties {
 
 	/**
 	 * The path for the Swagger UI pages to load. Will redirect to the springdoc.webjars.prefix property.
@@ -140,7 +140,7 @@ public abstract class AbstractSwaggerUiConfigProperties {
 	/**
 	 * The Urls.
 	 */
-	protected Set<SwaggerUrl> urls;
+	protected Set<OpenApiUrl> urls;
 
 	/**
 	 * The Groups order.
@@ -157,7 +157,7 @@ public abstract class AbstractSwaggerUiConfigProperties {
 	 *
 	 * @return the urls
 	 */
-	public Set<SwaggerUrl> getUrls() {
+	public Set<OpenApiUrl> getUrls() {
 		return this.urls;
 	}
 
@@ -166,7 +166,7 @@ public abstract class AbstractSwaggerUiConfigProperties {
 	 *
 	 * @param urls the urls
 	 */
-	public void setUrls(Set<SwaggerUrl> urls) {
+	public void setUrls(Set<OpenApiUrl> urls) {
 		this.urls = urls;
 	}
 
@@ -570,7 +570,7 @@ public abstract class AbstractSwaggerUiConfigProperties {
 	/**
 	 * The type Swagger url.
 	 */
-	public static class SwaggerUrl {
+	public static class OpenApiUrl {
 		/**
 		 * The Url.
 		 */
@@ -584,7 +584,7 @@ public abstract class AbstractSwaggerUiConfigProperties {
 		/**
 		 * Instantiates a new Swagger url.
 		 */
-		public SwaggerUrl() {
+		public OpenApiUrl() {
 		}
 
 		/**
@@ -593,7 +593,7 @@ public abstract class AbstractSwaggerUiConfigProperties {
 		 * @param group the group
 		 * @param url the url
 		 */
-		public SwaggerUrl(String group, String url) {
+		public OpenApiUrl(String group, String url) {
 			Objects.requireNonNull(group, GROUP_NAME_NOT_NULL);
 			this.url = url;
 			this.name = group;
@@ -604,7 +604,7 @@ public abstract class AbstractSwaggerUiConfigProperties {
 		 *
 		 * @param group the group
 		 */
-		public SwaggerUrl(String group) {
+		public OpenApiUrl(String group) {
 			Objects.requireNonNull(group, GROUP_NAME_NOT_NULL);
 			this.name = group;
 		}
@@ -649,7 +649,7 @@ public abstract class AbstractSwaggerUiConfigProperties {
 		public boolean equals(Object o) {
 			if (this == o) return true;
 			if (o == null || getClass() != o.getClass()) return false;
-			SwaggerUrl that = (SwaggerUrl) o;
+			OpenApiUrl that = (OpenApiUrl) o;
 			return name.equals(that.name);
 		}
 
