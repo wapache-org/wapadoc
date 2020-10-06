@@ -26,7 +26,17 @@ export default function headerTemplate() {
             @change="${this.onSepcUrlChange}" 
             spellcheck="false" 
           >
-          <div style="margin: 6px 5px 0 -24px; font-size:var(--title-font-size); cursor:pointer;" @click="${this.reloadUrlSepc}">&#x2b90;</div> 
+          <div style="margin: 6px 5px 0 -24px; font-size:var(--title-font-size); cursor:pointer;" @click="${this.reloadUrlSepc}">&#x2b90;</div>
+        `
+      }
+      ${(!this.groupedApis || this.groupedApis.length === 0)
+        ? ''
+        : html`<div style="display: flex;justify-content: center; margin: 2px 0 2px 10px">
+          <span style="text-align: center; padding: 0 0 0 0; color:#47AFE8">分组接口: </span>
+          <select id="spec-urls" @change="${this.changeGroupedSepcUrl}">
+            ${this.groupedApis.map((api) => html`<option value="${api.url}">${api.name}</option>`)}
+          </select>
+          </div>
         `
       }
       <slot name="header"></slot>
@@ -37,7 +47,7 @@ export default function headerTemplate() {
           <input id="header-search" class="header-input" type="text"  placeholder="search" @change="${this.onSearchChange}" style="max-width:250px;margin-left:10px;" spellcheck="false" autocomplete="off">
           <div style="margin: 6px 5px 0 -24px; font-size:var(--title-font-size); cursor:pointer;">&#x2b90;</div>
           ${this.matchPaths
-            ? html`<div @click = '${this.onClearSearch}' style='margin-left:5px; cursor:pointer; align-self:center; color:var(--nav-text-color)' class='small-font-size primary-text bold-text'> CLEAR </div>`
+            ? html`<div @click = '${this.onClearSearch}' style='margin-left:5px; cursor:pointer; align-self:center; color:var(--nav-text-color)' class='small-font-size primary-text bold-text'> 清空 </div>`
             : ''
           }
         `

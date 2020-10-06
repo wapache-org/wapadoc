@@ -49,6 +49,7 @@ export default class RapiDoc extends LitElement {
       sortTags: { type: String, attribute: 'sort-tags' },
       sortEndpointsBy: { type: String, attribute: 'sort-endpoints-by' },
       specFile: { type: String, attribute: false },
+      groupedApis: { type: Array },
 
       // UI Layouts
       layout: { type: String },
@@ -372,6 +373,8 @@ export default class RapiDoc extends LitElement {
     if (!this.infoDescriptionHeadingsInNavBar || !'true, false,'.includes(`${this.infoDescriptionHeadingsInNavBar},`)) { this.infoDescriptionHeadingsInNavBar = 'false'; }
     if (!this.endpointBodyLayout || !'row, column,'.includes(`${this.endpointBodyLayout},`)) { this.endpointBodyLayout = 'column'; }
 
+    if (!this.groupedApis) { this.groupedApis = []; }
+
     marked.setOptions({
       highlight: (code, lang) => {
         if (Prism.languages[lang]) {
@@ -398,7 +401,7 @@ export default class RapiDoc extends LitElement {
     super.disconnectedCallback();
   }
 
-  taggleTagFilterDialog(e) {
+  taggleTagFilterDialog() {
     this.navShowTagFilterDialog = !this.navShowTagFilterDialog;
   }
 
@@ -545,10 +548,22 @@ export default class RapiDoc extends LitElement {
   }
 
   onSepcUrlChange() {
+    this.groupedApis = [];
     this.setAttribute('spec-url', this.shadowRoot.getElementById('spec-url').value);
   }
 
+  changeGroupedSepcUrl(e) {
+    const specUrl = e.target.value;
+    const gapi = this.groupedApis.find((api) => api.url === specUrl);
+    if (gapi) {
+      this.loadSpec(gapi.specObj || specUrl, gapi);
+    } else {
+      this.loadSpec(specUrl);
+    }
+  }
+
   onSepcFileChange(e) {
+    this.groupedApis = [];
     this.setAttribute('spec-file', this.shadowRoot.getElementById('spec-file').value);
     const specFile = e.target.files[0];
     const reader = new FileReader();
@@ -566,6 +581,7 @@ export default class RapiDoc extends LitElement {
   }
 
   reloadUrlSepc() {
+    this.groupedApis = [];
     this.loadSpec(this.getAttribute('spec-url'));
   }
 
@@ -604,7 +620,11 @@ export default class RapiDoc extends LitElement {
   }
 
   // Public Method
-  async loadSpec(specUrl) {
+  async fetchJson(url) {
+    return fetch(url).then((res) => res.json());
+  }
+
+  async loadSpec(specUrl, groupedApi) {
     if (!specUrl) {
       return;
     }
@@ -613,6 +633,22 @@ export default class RapiDoc extends LitElement {
     try {
       this.loading = true;
       this.loadFailed = false;
+
+      if (typeof specUrl === 'string') {
+        const specObj = await this.fetchJson(specUrl);
+        if (specObj.openapi) {
+          specUrl = specObj;
+          if (groupedApi) {
+            groupedApi.specObj = specObj; // 缓存
+          }
+        } else if (specObj.urls) {
+          const url = new URL(specUrl);
+          this.groupedApis = specObj.urls.map((api) => ({ url: api.url.startsWith('/') ? `${url.protocol}//${url.host}${api.url}` : api.url, name: api.name }));
+          this.groupedApis[0].specObj = await this.fetchJson(this.groupedApis[0].url); // 缓存
+          specUrl = this.groupedApis[0].specObj;
+        }
+      }
+
       const spec = await ProcessSpec(
         specUrl,
         this.sortTags === 'true',
