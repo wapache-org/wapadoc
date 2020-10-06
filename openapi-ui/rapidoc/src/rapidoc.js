@@ -648,8 +648,12 @@ export default class RapiDoc extends LitElement {
             groupedApi.specObj = specObj; // 缓存
           }
         } else if (specObj.urls) {
-          const url = new URL(specUrl);
-          this.groupedApis = specObj.urls.map((api) => ({ url: api.url.startsWith('/') ? `${url.protocol}//${url.host}${api.url}` : api.url, name: api.name }));
+          if (specUrl.startsWith('/')) {
+            this.groupedApis = specObj.urls;
+          } else {
+            const url = new URL(specUrl);
+            this.groupedApis = specObj.urls.map((api) => ({ url: api.url.startsWith('/') ? `${url.protocol}//${url.host}${api.url}` : api.url, name: api.name }));
+          }
           this.groupedApis[0].specObj = await this.fetchJson(this.groupedApis[0].url); // 缓存
           specUrl = this.groupedApis[0].specObj;
         }
