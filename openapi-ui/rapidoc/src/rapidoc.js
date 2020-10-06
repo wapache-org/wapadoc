@@ -538,6 +538,12 @@ export default class RapiDoc extends LitElement {
     this.setAttribute(key, value);
   }
 
+  setAttribute3(e) {
+    const key = e.target.attributes.key.nodeValue;
+    const value = e.target.value;
+    this.setAttribute(key, value);
+  }
+
   toggleAttribute(e) {
     const attr = e.target.attributes.key.nodeValue;
     if (this.getAttribute(attr) === 'false') {

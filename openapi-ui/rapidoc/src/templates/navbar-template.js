@@ -84,7 +84,7 @@ export default function navbarTemplate() {
       </select>
     </div>
 
-    ${this.resolvedSpec.tags.filter((t) => this.navTagFilter == ',' || this.navTagFilter.includes(`,${t.name},`)).map((tag) => html`
+    ${this.resolvedSpec.tags.filter((t) => this.navTagFilter === ',' || this.navTagFilter.includes(`,${t.name},`)).map((tag) => html`
       <!-- Tag -->
       <div class='nav-bar-tag' id="link-tag--${tag.name.replace(invalidCharsRegEx, '-')}" data-content-id='tag--${tag.name.replace(invalidCharsRegEx, '-')}' @click='${(e) => this.scrollToEl(e)}'>
         ${this.navTagFormat === 'title'

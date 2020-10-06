@@ -396,6 +396,6 @@ function parseIndex(obj) {
   if (v == null) {
     return 9999;
   }
-  const n = Number.parseInt(v);
+  const n = Number.parseInt(v, 10);
   return Number.isNaN(n) || n <= 0 ? 9999 : n;
 }

@@ -23,13 +23,15 @@ export default function headerTemplate() {
     <button class='header-btn' @click='${this.toggleAttribute}' key='show-info' title="是否显示接口说明">说明</button>
     <button class='header-btn' @click='${this.toggleAttribute}' key='allow-server-selection' title="是否显示服务器地址">服务器</button>
     <button class='header-btn' @click='${this.toggleAttribute}' key='allow-authentication' title="是否显示认证授权">授权</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='path' title="仅显示路径">路</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='operation' title="仅显示操作ID">操</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='summary' title="仅显示操作描述">简</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='path,operation' title="显示操作ID和路径">路+操</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='path,summary' title="显示操作描述和路径">路+简</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='operation,summary' title="显示操作描述和操作ID">操+简</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='use-path-in-nav-bar' value='path,operation,summary' title="显示操作ID,操作描述和路径">路+操+简</button>
+    <select @change='${this.setAttribute3}' style="width:160px;" key='use-path-in-nav-bar'>
+      <option value="summary">仅显示操作名称</option>
+      <option value="path">仅显示路径</option>
+      <option value="operation">仅显示操作ID</option>
+      <option value="path,operation">显示路径和操作ID</option>
+      <option value="path,summary">显示路径和操作名称</option>
+      <option value="operation,summary">显示操作ID和名称</option>
+      <option value="path,operation,summary">显示路径、操作ID和名称</option>
+    </select>
   </div>
 
   <div style="display: flex;justify-content: center; margin: 2px 0">
@@ -41,11 +43,13 @@ export default function headerTemplate() {
     <button class='header-btn' @click='${this.setAttribute2}' key='schema-style' value='table' >表</button>
   </div>
 
-  <div style="display: flex;justify-content: center; margin: 2px 0"">
+  <div style="display: flex;justify-content: center; margin: 2px 0">
     <span style="text-align: center; padding: 0 0 0 0; color:#47AFE8">字体:</span>
-    <button class='header-btn' @click='${this.setAttribute2}' key='font-size' value='default' >默认</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='font-size' value='large' >较大</button>
-    <button class='header-btn' @click='${this.setAttribute2}' key='font-size' value='largest' >最大</button>
+    <select @change='${this.setAttribute3}' key='font-size'>
+      <option value="summary">默认</option>
+      <option value="path">较大</option>
+      <option value="operation">最大</option>
+    </select>
   </div>
 
   <div style="display: flex;justify-content: center; margin: 2px 0"">
