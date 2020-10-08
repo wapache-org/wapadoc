@@ -19,6 +19,7 @@
 package test.org.springdoc.api.app77;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import org.wapache.openapi.v3.annotations.Operation;
 import org.wapache.openapi.v3.annotations.extensions.Extension;
@@ -26,7 +27,6 @@ import org.wapache.openapi.v3.annotations.extensions.ExtensionProperty;
 import org.wapache.openapi.v3.annotations.media.Content;
 import org.wapache.openapi.v3.annotations.media.Schema;
 import org.wapache.openapi.v3.annotations.responses.ApiResponse;
-import org.hibernate.validator.constraints.NotBlank;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

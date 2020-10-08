@@ -30,7 +30,6 @@
           {
             "name": "adresse",
             "in": "query",
-            "required": true,
             "schema": {
               "type": "string"
             }

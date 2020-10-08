@@ -35,6 +35,7 @@ public class HelloController {
 	@ApiResponses({@ApiResponse(responseCode = "200")})
 	public DeferredResult<OperationResponse<ActualReturnedEntity>> update(
 			@RequestBody ActualReturnedEntity entity) throws Exception {
+		// 在OPENAPI中, Get 是没有body的, 所以 @RequestBody 不生效
 		return null;
 	}
 }

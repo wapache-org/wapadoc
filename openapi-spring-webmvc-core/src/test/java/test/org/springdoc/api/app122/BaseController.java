@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public abstract class BaseController<D extends BaseObject> {
 
-	@PostMapping
+	@PostMapping("/")
 	@Operation(summary = "create")
 	public ResponseEntity<D> create(@RequestBody Wrapper<D> payload) {
 		return null;

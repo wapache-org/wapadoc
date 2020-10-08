@@ -18,7 +18,10 @@ public abstract class CrudController<T extends HavingPK> {
 	@ResponseBody
 	@Operation(description = "Get single object")
 	public T get( //
-			@Parameter(description = "The id to get.", required = true) @PathVariable("id") int id) {
+		@Parameter(description = "The id to get.", required = true)
+		@PathVariable("id")
+		int id
+	) {
 		return null;
 	}
 

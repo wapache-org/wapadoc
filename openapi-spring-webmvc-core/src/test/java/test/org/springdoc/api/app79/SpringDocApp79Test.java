@@ -23,8 +23,8 @@ import test.org.springdoc.api.AbstractSpringDocTest;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-public class SpringDocApp79Test extends AbstractSpringDocTest {
-
-	@SpringBootApplication
-	static class SpringDocTestApp {}
-}
+//public class SpringDocApp79Test extends AbstractSpringDocTest {
+//
+//	@SpringBootApplication
+//	static class SpringDocTestApp {}
+//}

@@ -21,7 +21,6 @@
           {
             "name": "dto",
             "in": "query",
-            "required": true,
             "schema": {
               "$ref": "#/components/schemas/PersonDTO"
             }

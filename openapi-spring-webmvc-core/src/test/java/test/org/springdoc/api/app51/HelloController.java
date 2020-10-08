@@ -67,7 +67,7 @@ public class HelloController {
 		return null;
 	}
 
-	@PostMapping
+	@PostMapping("/")
 	public ResponseEntity<HashMap<String, Object>> hello(@RequestBody HashMap<String, Object> map) {
 		return ResponseEntity.ok(map);
 	}

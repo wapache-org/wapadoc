@@ -17,14 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
 	@Operation(summary = "find-articles")
-	@GetMapping
+	@GetMapping("/")
 	@Parameter(name = HttpHeaders.IF_MODIFIED_SINCE,
 			description = "DateTime",
 			in = ParameterIn.HEADER,
 			schema = @Schema(type = "string", format = "date-time"),
 			example = "2020-01-01T00:00:00.000Z"
 	)
-	public ResponseEntity<String> findArticles(@RequestHeader(value = HttpHeaders.IF_MODIFIED_SINCE, required = false) Instant modifiedSince) {
+	public ResponseEntity<String> findArticles(
+		@RequestHeader(value = HttpHeaders.IF_MODIFIED_SINCE, required = false)
+		Instant modifiedSince
+	) {
 		return null;
 	}
 

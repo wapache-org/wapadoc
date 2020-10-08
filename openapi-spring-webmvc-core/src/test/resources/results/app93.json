@@ -21,7 +21,6 @@
           {
             "name": "param",
             "in": "query",
-            "required": true,
             "schema": {
               "$ref": "#/components/schemas/SpecificClientModel"
             }

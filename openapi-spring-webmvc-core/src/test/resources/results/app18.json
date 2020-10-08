@@ -52,7 +52,6 @@
           {
             "name": "age",
             "in": "query",
-            "required": true,
             "schema": {
               "maximum": 0,
               "type": "integer",
@@ -84,7 +83,6 @@
           {
             "name": "age",
             "in": "query",
-            "required": true,
             "schema": {
               "minimum": 0,
               "type": "integer",

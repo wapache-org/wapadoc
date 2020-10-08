@@ -23,7 +23,6 @@
             "name": "name",
             "in": "query",
             "description": "Name",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -32,7 +31,6 @@
             "name": "phone",
             "in": "query",
             "description": "Phone",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -41,7 +39,6 @@
             "name": "createdFrom",
             "in": "query",
             "description": "createdFrom",
-            "required": true,
             "content": {
               "*/*": {
                 "schema": {
@@ -57,7 +54,6 @@
             "name": "createdRange",
             "in": "query",
             "description": "createdRange",
-            "required": true,
             "schema": {
               "maxItems": 2,
               "minItems": 2,

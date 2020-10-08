@@ -48,7 +48,7 @@ public class HelloController<T> {
     CURRENCIES.add("USD");
   }
 
-  @GetMapping
+  @GetMapping("/")
   @Operation(description = "Get all currencies", summary = "getAllCurrencies")
   @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "All currencies returned") })
   public ResponseEntity<Collection<String>> getAllCurrencies() {

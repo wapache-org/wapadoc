@@ -39,7 +39,6 @@
             "name": "stringParam",
             "in": "query",
             "description": "string parameter",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -47,7 +46,6 @@
           {
             "name": "stringParam1",
             "in": "query",
-            "required": false,
             "deprecated": true,
             "schema": {
               "type": "string"
@@ -66,7 +64,6 @@
             "name": "intParam",
             "in": "query",
             "description": "int parameter",
-            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -75,7 +72,6 @@
           {
             "name": "intParam2",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -83,7 +79,6 @@
           {
             "name": "intParam3",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -91,7 +86,6 @@
           {
             "name": "nested.param1",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -99,7 +93,6 @@
           {
             "name": "nested.param2",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "integer"
             }
@@ -107,7 +100,6 @@
           {
             "name": "nestedList",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "array",
               "items": {

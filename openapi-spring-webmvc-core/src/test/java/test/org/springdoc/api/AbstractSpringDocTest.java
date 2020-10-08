@@ -69,8 +69,10 @@ public abstract class AbstractSpringDocTest {
 	public void testApp() throws Exception {
 		className = getClass().getSimpleName();
 		String testNumber = className.replaceAll("[^0-9]", "");
-		MvcResult mockMvcResult = mockMvc.perform(get(Constants.DEFAULT_API_DOCS_URL)).andExpect(status().isOk())
-				.andExpect(jsonPath("$.openapi", is("3.0.1"))).andReturn();
+		MvcResult mockMvcResult = mockMvc.perform(get(Constants.DEFAULT_API_DOCS_URL))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.openapi", is("3.0.1")))
+			.andReturn();
 		String result = mockMvcResult.getResponse().getContentAsString();
 		String expected = getContent("results/app" + testNumber + ".json");
 		assertEquals(expected, result, true);

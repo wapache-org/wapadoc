@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
-	@PostMapping
+	@PostMapping("/")
 	public ActionResult<Void> update(String toto) {
 		return null;
 	}

@@ -21,7 +21,6 @@
           {
             "name": "hello",
             "in": "query",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -44,7 +43,6 @@
           {
             "name": "s",
             "in": "query",
-            "required": true,
             "schema": {
               "type": "string"
             }

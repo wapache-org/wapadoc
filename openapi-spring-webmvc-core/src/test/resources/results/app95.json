@@ -24,7 +24,6 @@
             "name": "name",
             "in": "query",
             "description": "Description of parameter name",
-            "required": true,
             "schema": {
               "type": "string"
             }

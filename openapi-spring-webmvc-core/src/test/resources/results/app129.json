@@ -21,7 +21,6 @@
           {
             "name": "entity",
             "in": "query",
-            "required": true,
             "schema": {
               "$ref": "#/components/schemas/ActualReturnedEntity"
             }

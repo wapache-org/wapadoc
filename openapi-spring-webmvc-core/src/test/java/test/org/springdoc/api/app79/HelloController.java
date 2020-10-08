@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
+	// TODO 既然是Optional, 那么RequestParam.required 应该等于false,
 	@GetMapping(produces = MediaType.TEXT_PLAIN_VALUE, path = "/test")
 	public String echo(@RequestParam Optional<String> text) {
 		return text.orElse("not-specified");

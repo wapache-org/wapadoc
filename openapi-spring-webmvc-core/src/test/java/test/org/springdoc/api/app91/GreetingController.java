@@ -16,7 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Tag(name = "Demo", description = "The Demo API")
 public class GreetingController {
 
-	@GetMapping(produces = APPLICATION_JSON_VALUE)
+	@GetMapping(value="/", produces = APPLICATION_JSON_VALUE)
 	@Operation(summary = "This API will return a random greeting.")
 	public ResponseEntity<Greeting> sayHello() {
 		return ResponseEntity.ok(new Greeting(RandomStringUtils.randomAlphanumeric(10)));
