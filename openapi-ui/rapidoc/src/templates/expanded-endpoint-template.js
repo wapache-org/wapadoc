@@ -12,7 +12,7 @@ import '@/components/api-response';
 
 export function expandedEndpointBodyTemplate(path) {
   let accept = '';
-  for (const respStatus in path.responses) {
+  for (const respStatus in path.responses && path.responses.sort ? path.responses.sort() : path.responses) {
     for (const acceptContentType in (path.responses[respStatus].content)) {
       accept = `${accept + acceptContentType}, `;
     }
