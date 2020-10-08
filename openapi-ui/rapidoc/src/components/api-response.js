@@ -81,7 +81,6 @@ export default class ApiResponse extends LitElement {
       .focused-mode,
       .read-mode {
         padding-top:24px;
-        margin-top:12px;
         border-top: 1px dashed var(--border-color);
       }`,
     ];
@@ -92,7 +91,7 @@ export default class ApiResponse extends LitElement {
     <div class="col regular-font response-try-panel ${this.renderStyle}-mode">
       ${this.allowTry === 'false' ? '' : html`<api-try
           class="try-panel"  
-          method = "${this.method}", 
+          method = "${this.method}"
           path = "${this.path}" 
           .parameters = "${this.parameters}" 
           .request_body = "${this.requestBody}"

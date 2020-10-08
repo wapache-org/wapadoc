@@ -66,6 +66,10 @@ export default class ApiRequest extends LitElement {
         .read-mode{
           margin-top:24px;
         }
+        .focused-mode {
+          padding-top:24px;
+          border-top: 1px dashed var(--border-color);
+        }
         .param-name,
         .param-type {
           margin: 1px 0;
@@ -150,19 +154,11 @@ export default class ApiRequest extends LitElement {
 
   render() {
     return html`
-    <div class="col regular-font request-panel ${'read focused'.includes(this.renderStyle) || this.callback === 'true' ? 'read-mode' : 'view-mode'}">
-      <div class=" ${this.callback === 'true' ? 'tiny-title' : 'req-res-title'} "> 
-        ${this.callback === 'true' ? '回调请求' : '请求'}
-      </div>
-      <div>
-        ${this.inputParametersTemplate('path')}
-        ${this.inputParametersTemplate('query')}
-        ${this.requestBodyTemplate()}
-        ${this.inputParametersTemplate('header')}
-        ${this.inputParametersTemplate('cookie')}
-        ${this.allowTry === 'false' ? '' : html`<api-try
+    
+    <div class="col regular-font request-try-panel ${this.renderStyle}-mode">
+      ${this.allowTry === 'false' ? '' : html`<api-try
           class="try-panel"  
-          method = "${this.method}", 
+          method = "${this.method}"
           path = "${this.path}" 
           .parameters = "${this.parameters}" 
           .request_body = "${this.requestBody}"
@@ -177,6 +173,18 @@ export default class ApiRequest extends LitElement {
           schema-expand-level = "${this.schemaExpandLevel}"
           schema-description-expanded = "${this.schemaDescriptionExpanded}"
         ></api-try>`}
+    </div>
+
+    <div class="col regular-font request-panel ${'read focused'.includes(this.renderStyle) || this.callback === 'true' ? (this.renderStyle === 'focused' ? 'focused-mode' : 'read-mode') : 'view-mode'}">
+      <div class=" ${this.callback === 'true' ? 'tiny-title' : 'req-res-title'} "> 
+        ${this.callback === 'true' ? '回调请求' : '请求'}
+      </div>
+      <div>
+        ${this.inputParametersTemplate('path')}
+        ${this.inputParametersTemplate('query')}
+        ${this.requestBodyTemplate()}
+        ${this.inputParametersTemplate('header')}
+        ${this.inputParametersTemplate('cookie')}
       </div>  
     </div>
     `;
