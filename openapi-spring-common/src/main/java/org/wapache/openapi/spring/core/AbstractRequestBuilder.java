@@ -132,6 +132,11 @@ public abstract class AbstractRequestBuilder {
 		PARAM_TYPES_TO_IGNORE.add(SessionStatus.class);
 		PARAM_TYPES_TO_IGNORE.add(UriComponentsBuilder.class);
 		PARAM_TYPES_TO_IGNORE.add(RequestAttribute.class);
+		try {
+			PARAM_TYPES_TO_IGNORE.add(Class.forName("org.springframework.data.domain.Pageable"));
+		} catch (ClassNotFoundException ignored) {
+			// ignore
+		}
 	}
 
 	/**
