@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.wapache.openapi</groupId>
 	<artifactId>wapache-openapi</artifactId>
-	<version>0.10.8-SNAPSHOT</version>
+	<version>0.10.8</version>
 	<packaging>pom</packaging>
 	<name>openapi project</name>
 	<description>整合openapi spec, swagger-api, springdoc, rapidoc, openapi-generator等多个项目, 并在此基础上做一定的裁剪扩展和汉化。</description>

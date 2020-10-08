@@ -54,7 +54,7 @@ npm run build # windows下运行: npm run build_windows
 cd ../..
 mvn clean package
 cd openapi-spring-webmvc-demo/target
-java -jar openapi-spring-webmvc-demo-0.10.8-SNAPSHOT.jar
+java -jar openapi-spring-webmvc-demo-0.10.8.jar
 ```
 
 ## 界面预览
