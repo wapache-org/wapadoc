@@ -179,7 +179,7 @@ public interface ReturnTypeParser {
 	 * @return the return type
 	 */
 	default Type getReturnType(MethodParameter methodParameter) {
-		if (methodParameter.getGenericParameterType() instanceof ParameterizedType)
+		if (methodParameter.getGenericParameterType() instanceof ParameterizedType || methodParameter.getGenericParameterType() instanceof TypeVariable)
 			return ReturnTypeParser.resolveType(methodParameter.getGenericParameterType(), methodParameter.getContainingClass());
 		return methodParameter.getParameterType();
 	}
