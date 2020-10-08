@@ -105,9 +105,8 @@ public class PetApiDelegateImpl implements PetApiDelegate {
 	}
 
 	@Override
-	public void addPet(Pet pet) {
-		petRepository.save(pet);
-		// return ResponseEntity.ok().build();
+	public ResponseEntity<Pet> addPet(Pet pet) {
+		return ResponseEntity.ok(petRepository.save(pet));
 	}
 
 	@Override

@@ -18,9 +18,12 @@
 
 package org.wapache.openapi.spring.webmvc.demo;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.wapache.openapi.spring.core.GroupedOpenApi;
 import org.wapache.openapi.v3.models.Components;
 import org.wapache.openapi.v3.models.OpenAPI;
@@ -34,8 +37,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
+@Configuration
 @SpringBootApplication
-public class SpringMvcDemoApplication {
+public class SpringMvcDemoApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringMvcDemoApplication.class);
@@ -64,19 +68,28 @@ public class SpringMvcDemoApplication {
 		);
 	}
 
-	@Bean
-	public CorsFilter corsFilter() {
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//	@Bean
+//	public CorsFilter corsFilter() {
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//
+//		// Allow anyone and anything access. Probably ok for Swagger spec
+//		CorsConfiguration config = new CorsConfiguration();
+//		config.setAllowCredentials(true);
+//		config.addAllowedOrigin("*");
+//		config.addAllowedHeader("*");
+//		config.addAllowedMethod("*");
+//
+//		source.registerCorsConfiguration("/v3/api-docs", config);
+//		return new CorsFilter(source);
+//	}
 
-		// Allow anyone and anything access. Probably ok for Swagger spec
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(true);
-		config.addAllowedOrigin("*");
-		config.addAllowedHeader("*");
-		config.addAllowedMethod("*");
-
-		source.registerCorsConfiguration("/v3/api-docs", config);
-		return new CorsFilter(source);
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+			.allowedOrigins("*")
+			.allowCredentials(true)
+			.allowedMethods("GET", "POST", "DELETE", "PUT")
+			.maxAge(3600);
 	}
 
 }

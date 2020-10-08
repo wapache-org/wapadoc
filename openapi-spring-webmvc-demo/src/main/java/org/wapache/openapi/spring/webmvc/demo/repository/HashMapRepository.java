@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -91,25 +92,25 @@ public abstract class HashMapRepository<T, ID> implements CrudRepository<T, ID> 
 				return result;
 			}
 		};
-		final Set<T> set = new TreeSet<>(comp);
-		set.addAll(entities.values());
-		result = getPageSlice(pageable, set);
+		result = getPageSlice(pageable, entities.values().stream()
+			.sorted(comp)
+			.collect(Collectors.toList())
+		);
 		return result;
 	}
 
-	private List<T> getPageSlice(Pageable pageable, Collection<T> col) {
-		final ArrayList<T> all = new ArrayList<>(col);
+	private List<T> getPageSlice(Pageable pageable, List<T> all) {
 		final int size = all.size();
 		final int psize = pageable.getPageSize();
 		final int pnum = pageable.getPageNumber();
-		if (pnum < 1) {
-			throw new IllegalArgumentException("page number must be 1 or more");
+		if (pnum < 0) {
+			throw new IllegalArgumentException("page number must be 0 or more");
 		}
 		if (psize < 1) {
 			throw new IllegalArgumentException("page size must be 1 or more");
 		}
 		// inclusive
-		final int begin = (pnum - 1) * psize;
+		final int begin = pnum * psize;
 		// exclusive
 		final int end = Math.min(begin + psize, size);
 		if (size < begin) {

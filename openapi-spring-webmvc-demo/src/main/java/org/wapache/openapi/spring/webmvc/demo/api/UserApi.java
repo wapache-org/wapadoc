@@ -110,7 +110,7 @@ public interface UserApi {
 		return getDelegate().getUserByName(username);
 	}
 
-	@Operation(summary = "登录", tags = { "user" })
+	@Operation(summary = "登录", tags = { "user" }, description = "可以随便填")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200", headers = {
@@ -122,10 +122,20 @@ public interface UserApi {
 		),
 		@ApiResponse(responseCode = "400", description = "用户名或密码不合法", content = @Content)
 	})
-	@GetMapping(value = "/user/login", produces = { "application/xml", "application/json" })
+	@GetMapping(value = "/user/login", produces = { "application/json", "application/xml" })
 	default ResponseEntity<String> loginUser(
-			@NotNull @Parameter(description = "用户名", required = false) @Valid @RequestParam(value = "username", required = false) String username,
-			@NotNull @Parameter(description = "密码(明文)", required = false) @Valid @RequestParam(value = "password", required = false) String password) {
+		@NotNull
+		@Parameter(description = "用户名", required = false)
+		@Valid
+		@RequestParam(value = "username", required = false)
+		String username,
+
+		@NotNull
+		@Parameter(description = "密码(明文)", required = false)
+		@Valid
+		@RequestParam(value = "password", required = false)
+		String password
+	) {
 		return getDelegate().loginUser(username, password);
 	}
 

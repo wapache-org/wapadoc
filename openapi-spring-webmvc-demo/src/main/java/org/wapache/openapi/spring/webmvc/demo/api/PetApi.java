@@ -28,6 +28,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.wapache.openapi.spring.core.converters.models.PageableAsQueryParam;
 import org.wapache.openapi.spring.webmvc.demo.model.ModelApiResponse;
 import org.wapache.openapi.spring.webmvc.demo.model.Pet;
 import org.wapache.openapi.v3.annotations.Operation;
@@ -96,10 +97,10 @@ public interface PetApi {
 		@ApiResponse(responseCode = "405", description = "非法的输入")
 	})
 	@PostMapping(value = "/pet", consumes = { "application/json", "application/xml", "application/x-www-form-urlencoded" })
-	default void addPet(
+	default ResponseEntity<Pet> addPet(
 		@Parameter(description = "宠物信息", required = true) @Valid @RequestBody Pet pet
 	) {
-		// return getDelegate().addPet(pet);
+		return getDelegate().addPet(pet);
 	}
 
 	@Operation(
@@ -138,7 +139,7 @@ public interface PetApi {
 			content = @Content(array = @ArraySchema(schema = @Schema(implementation = Pet.class)))),
 		@ApiResponse(responseCode = "400", description = "非法的宠物状态值")
 	})
-	@GetMapping(value = "/pet/findByStatus", produces = { "application/xml", "application/json" })
+	@GetMapping(value = "/pet/findByStatus", produces = { "application/json", "application/xml" })
 	default ResponseEntity<List<Pet>> findPetsByStatus(
 		@Parameter(
 			explode = Explode.TRUE,
@@ -164,7 +165,7 @@ public interface PetApi {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "操作成功", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Pet.class)))),
 			@ApiResponse(responseCode = "400", description = "Invalid tag value", content = @Content) })
-	@GetMapping(value = "/pet/findByTags", produces = { "application/xml", "application/json" })
+	@GetMapping(value = "/pet/findByTags", produces = { "application/json", "application/xml" })
 	default ResponseEntity<List<Pet>> findPetsByTags(
 			@Parameter(description = "多个tag用逗号分隔, 譬如tag1, tag2, tag3", explode = Explode.TRUE, in = ParameterIn.QUERY, name = "tags", style = ParameterStyle.FORM)
 			@Valid @RequestParam(value = "tags", required = false)
@@ -180,7 +181,7 @@ public interface PetApi {
 			@ApiResponse(responseCode = "200", description = "操作成功", content = @Content(schema = @Schema(implementation = Pet.class))),
 			@ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
 			@ApiResponse(responseCode = "404", description = "找不到该宠物", content = @Content) })
-	@GetMapping(value = "/pet/{petId}", produces = { "application/xml", "application/json" })
+	@GetMapping(value = "/pet/{petId}", produces = { "application/json", "application/xml" })
 	default ResponseEntity<Pet> getPetById(
 			@Parameter(description = "宠物ID", required = true) @PathVariable("petId") Long petId) {
 		return getDelegate().getPetById(petId);
@@ -247,8 +248,12 @@ public interface PetApi {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "操作成功", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Pet.class))))
 	})
-	@GetMapping(value = "/pet", produces = { "application/xml", "application/json" })
-	default ResponseEntity<List<Pet>> getAllPets(@NotNull Pageable pageable) {
+	@GetMapping(value = "/pet", produces = { "application/json", "application/xml" })
+	@PageableAsQueryParam
+	default ResponseEntity<List<Pet>> getAllPets(
+		// @PageableDefault(sort = {"name"}, direction = Sort.Direction.ASC)
+		@NotNull Pageable pageable
+	) {
 		return getDelegate().getAllPets(pageable);
 	}
 

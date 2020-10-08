@@ -39,8 +39,11 @@ public class ApiUtil {
 	}
 
 	public static void checkApiKey(NativeWebRequest req) {
-		if (!"1".equals(System.getenv("DISABLE_API_KEY")) && !"special-key".equals(req.getHeader("api_key"))) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing API key!");
+		if (!"1".equals(System.getenv("DISABLE_API_KEY"))
+			&& !"special-key".equals(req.getHeader("api_key"))
+		) {
+			// TODO 需要实现一个oauth服务.
+			//throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing API key!");
 		}
 	}
 }

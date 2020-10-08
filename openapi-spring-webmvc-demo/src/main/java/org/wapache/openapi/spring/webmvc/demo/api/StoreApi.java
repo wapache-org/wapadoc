@@ -98,7 +98,7 @@ public interface StoreApi {
 		@ApiResponse(responseCode = "400", description = "订单ID不合法", content = @Content),
 		@ApiResponse(responseCode = "404", description = "订单不存在", content = @Content)
 	})
-	@GetMapping(value = "/store/order/{orderId}", produces = { "application/xml", "application/json" })
+	@GetMapping(value = "/store/order/{orderId}", produces = { "application/json", "application/xml" })
 	default ResponseEntity<Order> getOrderById(
 			@Min(1L) @Max(5L) @Parameter(description = "订单ID", required = true) @PathVariable("orderId") Long orderId) {
 		return getDelegate().getOrderById(orderId);
@@ -109,7 +109,7 @@ public interface StoreApi {
 		@ApiResponse(responseCode = "200", description = "操作成功", content = @Content(schema = @Schema(implementation = Order.class))),
 		@ApiResponse(responseCode = "405", description = "非法的输入", content = @Content)
 	})
-	@PostMapping(value = "/store/order", produces = { "application/json" }, consumes = { "application/xml", "application/json", "application/x-www-form-urlencoded" })
+	@PostMapping(value = "/store/order", produces = { "application/json" }, consumes = { "application/json", "application/xml", "application/x-www-form-urlencoded" })
 	default ResponseEntity<Order> placeOrder(
 			@ApiRequestBody(description = "") @Valid @RequestBody Order order) {
 		return getDelegate().placeOrder(order);

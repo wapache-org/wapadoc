@@ -23,14 +23,23 @@ spring:
           paths: /webjars/swagger-ui/**.*
 springdoc:
   version: '@springdoc.version@'
+  # 多个时, 用逗号分隔
+  packages-to-exclude: org.springframework
   api-docs:
     groups:
       enabled: true
-  swagger-ui:
-    path: /swagger-ui.html
+  cache:
+    disabled: false
+  openapi-ui:
+    path: /openapi-ui.html
     display-request-duration: true
     groups-order: DESC
     operationsSorter: method
+#  swagger-ui:
+#    path: /swagger-ui.html
+#    display-request-duration: true
+#    groups-order: DESC
+#    operationsSorter: method
   show-actuator: true
   group-configs:
   - group: stores
