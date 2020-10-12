@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.wapache.openapi</groupId>
 		<artifactId>wapache-openapi</artifactId>
-		<version>0.10.8</version>
+		<version>0.10.28-SNAPSHOT</version>
 	</parent>
 	<artifactId>openapi-spring-webjars-ui</artifactId>
 	<dependencies>
