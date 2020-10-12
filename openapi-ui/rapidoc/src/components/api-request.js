@@ -320,7 +320,7 @@ export default class ApiRequest extends LitElement {
           ${paramSchema.default || paramSchema.constrain || paramSchema.allowedValues
             ? html`
               <div class="param-constraint">
-                ${paramSchema.default ? html`<span style="font-weight:bold">Default: </span>${paramSchema.default}<br/>` : ''}
+                ${paramSchema.default ? html`<span style="font-weight:bold">默认值: </span>${paramSchema.default}<br/>` : ''}
                 ${paramSchema.constrain ? html`${paramSchema.constrain}<br/>` : ''}
                 ${param.schema.enum
                   ? param.schema.enum.map((v, i) => html`
