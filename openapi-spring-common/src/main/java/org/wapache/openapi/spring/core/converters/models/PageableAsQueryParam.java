@@ -46,18 +46,17 @@ import org.wapache.openapi.v3.annotations.media.Schema;
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Parameter(in = ParameterIn.QUERY
-		, description = "Zero-based page index (0..N)"
 		, name = "page"
-		, schema = @Schema(type = "integer", defaultValue = "0"))
+		, schema = @Schema(type = "integer", title="第几页", description = "取值范围:(0..N), 第一页传0", defaultValue = "0"))
 @Parameter(in = ParameterIn.QUERY
-		, description = "The size of the page to be returned"
 		, name = "size"
-		, schema = @Schema(type = "integer", defaultValue = "20"))
+		, schema = @Schema(type = "integer", title="每页记录数", description = "", defaultValue = "20"))
 @Parameter(in = ParameterIn.QUERY
-		, description = "Sorting criteria in the format: property(,asc|desc). "
-		+ "Default sort order is ascending. " + "Multiple sort criteria are supported."
 		, name = "sort"
-		, array = @ArraySchema(schema = @Schema(type = "string")))
+		, array = @ArraySchema(schema = @Schema(type = "string", title="排序规则"
+	, description = "格式: 属性名[,asc|desc]"
+	+ "默认的排序方式是asc升序"
+	+ "支持多个排序规则, 譬如 http://localhost/xxx?sort=a,desc&sort=b,asc")))
 public @interface PageableAsQueryParam {
 
 }
