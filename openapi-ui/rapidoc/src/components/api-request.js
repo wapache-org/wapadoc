@@ -210,11 +210,29 @@ export default class ApiRequest extends LitElement {
   }
 
   getFieldTitle(param) {
-    return param.schema ? param.schema.title || '' : '';
+    const schema = param.schema;
+    if (schema) {
+      if (schema.type === 'array' && schema.items) {
+        return schema.items.title || '';
+      }
+      return schema.title || '';
+    }
+    return '';
   }
 
   getFieldDescription(param) {
-    return param.description || param.schema.description || '';
+    if (param.description) {
+      return param.description;
+    }
+
+    const schema = param.schema;
+    if (schema) {
+      if (schema.type === 'array' && schema.items) {
+        return schema.items.description || '';
+      }
+      return schema.description || '';
+    }
+    return '';
   }
 
   /* eslint-disable indent */
@@ -339,7 +357,10 @@ export default class ApiRequest extends LitElement {
         </td>  
       </tr>
       <tr>
-        ${this.allowTry === 'true' || inputVal !== '' ? html`<td style="border:none;text-align: right;margin-top:0; padding:0 5px 8px 5px;">${this.getFieldTitle(param)}</td>` : ''}
+        ${this.allowTry === 'true' || inputVal !== ''
+        ? html`<td style="border:none;text-align: right;margin-top:0; padding:0 5px 8px 5px;">${this.getFieldTitle(param)}</td>`
+        : ''
+        }
         <td colspan="2" style="border:none; margin-top:0; padding:0 5px 8px 5px;"> 
           <span class="m-markdown-small">${unsafeHTML(marked(this.getFieldDescription(param)))}</span>
           ${(param.examples && Object.values(param.examples).length > 1)
