@@ -1,7 +1,7 @@
 # Wapache OpenAPI Project
 
 `Wapache OpenAPI Project`是一个整合了openapi spec, swagger-api, springdoc, rapidoc, openapi-generator等多个开源项目, 
-用于OpenAPI学习, 提供Spring整合, 代码生成和文档生成, 可视化展示等功能整合的项目。
+用于OpenAPI学习, 提供Spring集成, 代码生成和文档生成, 可视化展示等功能整合的项目。
 本项目在众多开源项目基础上针对中文环境和使用习惯做了一定裁剪,扩展和汉化。
 
 主要引入了以下项目:
@@ -23,6 +23,7 @@
 4. 删除`springdoc-openapi`中除Java语言外的其他语言支持, 删除`webflux`支持, `spring-boot`降级为`2.0.4`版本。
 5. 原`springdoc`的`RequestBody`重命名为`ApiRequestBody`,以避免与Spring的`RequestBody`名称重复导致使用不便。
 6. 部分汉化`Rapidoc`, 对`Rapidoc`界面布局和样式做了调整和增强。
+7. `Rapidoc`界面布局增加`文档`模式, 以word文档样式的方式展示OpenAPI文档的内容, 全选复制到word即可得到word格式的接口文档, 非常方便。 
 
 ## 模块列表
 
@@ -59,13 +60,34 @@ java -jar openapi-spring-webmvc-demo-0.10.8.jar
 
 ## 界面预览
 
-暗黑主题:
+文档模式:
+
+文档模式是目前市面上各种OpenAPI-UI都没有的显示模式, 是此项目的特色功能。
+此功能以大家都很熟悉的Word文档样式展示接口内容，且可以直接全选复制到Word或者WPS上得到标准的接口文档。
+有了这个功能, 从此就不用怕第三方找你要接口文档啦!
+
+![文档模式](docs/images/openapi-ui-document-mode.jpg)
+
+传统模式:
+
+此模式与传统的SwaggerUI展示方式类似, 相信用过springfox和springdoc的同学都很熟悉了。
+本模式下, 还额外提供了请求和响应并排显示功能, 在高分辨率下可以一屏展示更多内容, 获得更好的用户体验。
+
+![暗黑主题](docs/images/openapi-ui-list-mode-dark.jpg)
+
+![明亮主题](docs/images/openapi-ui-list-mode-light.jpg)
+
+默认模式:
+
+此模式是本项目的默认展示模式, 在 `Rapidoc` 中称为`专注`布局, 只展示当前选中的接口。
 
 ![暗黑主题](docs/images/openapi-ui-dark.jpg)
 
-明亮主题:
-
 ![明亮主题](docs/images/openapi-ui-light.jpg)
+
+阅读模式:
+
+与默认模式雷同, 只是有滚动条, 可以滚动到其他接口, 在阅读和浏览接口的时候比较方便。
 
 #其他资源
 
@@ -82,7 +104,10 @@ java -jar openapi-spring-webmvc-demo-0.10.8.jar
 
 4. [openapi整合spring-security表单登录](https://waynestalk.com/spring-security-form-login-jpa-springdoc-explained/)
 
-
 # 请作者喝杯奶茶
+
+有任何使用上的问题可以在github的issues上提, 也可以发邮件到作者的邮箱: ykuang老鼠wapache点org 。
+
+开源不易, 如果此项目对你有用, 请作者喝杯茶, 以资鼓励吧^_^!
 
 ![wechat_code](docs/images/wechat_code.jpg)
