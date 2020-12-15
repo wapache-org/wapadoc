@@ -13,6 +13,7 @@ import componentsTemplate from '@/templates/components-template';
 import contactInfoTemplate from '@/templates/contact-info-template';
 import headerTemplate from '@/templates/header-template';
 import navbarTemplate from '@/templates/navbar-template';
+import documentTemplate from '@/templates/document-template';
 
 import SetTheme from '@/utils/theme';
 import { isValidHexColor } from '@/utils/color-utils';
@@ -73,6 +74,11 @@ export default function mainBodyTemplate() {
     ${this.showHeader === 'false' ? '' : headerTemplate.call(this)}
     
     <div class="body">
+
+    ${(this.renderStyle === 'document')
+    ? documentTemplate.call(this)
+    : html`
+      
       <!-- Side Nav -->
       ${((this.renderStyle === 'read' || this.renderStyle === 'focused') && this.resolvedSpec) ? navbarTemplate.call(this) : ''}
       
@@ -122,6 +128,7 @@ export default function mainBodyTemplate() {
         </div>  
         <slot name="footer"></slot>
       </main>
+    `}
     </div>  
   `;
 }

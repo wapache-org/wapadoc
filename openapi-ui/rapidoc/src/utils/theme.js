@@ -5,7 +5,7 @@ export default function setTheme(baseTheme, theme = {}) {
   let newTheme = {};
 
   // Common Theme colors
-  const primaryColor = theme.primaryColor ? theme.primaryColor : '#ff591e';
+  const primaryColor = theme.primaryColor ? theme.primaryColor : '#4477AA'; /* #ff591e */
   const primaryColorInvert = ColorUtils.color.invert(primaryColor);
   const primaryColorTrans = ColorUtils.color.opacity(primaryColor, '0.8');
 

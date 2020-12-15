@@ -267,9 +267,11 @@ function groupByTags(openApiSpec, sortTags = false, sortEndpointsBy) {
       index: parseIndex(v),
       show: true,
       name: v.name,
+      title: getExtention(v, 'title', ''),
       description: v.description,
       paths: [],
       expanded: v['x-tag-expanded'] !== false,
+      extentions: getExtentions(v),
     }))
     : [];
 
@@ -314,8 +316,10 @@ function groupByTags(openApiSpec, sortTags = false, sortEndpointsBy) {
               show: true,
               name: tag,
               paths: [],
+              title: getExtention(specTagsItem, 'title', ''),
               description: specTagsItem ? specTagsItem.description : '',
               expanded: (specTagsItem ? specTagsItem['x-tag-expanded'] !== false : true),
+              extentions: getExtentions(specTagsItem),
             };
             tags.push(tagObj);
           }
@@ -398,4 +402,21 @@ function parseIndex(obj) {
   }
   const n = Number.parseInt(v, 10);
   return Number.isNaN(n) || n <= 0 ? 9999 : n;
+}
+
+function getExtention(obj, property, defaults) {
+  const value = obj ? obj[`x-${property}`] : defaults;
+  return value === undefined ? defaults : value;
+}
+
+function getExtentions(obj) {
+  const exts = {};
+  if (obj) {
+    for (const key in obj) {
+      if (key.startsWith('x-')) {
+        exts[key.substr(2)] = obj[key];
+      }
+    }
+  }
+  return exts;
 }

@@ -21,6 +21,7 @@ import EndpointStyles from '@/styles/endpoint-styles';
 import PrismStyles from '@/styles/prism-styles';
 import TabStyles from '@/styles/tab-styles';
 import NavStyles from '@/styles/nav-styles';
+import DocumentStyles from '@/styles/document-styles';
 
 import { pathIsInSearch, invalidCharsRegEx, sleep } from '@/utils/common-utils';
 import ProcessSpec from '@/utils/spec-parser';
@@ -112,6 +113,7 @@ export default class RapiDoc extends LitElement {
 
       // Internal Attributes
       selectedContentId: { type: String },
+      // resolvedSpec: {type: Object}
 
     };
   }
@@ -126,6 +128,7 @@ export default class RapiDoc extends LitElement {
       PrismStyles,
       TabStyles,
       NavStyles,
+      DocumentStyles,
       css`
       :host {
         --border-radius: 2px;
@@ -344,7 +347,8 @@ export default class RapiDoc extends LitElement {
   // Startup
   connectedCallback() {
     super.connectedCallback();
-    if (!this.renderStyle || !'read, view, focused,'.includes(`${this.renderStyle},`)) { this.renderStyle = 'view'; }
+    // TODO 增加一个document renderStyle, 以接近word文档的方式显示
+    if (!this.renderStyle || !'read, view, focused, document, '.includes(`${this.renderStyle},`)) { this.renderStyle = 'view'; }
     if (!this.schemaStyle || !'tree, table,'.includes(`${this.schemaStyle},`)) { this.schemaStyle = 'tree'; }
     if (!this.theme || !'light, dark,'.includes(`${this.theme},`)) { this.theme = 'light'; }
     if (!this.defaultSchemaTab || !'example, model,'.includes(`${this.defaultSchemaTab},`)) { this.defaultSchemaTab = 'model'; }
@@ -656,6 +660,8 @@ export default class RapiDoc extends LitElement {
           }
           this.groupedApis[0].specObj = await this.fetchJson(this.groupedApis[0].url); // 缓存
           specUrl = this.groupedApis[0].specObj;
+        } else if (specObj.url) {
+          specUrl = specObj.url;
         }
       }
 
@@ -678,7 +684,7 @@ export default class RapiDoc extends LitElement {
       this.loadFailed = true;
       this.resolvedSpec = null;
       this.requestUpdate();
-      console.error(`RapiDoc: Unable to resolve the API spec..  ${err.message}`); // eslint-disable-line no-console
+      // console.error(`RapiDoc: Unable to resolve the API spec..  ${err.message}`); // eslint-disable-line no-console
     }
   }
 

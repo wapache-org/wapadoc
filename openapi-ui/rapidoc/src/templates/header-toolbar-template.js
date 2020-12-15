@@ -13,9 +13,10 @@ export default function headerTemplate() {
 
   <div style="display: flex;justify-content: center; margin: 2px 0">
     <span style="text-align: center; padding: 0 0 0 0; color:#47AFE8">布局:</span>
-    <button class='header-btn' @click='${this.setAttribute2}' key='render-style' value='view' >列表</button>
-    <!--<button class='header-btn' @click='${this.setAttribute2}' 'render-style' value='read')" >阅读</button>-->
-    <button class='header-btn' @click='${this.setAttribute2}' key='render-style' value='focused' >导航</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='render-style' value='focused' >默认</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='render-style' value='view' >传统</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='render-style' value='read' >阅读</button>
+    <button class='header-btn' @click='${this.setAttribute2}' key='render-style' value='document' >文档</button>
   </div>
 
   <div style="display: flex;justify-content: center; margin: 2px 0">
@@ -23,7 +24,7 @@ export default function headerTemplate() {
     <button class='header-btn' @click='${this.toggleAttribute}' key='show-info' title="是否显示接口说明">说明</button>
     <button class='header-btn' @click='${this.toggleAttribute}' key='allow-server-selection' title="是否显示服务器地址">服务器</button>
     <button class='header-btn' @click='${this.toggleAttribute}' key='allow-authentication' title="是否显示认证授权">授权</button>
-    <select @change='${this.setAttribute3}' style="width:160px;" key='use-path-in-nav-bar'>
+    <select class='header-btn' @change='${this.setAttribute3}' style="width:160px;" key='use-path-in-nav-bar'>
       <option value="summary">仅显示操作名称</option>
       <option value="path">仅显示路径</option>
       <option value="operation">仅显示操作ID</option>
@@ -45,14 +46,14 @@ export default function headerTemplate() {
 
   <div style="display: flex;justify-content: center; margin: 2px 0">
     <span style="text-align: center; padding: 0 0 0 0; color:#47AFE8">字体:</span>
-    <select @change='${this.setAttribute3}' key='font-size'>
+    <select class='header-btn' @change='${this.setAttribute3}' key='font-size'>
       <option value="summary">默认</option>
       <option value="path">较大</option>
       <option value="operation">最大</option>
     </select>
   </div>
 
-  <div style="display: flex;justify-content: center; margin: 2px 0"">
+  <div style="display: flex;justify-content: center; margin: 2px 0">
   <div style="text-align: center; padding: 0 0 0 0; color:#47AFE8">其他:</div>
     <!--
     <button class='header-btn' onclick="this.toggleAttribute('show-header')" title="Toggle Header">&#x2b90;</button>
