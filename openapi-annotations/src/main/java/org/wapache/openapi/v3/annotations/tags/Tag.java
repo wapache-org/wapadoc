@@ -56,6 +56,15 @@ public @interface Tag {
     String name();
 
     /**
+     * The title of this tag.
+     *
+     * equals x-title
+     *
+     * @return the title of this tag
+     */
+    String title() default "";
+
+    /**
      * A short description for this tag.
      *
      * @return the description of this tag
@@ -75,4 +84,8 @@ public @interface Tag {
      * @return an optional array of extensions
      */
     Extension[] extensions() default {};
+
+    // TODO: 增加一个summary, 用于存放中文名称.
+
+    // TODO: 增加一个index, 用于排序显示.
 }

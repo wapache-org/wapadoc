@@ -594,16 +594,17 @@ public abstract class AnnotationsUtils {
                 continue;
             }
             Tag tagObject = new Tag();
+            tagObject.setName(tag.name());
             if (StringUtils.isNotBlank(tag.description())) {
                 tagObject.setDescription(tag.description());
             }
-            tagObject.setName(tag.name());
+            if(StringUtils.isNotBlank(tag.title())){
+                tagObject.addExtension("x-title", tag.title());
+            }
             getExternalDocumentation(tag.externalDocs()).ifPresent(tagObject::setExternalDocs);
             if (tag.extensions().length > 0) {
                 Map<String, Object> extensions = AnnotationsUtils.getExtensions(tag.extensions());
-                if (extensions != null) {
-                    extensions.forEach(tagObject::addExtension);
-                }
+                extensions.forEach(tagObject::addExtension);
             }
             tagsList.add(tagObject);
         }
