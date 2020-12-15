@@ -48,6 +48,7 @@
 ## 编译运行
 
 ```shell script
+
 cd openapi-ui/rapidoc
 npm install
 npm run build # windows下运行: npm run build_windows
@@ -55,12 +56,15 @@ npm run build # windows下运行: npm run build_windows
 cd ../..
 mvn clean package
 cd openapi-spring-webmvc-demo/target
-java -jar openapi-spring-webmvc-demo-0.10.8.jar
+java -jar openapi-spring-webmvc-demo-0.10.28-SNAPSHOT.jar
+
+# 浏览器打开`http://localhost` 或者 `http://localhost/openapi-ui.html`
+
 ```
 
 ## 界面预览
 
-文档模式:
+### 文档模式
 
 文档模式是目前市面上各种OpenAPI-UI都没有的显示模式, 是此项目的特色功能。
 此功能以大家都很熟悉的Word文档样式展示接口内容，且可以直接全选复制到Word或者WPS上得到标准的接口文档。
@@ -68,7 +72,9 @@ java -jar openapi-spring-webmvc-demo-0.10.8.jar
 
 ![文档模式](docs/images/openapi-ui-document-mode.jpg)
 
-传统模式:
+![文档模式](docs/images/openapi-ui-document-mode-2.jpg)
+
+### 传统模式
 
 此模式与传统的SwaggerUI展示方式类似, 相信用过springfox和springdoc的同学都很熟悉了。
 本模式下, 还额外提供了请求和响应并排显示功能, 在高分辨率下可以一屏展示更多内容, 获得更好的用户体验。
@@ -77,7 +83,7 @@ java -jar openapi-spring-webmvc-demo-0.10.8.jar
 
 ![明亮主题](docs/images/openapi-ui-list-mode-light.jpg)
 
-默认模式:
+### 默认模式
 
 此模式是本项目的默认展示模式, 在 `Rapidoc` 中称为`专注`布局, 只展示当前选中的接口。
 
@@ -85,16 +91,17 @@ java -jar openapi-spring-webmvc-demo-0.10.8.jar
 
 ![明亮主题](docs/images/openapi-ui-light.jpg)
 
-阅读模式:
+### 阅读模式
 
 与默认模式雷同, 只是有滚动条, 可以滚动到其他接口, 在阅读和浏览接口的时候比较方便。
+
+![暗黑主题](docs/images/openapi-ui-read-mode-dark.jpg)
 
 #其他资源
 
 1. 中文版规范: https://github.com/fishead/OpenAPI-Specification/blob/master/versions/3.0.0.zhCN.md
 
 2. 中文教程: https://www.breakyizhan.com/swagger/2806.html
-
 
 3. [API Documentation with springdoc-openapi](https://mflash.dev/blog/2020/06/27/api-documentation-with-springdoc-openapi/)
 
@@ -106,8 +113,8 @@ java -jar openapi-spring-webmvc-demo-0.10.8.jar
 
 # 请作者喝杯奶茶
 
-有任何使用上的问题可以在github的issues上提, 也可以发邮件到作者的邮箱: ykuang老鼠wapache点org 。
+有任何使用上的问题可以在github的issues上提, 也可以发邮件到作者的邮箱(ykuang老鼠wapache点org)。
 
-开源不易, 如果此项目对你有用, 请作者喝杯茶, 以资鼓励吧^_^!
+开源不易, 如果此项目对你有用, 请作者喝杯茶以资鼓励吧^_^!
 
 ![wechat_code](docs/images/wechat_code.jpg)

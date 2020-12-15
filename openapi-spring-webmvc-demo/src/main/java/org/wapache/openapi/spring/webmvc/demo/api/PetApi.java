@@ -73,7 +73,7 @@ import org.springframework.web.multipart.MultipartFile;
 				@OAuthScope(name = "write:pets", description = "修改你的宠物"),
 				@OAuthScope(name = "read:pets", description = "读取你的宠物列表")
 })))
-@Tag(name = "pet", description = "宠物接口")
+@Tag(name = "pet", title = "宠物接口", description = "宠物相关接口")
 public interface PetApi {
 
 	default PetApiDelegate getDelegate() {
