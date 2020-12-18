@@ -24,6 +24,7 @@
 5. 原`springdoc`的`RequestBody`重命名为`ApiRequestBody`,以避免与Spring的`RequestBody`名称重复导致使用不便。
 6. 部分汉化`Rapidoc`, 对`Rapidoc`界面布局和样式做了调整和增强。
 7. `Rapidoc`界面布局增加`文档`模式, 以word文档样式的方式展示OpenAPI文档的内容, 全选复制到word即可得到word格式的接口文档, 非常方便。 
+8. 引入`openapi-generator`中的`openapi-generator-online`, 去掉springfox的依赖并对接口做少量调整和汉化。
 
 ## 模块列表
 
@@ -96,6 +97,19 @@ java -jar openapi-spring-webmvc-demo-0.10.28-SNAPSHOT.jar
 与默认模式雷同, 只是有滚动条, 可以滚动到其他接口, 在阅读和浏览接口的时候比较方便。
 
 ![暗黑主题](docs/images/openapi-ui-read-mode-dark.jpg)
+
+## 在线代码生成服务
+
+服务启动
+
+```
+
+cd openapi-generator-server/target
+java -jar openapi-generator-server-0.10.28-SNAPSHOT.jar
+
+# 浏览器打开`http://localhost` 或者 `http://localhost/openapi-ui.html`
+
+```
 
 #其他资源
 

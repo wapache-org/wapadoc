@@ -39,7 +39,8 @@
 
 		<module>openapi-test</module>
 		<module>openapi-parser</module>
-	</modules>
+        <module>openapi-generator-server</module>
+    </modules>
 
 	<properties>
 		<springdoc.version>0.9.13</springdoc.version>
@@ -162,12 +163,6 @@
 				<artifactId>jjwt</artifactId>
 				<version>${jjwt.version}</version>
 				<scope>test</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>io.github.classgraph</groupId>
-				<artifactId>classgraph</artifactId>
-				<version>4.8.65</version>
 			</dependency>
 
 			<dependency>
