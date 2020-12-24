@@ -149,19 +149,23 @@ function convertSpecToDocument() {
         });
 
         if (path.requestBody) {
-          const schema = path.requestBody.schema || {};
-          const param = {
-            name: path.requestBody.name || '{BODY}',
-            title: schema.title || schema.items?.title || '请求消息体',
-            type: schema.type,
-            item: schema.items,
-            format: schema.format || schema.items?.format || '',
-            model: modelMap[schema.$$ref] || modelMap[schema.items?.$$ref],
-            description: path.requestBody.description || schema.description || schema.items?.description || '',
-            location: 'BODY',
-            required: path.requestBody.required || schema.required,
-          };
-          operation.parameters.push(param);
+          for (const media in path.requestBody?.content || {}) {
+            const schema = path.requestBody?.content[media]?.schema;
+
+            const param = {
+              name: path.requestBody.name || '{BODY}',
+              title: schema.title || schema.items?.title || '请求消息体',
+              type: schema.type,
+              item: schema.items,
+              format: schema.format || schema.items?.format || '',
+              model: modelMap[schema.$$ref] || modelMap[schema.items?.$$ref],
+              description: path.requestBody.description || schema.description || schema.items?.description || '',
+              location: 'BODY',
+              required: path.requestBody.required || schema.required,
+              media,
+            };
+            operation.parameters.push(param);
+          }
         }
 
         for (const code in path.responses) {
@@ -324,9 +328,9 @@ function operationParameterTemplate(index) {
       <td>${this.title}</td>
       <td>${this.name}${this.required ? html`<a style="color:red;"> * </a>` : ''}</td>
       <td>${this.type === 'array' ? `[${this.item.type}]` : this.type}</td>
+      <td>${this.format || (this.model ? html`${this.model.name}` : '')}</td>
       <td>
-        位置: ${this.location} ;<br/>
-        格式: ${this.format || (this.model ? html`${this.model.name}` : '无')} ;<br/>
+        ${this.media ? html`媒体: ${this.media} ;` : html`位置: ${this.location} ;`} <br/>
         说明: ${this.description || this.summary}
       </td>
     </tr>
@@ -357,6 +361,7 @@ function operationParametersTemplate() {
             <th style="min-width:6em;">名称</th>
             <th style="min-width:3em;">参数名</th>
             <th>类型</th>
+            <th>格式</th>
             <th>说明</th>
           </tr>
         ` : html`
