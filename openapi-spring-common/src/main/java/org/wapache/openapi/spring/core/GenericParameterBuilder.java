@@ -223,9 +223,9 @@ public class GenericParameterBuilder {
 		if (parameterDoc.content().length > 0) {
 			Optional<Content> optionalContent = AnnotationsUtils.getContent(parameterDoc.content(), null, null, null, components, jsonView);
 			optionalContent.ifPresent(parameter::setContent);
-		}
-		else
+		} else {
 			setSchema(parameterDoc, components, jsonView, parameter);
+		}
 
 		setExamples(parameterDoc, parameter);
 		setExtensions(parameterDoc, parameter);
@@ -356,10 +356,16 @@ public class GenericParameterBuilder {
 	 * @param parameter the parameter
 	 */
 	private void setExtensions(org.wapache.openapi.v3.annotations.Parameter parameterDoc, Parameter parameter) {
+
+		if (StringUtils.isNotBlank(parameterDoc.title())) {
+			parameter.addExtension("x-title", parameterDoc.title());
+		}
+
 		if (parameterDoc.extensions().length > 0) {
 			Map<String, Object> extensionMap = AnnotationsUtils.getExtensions(parameterDoc.extensions());
 			extensionMap.forEach(parameter::addExtension);
 		}
+
 	}
 
 	/**

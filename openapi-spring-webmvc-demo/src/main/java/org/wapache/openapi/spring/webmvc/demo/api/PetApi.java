@@ -29,6 +29,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.wapache.openapi.spring.core.converters.models.PageableAsQueryParam;
+import org.wapache.openapi.spring.webmvc.annotation.DeleteOperation;
+import org.wapache.openapi.spring.webmvc.annotation.GetOperation;
+import org.wapache.openapi.spring.webmvc.annotation.PostOperation;
+import org.wapache.openapi.spring.webmvc.annotation.PutOperation;
 import org.wapache.openapi.spring.webmvc.demo.model.ModelApiResponse;
 import org.wapache.openapi.spring.webmvc.demo.model.Pet;
 import org.wapache.openapi.v3.annotations.Operation;
@@ -66,13 +70,14 @@ import org.springframework.web.multipart.MultipartFile;
 @SecurityScheme(
 	name = "petstore_auth",
 	type = SecuritySchemeType.OAUTH2,
-	flows = @OAuthFlows(
-		implicit = @OAuthFlow(
-			authorizationUrl = "https://petstore3.swagger.io/oauth/authorize",
-			scopes = {
-				@OAuthScope(name = "write:pets", description = "修改你的宠物"),
-				@OAuthScope(name = "read:pets", description = "读取你的宠物列表")
-})))
+	flows = @OAuthFlows( implicit = @OAuthFlow(
+		authorizationUrl = "https://petstore3.swagger.io/oauth/authorize",
+		scopes = {
+			@OAuthScope(name = "write:pets", description = "修改你的宠物"),
+			@OAuthScope(name = "read:pets", description = "读取你的宠物列表")
+		}
+	))
+)
 @Tag(name = "pet", title = "宠物接口", description = "宠物相关接口")
 public interface PetApi {
 
@@ -81,180 +86,264 @@ public interface PetApi {
 		};
 	}
 
-	@Operation(
-		summary = "添加一只宠物到宠物商店",
-		description = "添加一只宠物到宠物商店",
+	@PostOperation(
+		title = "添加一只宠物到宠物商店",
+		description = "",
+		path = "/pet",
+		consumes = { "application/json", "application/xml", "application/x-www-form-urlencoded" },
+		produces = { "application/json", "application/xml" },
+		parameters = {
+		},
+		requestBody = @ApiRequestBody(
+			title = "宠物信息",
+			description = "",
+			content = {
+				@Content(mediaType = "application/xml", schema = @Schema(implementation = Pet.class, required = true)),
+				@Content(mediaType = "application/json", schema = @Schema(implementation = Pet.class))
+			}
+		),
+		responses = {
+			@ApiResponse(responseCode = "200", description = "操作成功", content = {
+				@Content(mediaType = "application/xml", schema = @Schema(implementation = Pet.class)),
+				@Content(mediaType = "application/json", schema = @Schema(implementation = Pet.class))
+			}),
+			@ApiResponse(responseCode = "405", description = "非法的输入")
+		},
 		security = {
 			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
-		},
-		tags = { "pet" }
+		}
 	)
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "操作成功", content = {
-			@Content(mediaType = "application/xml", schema = @Schema(implementation = Pet.class)),
-			@Content(mediaType = "application/json", schema = @Schema(implementation = Pet.class))
-		}),
-		@ApiResponse(responseCode = "405", description = "非法的输入")
-	})
-	@PostMapping(value = "/pet", consumes = { "application/json", "application/xml", "application/x-www-form-urlencoded" })
-	default ResponseEntity<Pet> addPet(
-		@Parameter(description = "宠物信息", required = true) @Valid @RequestBody Pet pet
-	) {
+	default ResponseEntity<Pet> addPet(@Valid @RequestBody Pet pet) {
 		return getDelegate().addPet(pet);
 	}
 
-	@Operation(
-		summary = "删除一只宠物",
-		description = "",
+	@DeleteOperation(
+		title = "删除宠物",
+		description = "根据宠物ID删除一只宠物。",
+		path = "/pet/{petId}",
+		parameters = {
+			@Parameter(in=ParameterIn.HEADER, name="api_key", description = ""),
+			@Parameter(in=ParameterIn.PATH, name="petId", description = "宠物ID", required = true)
+		},
+		responses = {
+			@ApiResponse(responseCode = "400", description = "非法的宠物ID")
+		},
 		security = {
 			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
-		},
-		tags = { "pet" }
+		}
 	)
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "400", description = "非法的宠物ID")
-	})
-	@DeleteMapping(value = "/pet/{petId}")
 	default ResponseEntity<Void> deletePet(
-		@Parameter(description = "宠物ID", required = true)
-		@PathVariable("petId")
+		@PathVariable
 		Long petId,
-		@Parameter(description = "")
 		@RequestHeader(value = "api_key", required = false)
 		String apiKey
 	) {
 		return getDelegate().deletePet(petId, apiKey);
 	}
 
-	@Operation(
-		summary = "根据状态查找宠物",
-		description = "",
-		security = {
-			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
-		},
-		tags = { "pet" }
-	)
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "操作成功",
-			content = @Content(array = @ArraySchema(schema = @Schema(implementation = Pet.class)))),
-		@ApiResponse(responseCode = "400", description = "非法的宠物状态值")
-	})
-	@GetMapping(value = "/pet/findByStatus", produces = { "application/json", "application/xml" })
-	default ResponseEntity<List<Pet>> findPetsByStatus(
-		@Parameter(
-			explode = Explode.TRUE,
-			name = "status",
-			in = ParameterIn.QUERY,
-			description = "多个状态可以用逗号分隔",
-			style = ParameterStyle.FORM,
-			schema = @Schema(
-				type = "string",
-				defaultValue = "available",
-				allowableValues = { "available", "pending", "sold" }
-			)
-		)
-		@Valid
-		@RequestParam(value = "status", required = false)
-		List<String> status
-	) {
-		return getDelegate().findPetsByStatus(status);
-	}
-
-	@Operation(summary = "根据标签查找宠物", description = "", security = {
-			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" }) }, tags = { "pet" })
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "操作成功", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Pet.class)))),
-			@ApiResponse(responseCode = "400", description = "Invalid tag value", content = @Content) })
-	@GetMapping(value = "/pet/findByTags", produces = { "application/json", "application/xml" })
-	default ResponseEntity<List<Pet>> findPetsByTags(
-			@Parameter(description = "多个tag用逗号分隔, 譬如tag1, tag2, tag3", explode = Explode.TRUE, in = ParameterIn.QUERY, name = "tags", style = ParameterStyle.FORM)
-			@Valid @RequestParam(value = "tags", required = false)
-			List<String> tags) {
-		return getDelegate().findPetsByTags(tags);
-	}
-
-	@Operation(summary = "根据ID获取宠物信息", description = "返回宠物信息", security = {
-			@SecurityRequirement(name = "api_key"),
-			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
-	}, tags = { "pet" })
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "操作成功", content = @Content(schema = @Schema(implementation = Pet.class))),
-			@ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
-			@ApiResponse(responseCode = "404", description = "找不到该宠物", content = @Content) })
-	@GetMapping(value = "/pet/{petId}", produces = { "application/json", "application/xml" })
-	default ResponseEntity<Pet> getPetById(
-			@Parameter(description = "宠物ID", required = true) @PathVariable("petId") Long petId) {
-		return getDelegate().getPetById(petId);
-	}
-
-	@Operation(
-		summary = "修改宠物信息",
+	@PutOperation(
+		title = "修改宠物信息",
 		description = "",
 		operationId = "updatePet",
-		security = {
-			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
-		},
-		tags = { "pet" }
-	)
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "操作成功",
+		path = "/pet",
+		consumes = { "application/json", "application/xml", "application/x-www-form-urlencoded" },
+		requestBody = @ApiRequestBody(
+			title = "宠物信息",
+			description = "",
 			content = {
-				@Content(mediaType = "application/xml", schema = @Schema(implementation = Pet.class)),
+				@Content(mediaType = "application/xml", schema = @Schema(implementation = Pet.class, required = true)),
 				@Content(mediaType = "application/json", schema = @Schema(implementation = Pet.class))
 			}
 		),
-		@ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
-		@ApiResponse(responseCode = "404", description = "Pet not found"),
-		@ApiResponse(responseCode = "405", description = "Validation exception")
-	})
-	@PutMapping(value = "/pet", consumes = { "application/json", "application/xml", "application/x-www-form-urlencoded" })
-	default ResponseEntity<Void> updatePet(
-			@Parameter(description = "宠物信息", required = true) @Valid @RequestBody Pet pet) {
+		responses = {
+			@ApiResponse(responseCode = "200", description = "操作成功",
+				content = {
+					@Content(mediaType = "application/xml", schema = @Schema(implementation = Pet.class)),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Pet.class))
+				}
+			),
+			@ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
+			@ApiResponse(responseCode = "404", description = "Pet not found"),
+			@ApiResponse(responseCode = "405", description = "Validation exception")
+		},
+		security = {
+			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
+		}
+	)
+	default ResponseEntity<Void> updatePet(@Valid @RequestBody Pet pet) {
 		return getDelegate().updatePet(pet);
 	}
 
-	@Operation(
-		summary = "修改宠物信息(form表单形式)",
+	@PostOperation(
+		title = "修改宠物信息(form表单形式)",
 		description = "",
+		path = "/pet/{petId}",
+		consumes = { "application/x-www-form-urlencoded" },
+		parameters = {
+			@Parameter(name = "petId", title = "宠物ID", description = "", required = true),
+			@Parameter(name = "name", title = "宠物名称", description = ""),
+			@Parameter(name = "status", title = "宠物状态", description = "")
+		},
+		responses = {
+			@ApiResponse(responseCode = "405", description = "非法的输入")
+		},
 		security = {
 			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
 		},
 		tags = { "pet" }
 	)
-	@ApiResponses(value = { @ApiResponse(responseCode = "405", description = "非法的输入") })
-	@PostMapping(value = "/pet/{petId}", consumes = { "application/x-www-form-urlencoded" })
 	default ResponseEntity<Void> updatePetWithForm(
-			@Parameter(description = "宠物ID", required = true) @PathVariable("petId") Long petId,
-			@Parameter(description = "宠物名称") @RequestParam(value = "name", required = false) String name,
-			@Parameter(description = "宠物状态") @RequestParam(value = "status", required = false) String status) {
+		 @PathVariable Long petId,
+		 @RequestParam(required = false) String name,
+		 @RequestParam(required = false) String status
+	) {
 		return getDelegate().updatePetWithForm(petId, name, status);
 	}
 
-	@Operation(summary = "上传图片", security = {
-			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" }) }, tags = { "pet" })
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "操作成功", content = @Content(schema = @Schema(implementation = ModelApiResponse.class))) })
-	@PostMapping(value = "/pet/{petId}/uploadImage", produces = { "application/json" }, consumes = { "application/octet-stream" })
+	@PostOperation(
+		title = "上传图片",
+		path = "/pet/{petId}/uploadImage",
+		consumes = { "application/octet-stream" },
+		produces = { "application/json" },
+		parameters = {
+			@Parameter(name = "petId", title = "宠物ID", description = "", required = true),
+			@Parameter(name = "additionalMetadata", title = "宠物扩展信息", description = "")
+		},
+		requestBody = @ApiRequestBody(content = {
+			@Content(mediaType = "application/octet-stream", schema = @Schema(type = "string", format = "binary"))
+		}),
+		responses = {
+			@ApiResponse(responseCode = "200", description = "操作成功",
+				content = @Content(schema = @Schema(implementation = ModelApiResponse.class))
+			)
+		},
+		security = {
+			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
+		}
+	)
 	default ResponseEntity<ModelApiResponse> uploadFile(
-			@Parameter(description = "宠物ID", required = true) @PathVariable("petId") Long petId,
-			@Parameter(description = "宠物扩展数据") @RequestParam(value = "additionalMetadata", required = false) String additionalMetadata,
-			@ApiRequestBody(content = @Content(mediaType = "application/octet-stream", schema = @Schema(type = "string", format = "binary")))
-			@Valid @RequestPart("file") MultipartFile file) {
+		@PathVariable("petId") Long petId,
+		@RequestParam(value = "additionalMetadata", required = false) String additionalMetadata,
+		@Valid @RequestPart("file") MultipartFile file
+	) {
 		return getDelegate().uploadFile(petId, additionalMetadata, file);
 	}
 
-	@Operation(summary = "分页查询宠物", description = "", security = {
-			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" }) }, tags = { "pet" })
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "操作成功", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Pet.class))))
-	})
-	@GetMapping(value = "/pet", produces = { "application/json", "application/xml" })
+	@GetOperation(
+		title = "分页查询宠物",
+		description = "",
+		path = "/pet",
+		produces = { "application/json", "application/xml" },
+		responses = {
+			@ApiResponse(responseCode = "200", description = "操作成功",
+				content = @Content(array = @ArraySchema(schema = @Schema(implementation = Pet.class)))
+			)
+		},
+		security = {
+			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
+		}
+	)
 	@PageableAsQueryParam
 	default ResponseEntity<List<Pet>> getAllPets(
 		// @PageableDefault(sort = {"name"}, direction = Sort.Direction.ASC)
 		@NotNull Pageable pageable
 	) {
 		return getDelegate().getAllPets(pageable);
+	}
+
+	@GetOperation(
+		title = "根据ID获取宠物信息",
+		description = "",
+		path = "/pet/{petId}",
+		produces = { "application/json", "application/xml" },
+		parameters = {
+			@Parameter(in = ParameterIn.PATH, name = "petId", title="宠物ID", description = "", required = true)
+		},
+		responses = {
+			@ApiResponse(responseCode = "200", description = "操作成功, 返回宠物信息",
+				content = @Content(schema = @Schema(implementation = Pet.class))
+			),
+			@ApiResponse(responseCode = "400", description = "宠物ID不正确", content = @Content),
+			@ApiResponse(responseCode = "404", description = "找不到该宠物", content = @Content)
+		},
+		security = {
+			@SecurityRequirement(name = "api_key"),
+			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
+		}
+	)
+	default ResponseEntity<Pet> getPetById( @PathVariable Long petId) {
+		return getDelegate().getPetById(petId);
+	}
+
+	@GetOperation(
+		title = "根据状态查找宠物",
+		description = "",
+		path = "/pet/findByStatus",
+		produces = { "application/json", "application/xml" },
+		parameters = {
+			@Parameter(
+				in = ParameterIn.QUERY,
+				name = "status",
+				title = "宠物状态",
+				description = "多个状态可以用逗号分隔",
+				explode = Explode.TRUE,
+				style = ParameterStyle.FORM,
+				schema = @Schema(
+					type = "string",
+					title = "",
+					defaultValue = "available",
+					allowableValues = { "available", "pending", "sold" }
+				)
+			)
+		},
+		responses = {
+			@ApiResponse(
+				responseCode = "200",
+				description = "操作成功",
+				content = @Content(array = @ArraySchema(schema = @Schema(implementation = Pet.class)))
+			),
+			@ApiResponse(responseCode = "400", description = "非法的宠物状态值")
+		},
+		security = {
+			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
+		}
+	)
+	default ResponseEntity<List<Pet>> findPetsByStatus(
+		@Valid
+		@RequestParam(value = "status", required = false, defaultValue = "available")
+			List<String> status
+	) {
+		return getDelegate().findPetsByStatus(status);
+	}
+
+	@GetOperation(
+		title = "根据标签查找宠物",
+		description = "",
+		path = "/pet/findByTags",
+		produces = { "application/json", "application/xml" },
+		parameters = {
+			@Parameter(
+				in = ParameterIn.QUERY,
+				name = "tags",
+				description = "多个tag用逗号分隔, 譬如tag1, tag2, tag3",
+				explode = Explode.TRUE,
+				style = ParameterStyle.FORM
+			)
+		},
+		responses = {
+			@ApiResponse(responseCode = "200", description = "操作成功",
+				content = @Content(array = @ArraySchema(schema = @Schema(implementation = Pet.class)))
+			),
+			@ApiResponse(responseCode = "400", description = "Invalid tag value", content = @Content)
+		},
+		security = {
+			@SecurityRequirement(name = "petstore_auth", scopes = { "write:pets", "read:pets" })
+		}
+	)
+	default ResponseEntity<List<Pet>> findPetsByTags(
+		@Valid @RequestParam(value = "tags", required = false) List<String> tags
+	) {
+		return getDelegate().findPetsByTags(tags);
 	}
 
 }

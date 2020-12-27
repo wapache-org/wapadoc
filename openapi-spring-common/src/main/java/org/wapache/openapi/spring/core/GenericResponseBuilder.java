@@ -150,23 +150,33 @@ public class GenericResponseBuilder {
 			Object controllerAdvice = entry.getValue();
 			// get all methods with annotation @ExceptionHandler
 			Class<?> objClz = controllerAdvice.getClass();
-			if (org.springframework.aop.support.AopUtils.isAopProxy(controllerAdvice))
+			if (org.springframework.aop.support.AopUtils.isAopProxy(controllerAdvice)) {
 				objClz = org.springframework.aop.support.AopUtils.getTargetClass(controllerAdvice);
+			}
 			ControllerAdviceInfo controllerAdviceInfo = new ControllerAdviceInfo(controllerAdvice);
-			Arrays.stream(objClz.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(ExceptionHandler.class)).forEach(methods::add);
+			Arrays.stream(objClz.getDeclaredMethods())
+				.filter(m -> m.isAnnotationPresent(ExceptionHandler.class))
+				.forEach(methods::add);
 			// for each one build ApiResponse and add it to existing responses
 			for (Method method : methods) {
 				if (!operationBuilder.isHidden(method)) {
 					RequestMapping reqMappringMethod = AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
 					String[] methodProduces = { springDocConfigProperties.getDefaultProducesMediaType() };
-					if (reqMappringMethod != null)
+					if (reqMappringMethod != null) {
 						methodProduces = reqMappringMethod.produces();
+					}
 					Map<String, ApiResponse> controllerAdviceInfoApiResponseMap = controllerAdviceInfo.getApiResponseMap();
 					MethodParameter methodParameter = new MethodParameter(method, -1);
 					ApiResponses apiResponsesOp = new ApiResponses();
-					MethodAttributes methodAttributes = new MethodAttributes(methodProduces, springDocConfigProperties.getDefaultConsumesMediaType(),
-							springDocConfigProperties.getDefaultProducesMediaType(), controllerAdviceInfoApiResponseMap);
-					Map<String, ApiResponse> apiResponses = computeResponseFromDoc(components, methodParameter, apiResponsesOp, methodAttributes);
+					MethodAttributes methodAttributes = new MethodAttributes(
+						methodProduces,
+						springDocConfigProperties.getDefaultConsumesMediaType(),
+						springDocConfigProperties.getDefaultProducesMediaType(),
+						controllerAdviceInfoApiResponseMap
+					);
+					Map<String, ApiResponse> apiResponses = computeResponseFromDoc(
+						components, methodParameter, apiResponsesOp, methodAttributes
+					);
 					buildGenericApiResponses(components, methodParameter, apiResponsesOp, methodAttributes);
 					apiResponses.forEach(controllerAdviceInfoApiResponseMap::put);
 				}

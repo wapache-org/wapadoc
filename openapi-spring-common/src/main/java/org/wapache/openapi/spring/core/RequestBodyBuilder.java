@@ -87,6 +87,11 @@ public class RequestBodyBuilder {
 			return Optional.of(requestBodyObject);
 		}
 
+		if (StringUtils.isNotBlank(requestBody.title())) {
+			requestBodyObject.addExtension("x-title", requestBody.title());
+			isEmpty = false;
+		}
+
 		if (StringUtils.isNotBlank(requestBody.description())) {
 			requestBodyObject.setDescription(requestBody.description());
 			isEmpty = false;
