@@ -329,9 +329,9 @@ function groupByTags(openApiSpec, sortTags = false, sortEndpointsBy) {
           if (summary.length > 100) {
             summary = summary.split('.')[0];
           }
-          if (!fullPath.description) {
-            fullPath.description = ((fullPath.summary || '-').trim());
-          }
+          // if (!fullPath.description) {
+          //   fullPath.description = ((fullPath.summary || '-').trim());
+          // }
 
           // Merge Common Parameters with This methods parameters
           let finalParameters = [];
