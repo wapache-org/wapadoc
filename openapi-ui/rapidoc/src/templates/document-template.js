@@ -1,4 +1,6 @@
 import { html } from 'lit-element';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import marked from 'marked';
 
 const wordMode = true;
 
@@ -12,7 +14,7 @@ function convertSchemeToModel(context, schema) {
     format: schema.format || schema.items?.format || '',
     name: schema.name,
     title: schema.title || schema.name,
-    description: schema.description,
+    description: schema.description || '',
     properties: [],
   };
 
@@ -26,7 +28,7 @@ function convertSchemeToModel(context, schema) {
       format: property.format || property.items?.format || '',
       name,
       title: property.title || name,
-      description: property.description,
+      description: property.description || '',
     };
 
     // TODO 递归
@@ -55,8 +57,8 @@ function convertSpecToDocument() {
   }
 
   const doc = {
-    title: this.resolvedSpec.info.title,
-    description: this.resolvedSpec.info.description,
+    title: this.resolvedSpec.info.title || '',
+    description: this.resolvedSpec.info.description || '',
     groups: [],
     paths: [],
     operations: [],
@@ -82,7 +84,7 @@ function convertSpecToDocument() {
       id: tag.name,
       name: tag.name,
       title: tag.title,
-      description: tag.description,
+      description: tag.description || '',
       paths: [],
       operations: [],
     };
@@ -95,7 +97,7 @@ function convertSpecToDocument() {
         docPath = {
           name: path.name,
           title: path.title,
-          description: path.description,
+          description: path.description || '',
           operations: [],
           groups: [],
         };
@@ -109,7 +111,7 @@ function convertSpecToDocument() {
         groupPath = {
           name: path.name,
           title: path.title,
-          description: path.description,
+          description: path.description || '',
           operations: [],
         };
         groupPathMap[pid] = groupPath;
@@ -121,8 +123,8 @@ function convertSpecToDocument() {
       if (!operation) {
         operation = {
           id: oid,
-          name: path.summary,
-          description: path.description,
+          name: path.summary || oid,
+          description: path.description || '',
           method: path.method.toUpperCase(),
           path: path.path,
           parameters: [],
@@ -135,7 +137,7 @@ function convertSpecToDocument() {
           const location = parameter.in.toUpperCase();
           const param = {
             name: parameter.name,
-            title: schema.title || schema.items?.title || '',
+            title: parameter['x-title'] || schema.title || schema.items?.title || '',
             type: schema.type,
             item: schema.items,
             format: schema.format || schema.items?.format || '',
@@ -154,7 +156,7 @@ function convertSpecToDocument() {
 
             const param = {
               name: path.requestBody.name || '{BODY}',
-              title: schema.title || schema.items?.title || '请求消息体',
+              title: path.requestBody['x-title'] || schema.title || schema.items?.title || '请求消息体',
               type: schema.type,
               item: schema.items,
               format: schema.format || schema.items?.format || '',
@@ -175,7 +177,7 @@ function convertSpecToDocument() {
               schema: {
                 name: response.name,
                 title: response.title,
-                description: response.description,
+                description: response.description || '',
               },
             },
           };
@@ -256,7 +258,7 @@ function schemaPropertyTemplate(index) {
         <td>${this.title}</td>
         <td>${this.type}</td>
         <td>${this.format}</td>
-        <td>${this.description}</td>
+        <td><span>${unsafeHTML(marked(this.description))}</span></td>
     </tr>
     `;
 }
@@ -265,7 +267,7 @@ function schemaTemplate() {
   return html`
     <div class="api-model" id="api-model-${this.id}">
         <h3>${this.name}</h3>
-        <p>${this.description}</p>
+        <p>${unsafeHTML(marked(this.description))}</p>
         <table class="api-model-table">
             <thead>
             <tr>
@@ -293,7 +295,7 @@ function operationResponseTemplate(index) {
       <td>${this.media}</td>
       <td>${this.type === 'array' ? `[${this.item?.type}]` : this.type}</td>
       <td>${this.format || (this.model ? this.model.name : '')}</td>
-      <td>${this.description}</td>
+      <td>${unsafeHTML(marked(this.description))}</td>
     </tr>
     `;
 }
@@ -330,8 +332,8 @@ function operationParameterTemplate(index) {
       <td>${this.type === 'array' ? `[${this.item.type}]` : this.type}</td>
       <td>${this.format || (this.model ? html`${this.model.name}` : '')}</td>
       <td>
-        ${this.media ? html`媒体: ${this.media} ;` : html`位置: ${this.location} ;`} <br/>
-        说明: ${this.description || this.summary}
+        ${this.media ? html`媒体: ${this.media}` : html`位置: ${this.location}`} 
+        ${this.description ? html`<br/>说明: ${unsafeHTML(marked(this.description))}` : ''}
       </td>
     </tr>
   ` : html`
@@ -343,7 +345,7 @@ function operationParameterTemplate(index) {
       <td>${this.type === 'array' ? `[${this.item.type}]` : this.type}</td>
       <td>${this.format || (this.model ? html`<a href="#${this.model.id}">${this.model.name}</a>` : '')}</td>
       <td>${this.required}</td>
-      <td>${this.description}</td>
+      <td>${unsafeHTML(marked(this.description))}</td>
     </tr>
     `;
 }
@@ -408,7 +410,7 @@ function operationInfoTemplate() {
         </tr>
         <tr>
           <td class="header-column width-4em">说明</td>
-          <td>${this.description}</td>
+          <td>${unsafeHTML(marked(this.description))}</td>
         </tr>
         </tbody>
       </table>
@@ -435,7 +437,7 @@ function operationRowTemplate(index) {
       <td>${this.path}</td>
       <td>${this.name}</td>
       ${wordMode ? '' : html`
-      <td>${this.summary || this.description}</td>
+      <td>${unsafeHTML(marked(this.description))}</td>
       `}
     </tr>
   `;
@@ -446,7 +448,7 @@ function operationGroupTemplate() {
     <div class="api-operation-group" id="api-operation-group-${this.id}">
       <h2 class="api-operation-group-title">${this.title || this.name}</h2>
       <div class="api-operation-group-description">
-        <p>${this.description}</p>
+        <p>${unsafeHTML(marked(this.description))}</p>
       </div>
       <div class="api-operation-group-operation-list">
         <table class="api-operation-list-table">
@@ -480,7 +482,7 @@ function headerTemplate() {
     <slot name="header"></slot>
     <h1 class="api-document-title">${this.title}</h1>
     <div class="api-document-description">
-      <p>${this.description}</p>
+      <p>${unsafeHTML(marked(this.description))}</p>
     </div>
   </div>
   `;
@@ -526,7 +528,7 @@ function operationListTemplate() {
             ${(gIndex === 0 ? '' : ' / ') + (group.title || group.name)}
           `)}
           </td>
-          <td>${operation.summary || operation.description}</td>
+          <td>${operation.description}</td>
           `}
         </tr>
       `)}
@@ -546,7 +548,10 @@ export default function documentTemplate() {
     ${this.loadFailed === true ? html`<div style="text-align: center;margin: 16px;">加载接口文档失败</div>` : ''}
     ${this.resolvedSpec
     ? html`<div id="api-document">
-    <div id="api-document-navbar" >
+      <div style="position:fixed;top:50px;right:50px;display:none;">
+        <button class="unselectable" onclick="document.execCommand('SelectAll');document.execCommand('Copy');">复制</button>
+      </div>
+    <div id="api-document-navbar" class="unselectable">
       ${tableOfContentTemplate.call(doc)}
     </div>
     <div id="api-document-content">
