@@ -29,6 +29,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.wapache.openapi.spring.api.annotations.ParameterObject;
 import org.wapache.openapi.spring.core.converters.AdditionalModelsConverter;
 import org.wapache.openapi.spring.core.customizers.DelegatingMethodParameterCustomizer;
@@ -105,15 +106,16 @@ public class DelegatingMethodParameter extends MethodParameter {
 
 			if (isParameterObject) {
 				Stream<MethodParameter> methodParameterStream = MethodParameterPojoExtractor.extractFrom(paramClass);
-				if (!optionalDelegatingMethodParameterCustomizer.isPresent())
-					MethodParameterPojoExtractor.extractFrom(paramClass).forEach(explodedParameters::add);
-				else {
+				if (!optionalDelegatingMethodParameterCustomizer.isPresent()) {
+					methodParameterStream.forEach(explodedParameters::add);
+				} else {
 					DelegatingMethodParameterCustomizer delegatingMethodParameterCustomizer = optionalDelegatingMethodParameterCustomizer.get();
 					methodParameterStream.forEach(methodParameter -> {
 						delegatingMethodParameterCustomizer.customize(p, methodParameter);
 						explodedParameters.add(methodParameter);
 					});
 				}
+
 			}
 			else {
 				String name = pNames != null ? pNames[i] : p.getParameterName();
