@@ -108,7 +108,7 @@ public class SpringDocConfigProperties {
 	/**
 	 * The Writer with default pretty printer.
 	 */
-	private boolean writerWithDefaultPrettyPrinter;
+	private boolean writerWithDefaultPrettyPrinter = true;
 
 	/**
 	 * The Default consumes media type.
