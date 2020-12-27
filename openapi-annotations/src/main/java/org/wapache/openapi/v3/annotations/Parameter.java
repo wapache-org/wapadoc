@@ -57,7 +57,6 @@ import static java.lang.annotation.ElementType.PARAMETER;
 @Repeatable(Parameters.class)
 @Inherited
 public @interface Parameter {
-
     /**
      * The name of the parameter.
      *
@@ -66,6 +65,15 @@ public @interface Parameter {
      * @return the parameter's name
      **/
     String name() default "";
+
+    /**
+     * The title of the parameter.
+     *
+     * 参数标题, 对应`x-title`属性
+     *
+     * @return the parameter's title
+     **/
+    String title() default "";
 
     /**
      * The location of the parameter.

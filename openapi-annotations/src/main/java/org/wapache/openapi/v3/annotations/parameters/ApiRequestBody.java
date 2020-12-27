@@ -42,6 +42,13 @@ import static java.lang.annotation.ElementType.PARAMETER;
 @Inherited
 public @interface ApiRequestBody {
     /**
+     * Alias For x-title.
+     *
+     * @return title of the request body
+     **/
+    String title() default "";
+
+    /**
      * A brief description of the request body.
      *
      * @return description of the request body

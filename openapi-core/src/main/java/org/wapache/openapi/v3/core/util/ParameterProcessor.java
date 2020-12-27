@@ -102,7 +102,9 @@ public class ParameterProcessor {
                     parameter = new Parameter().$ref(p.ref());
                     return parameter;
                 }
-
+                if (StringUtils.isNotBlank(p.title())) {
+                    parameter.addExtension("x-title", p.title());
+                }
                 if (StringUtils.isNotBlank(p.description())) {
                     parameter.setDescription(p.description());
                 }
