@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.wapache.openapi</groupId>
 		<artifactId>wapache-openapi</artifactId>
-		<version>0.13.2</version>
+		<version>0.13.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>openapi-spring-webmvc-core</artifactId>
 	<dependencies>

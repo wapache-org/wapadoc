@@ -1,32 +1,13 @@
-# Wapache OpenAPI Project
+# wapadoc - The Wapache OpenAPI Project
 
-`Wapache OpenAPI Project`是一个整合了openapi spec, swagger-api, springdoc, rapidoc, openapi-generator等多个开源项目, 
-用于OpenAPI学习, 提供Spring集成, 代码生成和文档生成, 可视化展示等功能整合的项目。
-本项目在众多开源项目基础上针对中文环境和使用习惯做了一定裁剪,扩展和汉化。
+`wapadoc`是一个基于 [OpenAPI V3](https://github.com/OAI/OpenAPI-Specification) 规范开发的类库，旨在通过OpenAPI规范化接口设计、编码和文档的编写，提高第三方对接的开发和调试体验。
 
-主要引入了以下项目:
-
-1. [OAI/OpenAPI-Specification](https://github.com/OAI/OpenAPI-Specification)
-2. [swagger-api/swagger-core](https://github.com/https://github.com/swagger-api/swagger-core)
-3. [swagger-api/swagger-parser](https://github.com/swagger-api/swagger-parser)
-4. [swagger-api/swagger-js](https://github.com/swagger-api/swagger-js)
-5. [springdoc/springdoc-openapi](https://github.com/springdoc/springdoc-openapi)
-6. [springdoc-openapi-demos](https://github.com/springdoc/springdoc-openapi-demos)
-7. [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator)
-8. [mrin9/RapiDoc](https://github.com/mrin9/RapiDoc)
-
-主要做了以下修改:
-
-1. 统一了包名前缀, 统一为`org.wapache.openapi`。
-2. 删除`swagger-core`中的JAXRS支持, 删除`openapi-generator`中不常用到的语言支持。
-3. 添加了`wapa` JS客户端代码生成模板, 修改了`openapi-generator`的代码, 增加了生成`AllApi.js`的功能。
-4. 删除`springdoc-openapi`中除Java语言外的其他语言支持, 删除`webflux`支持, `spring-boot`降级为`2.0.4`版本。
-5. 原`springdoc`的`RequestBody`重命名为`ApiRequestBody`,以避免与Spring的`RequestBody`名称重复导致使用不便。
-6. 部分汉化`Rapidoc`, 对`Rapidoc`界面布局和样式做了调整和增强。
-7. `Rapidoc`界面布局增加`文档`模式, 以word文档样式的方式展示OpenAPI文档的内容, 全选复制到word即可得到word格式的接口文档, 非常方便。 
-8. 引入`openapi-generator`中的`openapi-generator-online`, 去掉springfox的依赖并对接口做少量调整和汉化。
+本项目期望能帮助您摆脱传统开发模式的`文档版本管理混乱`，`文档和代码不一致`，`接口设计不规范`，`第三方缺少可运行示例对接效率低下`，`开发人员不写注释`等等众多问题的困扰。
+OpenAPI支持`设计优先+代码生成`和`代码优先+文档生成`两种开发模式，对于设计者本身就是Java开发人员的情况，强烈建议`代码优先`模式进行开发，能很好的贯彻`代码即文档`的开发理念，同时还可以获得文档版本化管理和IDE支持等等一系列好处。
 
 ## 模块列表
+
+`wapadoc`项目的命名主要参考自`springdoc`和`rapidoc`，本项目的主要代码也是来自于这两个项目，一个是后台服务，一个前端界面，这俩项目非常优秀，推荐学习使用。
 
 | 模块                       | 来源(github)                                                  | 说明 |
 | -------------------------- | ------------------------------------------------------------ | ---- |
@@ -111,6 +92,34 @@ java -jar openapi-generator-server-0.10.28-SNAPSHOT.jar
 
 ```
 
+# 引用项目
+
+`wapadoc`是一个整合了openapi spec, swagger-api, springdoc, rapidoc, openapi-generator等多个开源项目, 提供Spring集成, 代码生成和文档生成, 可视化展示等功能整合的项目。 
+本项目在众多开源项目基础上针对中文环境和使用习惯做了一定裁剪,扩展和汉化。
+
+主要引入了以下项目:
+
+1. [OAI/OpenAPI-Specification](https://github.com/OAI/OpenAPI-Specification)
+2. [swagger-api/swagger-core](https://github.com/https://github.com/swagger-api/swagger-core)
+3. [swagger-api/swagger-parser](https://github.com/swagger-api/swagger-parser)
+4. [swagger-api/swagger-js](https://github.com/swagger-api/swagger-js)
+5. [springdoc/springdoc-openapi](https://github.com/springdoc/springdoc-openapi)
+6. [springdoc-openapi-demos](https://github.com/springdoc/springdoc-openapi-demos)
+7. [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator)
+8. [mrin9/RapiDoc](https://github.com/mrin9/RapiDoc)
+
+主要做了以下修改:
+
+1. 统一了包名前缀, 统一为`org.wapache.openapi`。
+2. 删除`swagger-core`中的JAXRS支持, 删除`openapi-generator`中不常用到的语言支持。
+3. 添加了`wapa` JS客户端代码生成模板, 修改了`openapi-generator`的代码, 增加了生成`AllApi.js`的功能。
+4. 删除`springdoc-openapi`中除Java语言外的其他语言支持, 删除`webflux`支持, `spring-boot`降级为`2.0.4`版本。
+5. 原`springdoc`的`RequestBody`重命名为`ApiRequestBody`,以避免与Spring的`RequestBody`名称重复导致使用不便。
+6. 部分汉化`Rapidoc`, 对`Rapidoc`界面布局和样式做了调整和增强。
+7. `Rapidoc`界面布局增加`文档`模式, 以word文档样式的方式展示OpenAPI文档的内容, 全选复制到word即可得到word格式的接口文档, 非常方便。 
+8. 引入`openapi-generator`中的`openapi-generator-online`, 去掉springfox的依赖并对接口做少量调整和汉化。
+
+
 #其他资源
 
 1. 中文版规范: https://github.com/fishead/OpenAPI-Specification/blob/master/versions/3.0.0.zhCN.md
@@ -125,10 +134,14 @@ java -jar openapi-generator-server-0.10.28-SNAPSHOT.jar
 
 4. [openapi整合spring-security表单登录](https://waynestalk.com/spring-security-form-login-jpa-springdoc-explained/)
 
-# 请作者喝杯奶茶
+# 欢迎使用
+
+本项目开始之初原本是作者的一个学习OpenAPI的练手项目，目前通过整合网上各种优质资源后已经初步具备投入使用的条件，欢迎尝鲜使用。
 
 有任何使用上的问题可以在github的issues上提, 也可以发邮件到作者的邮箱(ykuang老鼠wapache点org)。
 
-开源不易, 如果此项目对你有用, 请作者喝杯茶以资鼓励吧^_^!
+# 请作者喝杯奶茶
+
+开源不易, 如果此项目对你有用, 请作者喝杯茶以资鼓励吧\^_\^!
 
 ![wechat_code](docs/images/wechat_code.jpg)
