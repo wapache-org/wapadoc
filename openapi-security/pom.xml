@@ -9,18 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>openapi-parser</artifactId>
+    <artifactId>openapi-security</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.wapache.openapi</groupId>
-            <artifactId>openapi-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-
-    </dependencies>
 
 </project>
